@@ -1,6 +1,6 @@
 <?php 
-
-    class usuarioService{
+require_once('config.php');
+    class UsuarioService{
         private $db_conn;
         public function __construct(){
             $database = new Database();

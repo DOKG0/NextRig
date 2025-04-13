@@ -1,6 +1,6 @@
 <?php 
-
-    class productoService{
+require_once('config.php');
+    class ProductoService{
         private $db_conn;
         public function __construct(){
             $database = new Database();
