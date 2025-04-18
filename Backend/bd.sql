@@ -64,7 +64,17 @@ CREATE TABLE `Productos` (
 
 CREATE TABLE `Componentes` (
   `id` VARCHAR(50) NOT NULL,
-  `categoria` ENUM('COMPONENTES', 'NOTEBOOKS', 'PERIFERICOS') NOT NULL,
+  `categoria` ENUM(
+    'CPU',
+    'MOTHERBOARD', 
+    'TARJETA_GRAFICA', 
+    'ALMACENAMIENTO', 
+    'MEMORIAS', 
+    'COOLING', 
+    'GABINETES', 
+    'MONITORES',  
+    'TECLADOS', 
+    'MOUSE') NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_componentes_productos` FOREIGN KEY (`id`) REFERENCES `Productos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
