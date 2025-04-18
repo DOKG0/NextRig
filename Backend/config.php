@@ -2,8 +2,8 @@
 
     class Database{
         private $host = "localhost";
-        private $user = "NextRig";
-        private $db_name = "root";
+        private $user = "root";
+        private $db_name = "NextRig";
         private $password = "";
         public $db_conn;
 
