@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div class="main-layout">
+      <div class="menu-btn sidebar-btn" id="sidebar-btn" #sidebarBtn>
+        <i class="bx bx-menu"></i>
+        <i class="bx bx-x"></i>
+      </div>
+      <div class="dark-mode-btn" id="dark-mode-btn" #darkModeBtn>
+        <i class="bx bx-sun"></i>
+        <i class="bx bx-moon"></i>
+      </div>
+      <div class="sidebar" id="sidebar" #sidebar>
+        <div class="header">
+          <div class="menu-btn" id="menu-btn">
+            <i class="bx bx-chevron-left"></i>
+          </div>
+          <div class="brand">
+            <img src="../assets/img/LogoD.png" alt="logo" class="logoD" />
+            <img src="../assets/img/LogoL.png" alt="logo" class="logoL" />
+            <span>NextRig</span>
+          </div>
+        </div>
+        <div class="menu-container">
+          <div class="search">
+            <i class="bx bx-search"></i>
+            <input type="search" placeholder="Search..." />
+          </div>
+          <ul class="menu">
+            <li class="menu-item menu-item-static active">
+              <a href="#" class="menu-link">
+                <i class="bx bx-home-alt-2"></i>
+                <span>Home</span>
+              </a>
+            </li>
+            <li class="menu-item menu-item-dropdown">
+              <a class="menu-link">
+                <i class="bx bx-box"></i>
+                <span>Componentes PC</span>
+                <i class="bx bx-chevron-down"></i>
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a href="#" class="sub-menu-link">CPU</a>
+                </li>
+                <li>
+                  <a href="#" class="sub-menu-link">Motherboard</a>
+                </li>
+                <li>
+                  <a href="#" class="sub-menu-link">Tarjetas Graficas</a>
+                </li>
+                <li>
+                  <a href="#" class="sub-menu-link">Almacenamiento</a>
+                </li>
+                <li>
+                  <a href="#" class="sub-menu-link">Memorias</a>
+                </li>
+                <li>
+                  <a href="#" class="sub-menu-link">Cooling</a>
+                </li>
+                <li>
+                  <a href="#" class="sub-menu-link">Gabinetes</a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item menu-item-static">
+              <a href="#" class="menu-link">
+                <i class="bx bx-desktop"></i>
+                <span>Monitores</span>
+              </a>
+            </li>
+            <li class="menu-item menu-item-dropdown">
+              <a class="menu-link">
+                <i class="bx bxs-keyboard"></i>
+                <span>Perifericos</span>
+                <i class="bx bx-chevron-down"></i>
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a href="#" class="sub-menu-link">Teclados</a>
+                </li>
+                <li>
+                  <a href="#" class="sub-menu-link">Mouse</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="footer">
+          <ul class="menu">
+            <li class="menu-item menu-item-static" *ngIf="!isLoggedIn">
+              <a [routerLink]="['/login']" class="menu-link">
+                <i class='bx bx-log-in'></i>
+                <span>Login / Signup</span>
+              </a>
+            </li>
+            <!-- Mostrar carrito solo si esta logueado y NO es admin -->
+            <li class="menu-item menu-item-static" *ngIf="isLoggedIn && !isAdmin">
+              <a [routerLink]="['/cart']" class="menu-link">
+                <i class="bx bx-cart"></i>
+                <span>Carrito</span>
+              </a>
+            </li>
+            <!-- dropdown menu usuario -->
+            <li class="menu-item menu-item-dropdown" *ngIf="isLoggedIn && !isAdmin">
+              <a class="menu-link">
+                <i class="bx bx-cog"></i>
+                <span>Settings</span>
+                <i class="bx bx-chevron-down"></i>
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a [routerLink]="['/profile']" class="sub-menu-link"
+                    >Perfil</a
+                  >
+                </li>
+                <li>
+                  <a [routerLink]="['/orders']" class="sub-menu-link"
+                    >Mis pedidos</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <!-- dropdown menu admin -->
+            <li class="menu-item menu-item-dropdown" *ngIf="isLoggedIn && isAdmin">
+              <a class="menu-link">
+                <i class="bx bx-cog"></i>
+                <span>Admin Settings</span>
+                <i class="bx bx-chevron-down"></i>
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a [routerLink]="['/add-product']" class="sub-menu-link"
+                    >Añadir producto</a
+                  >
+                </li>
+                <li>
+                  <a [routerLink]="['/delete-product']" class="sub-menu-link"
+                    >Eliminar producto</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <div class="user">
+            <div class="user-img">
+              <i class="bx bx-user-circle bx-md"></i>
+            </div>
+            <div class="user-data" *ngIf="isLoggedIn && currentUser; else visitante">
+              <span class="name">{{ currentUser.username || currentUser.name }}</span>
+              <span class="email">{{ currentUser.email}}</span>
+            </div>
+            <ng-template #visitante>
+              <div class="user-data">
+                <span class="email">¿Quien eres?</span>
+                <span class="email">Registrate!</span>
+              </div>
+            </ng-template>
+            <div class="user-icon" *ngIf="isLoggedIn" (click)="logout()">
+              <i class="bx bx-exit"></i>
+            </div>
+          </div>
+        </div>
+      </div>  
+        <router-outlet></router-outlet>  
+    </div>
+  </body>
+</html>

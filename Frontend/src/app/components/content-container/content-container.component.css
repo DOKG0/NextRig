@@ -1,0 +1,77 @@
+.content-wrapper {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s ease;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.content-container {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-border);
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.content-wrapper,
+.content-container {
+  box-sizing: border-box;
+}
+
+.content-wrapper.sidebar-visible {
+  width: calc(100% - 16rem);
+}
+.content-wrapper.sidebar-minimized {
+  width: calc(100% - 4.94rem);
+}
+
+/* Ajustes para diferentes estados del sidebar */
+.sidebar-visible {
+  margin-left: 16rem;
+}
+
+.sidebar-minimized {
+  margin-left: 4.94rem;
+}
+
+.sidebar-hidden {
+  margin-left: 0;
+}
+
+/* carousel */
+
+.carousel-section{
+  flex-shrink: 0;
+  width: 100%;
+}
+
+/* main content */
+.main-content {
+  flex: 1 1 auto;
+  width: 100%;
+  overflow-y: auto;
+  padding-bottom: 120px;
+}
+
+/* footer */
+app-footer, .footer {
+  margin-top: auto;
+}
+
+@media (max-width: 700px), (max-height: 683px) {
+  .content-wrapper {
+    padding: 0.3rem;
+  }
+
+  .content-container {
+    padding: 0.3rem;
+  }
+}

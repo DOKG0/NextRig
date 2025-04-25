@@ -1,0 +1,314 @@
+.auth-container {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg);
+    padding: 0.15rem;
+    transition: left 0.5s ease;
+    overflow: auto;
+  
+    /* Ajuste para diferentes estados del sidebar */
+    &.sidebar-visible {
+      left: 16rem; /* Ancho del sidebar expandido */
+    }
+  
+    &.sidebar-minimized {
+      left: 4.94rem; /* Ancho del sidebar minimizado */
+    }
+  
+    &.sidebar-hidden {
+      left: 0; /* Sin sidebar */
+    }
+  }
+  
+  .auth-box {
+    width: 100%;
+    max-width: 400px;
+    min-width: 252px;
+    padding: 1.5rem;
+    background-color: var(--color-surface);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-border);
+    margin: auto;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+  
+  .auth-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .auth-header h2{
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .auth-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+  }
+  
+  .form-group input {
+    padding: 0.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-text-primary);
+    width: 100%;           /* Asegura que el input ocupe todo el ancho */
+    box-sizing: border-box;
+  }
+  
+  .auth-button {
+    margin-top: 0.5rem;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #4361ee;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .auth-button:hover {
+    background-color: #3b55d9;
+  }
+  
+  .auth-link {
+    margin-top: 1rem;
+    text-align: right;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    color: var(--color-text-secondary);
+  }
+  
+  .auth-link a {
+    color: #4361ee;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  
+  /* Animación al cambiar entre login y registro */
+  .auth-box {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .auth-box.register-mode {
+    max-width: 450px;
+  }
+
+
+  
+  /* Grid para el formulario de registro */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
+    gap: 0.8rem;
+    width: 100%;
+  }
+  
+  /* Los elementos que ocupan todo el ancho */
+  .grid-full {
+    grid-column: 1 / -1; /* Desde la primera hasta la última línea de columna */
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    padding: 0.5rem;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-radius: 4px;
+  }
+  
+  .auth-button:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  }
+  
+  @media (min-width: 684px) {
+    .auth-box.register-mode {
+      max-width: 550px; /* Un poco más pequeño que 700px para mejor proporción */
+    }
+  }
+
+  /* Ajustes para la versión móvil */
+  @media (max-width: 683px) {
+    .form-grid {
+      grid-template-columns: 1fr; /* Una sola columna en móviles */
+      gap: 0.4rem;
+    }
+  
+    .auth-box.register-mode {
+      max-width: 400px;
+    }
+  
+    .auth-container {
+      padding: 0.8rem;
+    }
+
+    .form-group input{
+      font-size: 12px;
+      padding: 0.4rem;
+    }
+
+    .auth-box.register-mode {
+      max-width: 360px;
+      padding: 1rem; /* Reducir el padding interno */
+    }
+  
+    /* Reducir espaciado entre grupos de formulario */
+    .auth-form {
+      gap: 0.25rem; /* Reduce el gap entre elementos del formulario */
+    }
+  
+    /* Reducir tamaño de fuente y padding en inputs */
+    .form-group {
+      gap: 0.3rem; /* Menos espacio entre label e input */
+    }
+  
+    .form-group label {
+      font-size: 0.8rem; /* Letra más pequeña en etiquetas */
+    }
+  
+    .form-group input {
+      font-size: 0.85rem; /* Letra más pequeña en inputs */
+      padding: 0.4rem;    /* Padding más pequeño */
+      height: 2.5rem;     /* Altura fija más pequeña */
+    }
+  
+    /* Hacer el botón más pequeño */
+    .auth-button {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      height: 2.5rem;
+    }
+    
+    /* Ajustar el enlace para cambiar de modo */
+    .auth-link {
+      font-size: 0.8rem;
+      margin-top: 0.6rem;
+    }
+    
+    /* Reducir tamaño del logo y título */
+    .auth-logo {
+      width: 45px;
+      height: 45px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .auth-header h2 {
+      font-size: 0.9rem;
+    }
+    
+    .auth-header {
+      margin-bottom: 0.3rem;
+    }
+  }
+
+  /* Ajustes especiales para pantallas bajas */
+@media (max-height: 600px) {
+  .auth-container {
+    padding: 0.5rem;
+  }
+  
+  .auth-box {
+    padding: 1rem;
+    max-height: calc(100vh - 1rem);
+  }
+  
+  /* Compactar elementos en pantallas bajas */
+  .auth-logo {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .auth-header {
+    margin-bottom: 0.3rem;
+  }
+  
+  .auth-header h2 {
+    font-size: 0.9rem;
+  }
+  
+  .form-group {
+    gap: 0.2rem;
+  }
+  
+  .form-group input {
+    padding: 0.4rem;
+    height: 2.2rem;
+  }
+  
+  .auth-button {
+    margin-top: 0.3rem;
+  }
+}
+  
+/* Para pantallas aún más pequeñas */
+@media (max-width: 360px) {
+  .auth-container {
+    padding: 0.5rem;
+  }
+  
+  .auth-box.register-mode {
+    padding: 0.8rem;
+  }
+  
+  .form-group input {
+    height: 2.2rem;
+  }
+  
+  .auth-button {
+    height: 2.2rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Ajuste para que no aparezca un conflicto con la definición anterior */
+.auth-box.register-mode {
+  max-width: 450px; /* Para pantallas grandes */
+}
+
+/* Ajustes para el scroll en caso de pantallas muy pequeñas */
+@media (max-height: 600px) {
+  .auth-container {
+    overflow-y: auto;
+    top: 0;
+    bottom: 0;
+  }
+  
+  .auth-box {
+    margin: 0.5rem 0;
+  }
+}
