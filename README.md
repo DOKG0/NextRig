@@ -45,3 +45,60 @@
 - ng g c nombre --skip-test -> crea un componente sin el archivo ".spec.ts"
 - ng g c nombre --inline-style -> crea un componente sin el archivo ".css"
 - ng g c nombre --inline-template -> crea un componente sin el archivo ".html"
+
+***
+
+## Como hacer andar el proyecto?
+
+1 - Descargar e instalar Xampp & configurar proyecto
+
+	1.1 - dar permisos a la carpeta htdocs para evitar problemas 
+	
+**Comando:**
+sudo chmod -R 775 /opt/lampp/htdocs
+	
+	1.2 - mover la carpeta backend a la carpeta htdocs
+
+	1.3 - iniciar xampp
+
+2 - Probar backend con postman
+
+	Antes de probar el backend con postman se deberia registrar un usuario desde la pagina ya que esta hashea la contraseña y la guarda en la base de datos, por lo cual si se crea el usuario directo desde la BD no funcionara.
+
+	Para probar funciones de admin, crear el usuario como esta mencionado anteriormente y el añadir el usuario que va a ser administrador a la tabla Administrador 
+
+**comando:** INSERT INTO Administrador (ci) VALUES ('12345678');
+
+	Rutas
+
+	Login: http://localhost/Backend/api.php/usuario/login  POST
+	Registro: http://localhost/Backend/api.php/usuario/registro POST
+	AddP: http://localhost/Backend/api.php/admin/addProducto POST
+	GetP: http://localhost/Backend/api.php/productos GET
+	GetP x categoria: http://localhost/Backend/api.php/productos/cpu GET
+	
+***
+
+## Como nos manejamos en GITHUB
+
+
+ ### Commits
+
+* feat: Agregar nueva funcionalidad
+* fix: Solucionar error o bug
+* Delete: Eliminacion de archivo/codigo innecesario
+* style: cambios de stylo (que no afecta la logica)
+* test: agregar o corregir test (aqui no pero funciona para java)
+
+### Flujo de trabajo
+
+1 - Clonar repositorio
+
+	1.1 - Crear nueva rama desde main:
+**comandos:** git checkout main<br>
+**comandos:** git pull origin main // Trae los cambios mas recientes de main a tu repo local<br>
+**comandos:** git checkout -b feature/nombre-tarea //Creas una rama para trabajar sobre ella y que no afecte a main
+
+	1.2 - Push a la rama creada
+
+**comando:** git push -u origin feature/nombre-tarea
