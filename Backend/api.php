@@ -238,7 +238,8 @@ function handleAdminRequest($adminService, $action, $data)
                 $data['descripcion'],
                 $data['imagen'],
                 $data['categoria'],
-                $data['admin_ci']
+                $data['admin_ci'],
+                $data['marca_nombre']
             ));
             break;
     }
