@@ -57,10 +57,16 @@ CREATE TABLE `Productos` (
   `imagen` VARCHAR(255) DEFAULT NULL,
   `nombre` VARCHAR(100) NOT NULL,
   `admin_ci` VARCHAR(50) NOT NULL,
+  `marca_nombre` VARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_productos_administrador` FOREIGN KEY (`admin_ci`) REFERENCES `Administrador` (`ci`) ON DELETE CASCADE
+  CONSTRAINT `fk_productos_marca` FOREIGN KEY (`marca_nombre`) REFERENCES `Marca` (`NombreMarca`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `Marca` (
+  `NombreMarca` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`NombreMarca`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Componentes` (
   `id` VARCHAR(50) NOT NULL,
