@@ -10,10 +10,10 @@ class AdminService
     }
 
 
-    public function addProducto($id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci)
+    public function addProducto($id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre)
     {
-        $query = "INSERT INTO Productos (id, nombre, precio, stock, descripcion, imagen, admin_ci) 
-                      VALUES ('$id', '$nombre', '$precio', '$stock', '$descripcion', '$imagen', '$admin_ci')";
+        $query = "INSERT INTO Productos (id, nombre, precio, stock, descripcion, imagen, admin_ci, marca_nombre) 
+                      VALUES ('$id', '$nombre', '$precio', '$stock', '$descripcion', '$imagen', '$admin_ci', '$marca_nombre')";
         mysqli_query($this->db_conn, $query);
         if (mysqli_affected_rows($this->db_conn) > 0) {
             switch ($categoria) {
