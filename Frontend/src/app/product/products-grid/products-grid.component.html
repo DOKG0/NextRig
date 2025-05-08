@@ -1,0 +1,19 @@
+<div class="content-wrapper" >
+    <div class="grid-container">
+        <div class="grid-header">
+            <h2 style="color: var(--color-text-primary);">Productos</h2>
+            <div class="grid-header-buttons">
+
+            </div>
+        <div class="product-grid">
+            <div *ngFor="let producto of products">
+                <app-product-card [producto]="producto"></app-product-card>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <app-footer></app-footer>
+    </div>
+
+</div>

@@ -1,0 +1,19 @@
+<div *ngIf="producto as p" class="details-container">
+  <div class="details-content">
+    <div class="image-section">
+      <img [src]="p.imageUrl" alt="{{ p.name }}" />
+    </div>
+  
+    <div class="info-section">
+      <h1>{{ p.name }}</h1>
+      <p class="price">{{ p.price | currency:'USD' }}</p>
+      <p class="description">{{ p.description }}</p>
+      <p class="category">Categoría: {{ p.category }}</p>
+      <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">
+        {{ p.stock > 0 ? 'Stock disponible' : 'Sin stock' }}
+      </p>
+      <button [disabled]="p.stock === 0">Agregar al carrito</button>
+      <p class="description">Descripcion: {{ p.description }}</p>
+    </div>
+  </div>
+</div>

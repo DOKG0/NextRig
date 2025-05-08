@@ -5,6 +5,7 @@
     margin: 0;
     padding: 0;
     font-family: "Poppins", sans-serif;
+    
 }
 :root {
     --color-bg: #EBECF2;
@@ -24,6 +25,7 @@ body {
     height: 100vh;
     background-color: var(--color-bg);
     transition: color 0.5s ease, background-color 0.5s ease, left 0.5s ease;
+    overflow-x: hidden;
 }
 
 body.dark-mode{
@@ -378,7 +380,7 @@ body.dark-mode .logoD{
 }
 
 .dark-mode-btn{
-    position: absolute;
+    position: fixed;
     z-index: 100;
     width: 2.4rem;
     height: 2.4rem;

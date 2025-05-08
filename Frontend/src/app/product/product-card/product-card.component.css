@@ -1,16 +1,24 @@
-table {
-    margin-left: 16rem;
+.card {
+    height: 400px;
+    background-color: var(--color-surface);
 }
 
-.prueba {
-    margin-left: 16rem;
+.card h5 {
+    color: var(--color-text-primary);
 }
 
 .img-container {
     position: relative;
     overflow: hidden;
+    height: 250px;
   }
 
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  
 .img-footer{
     position: absolute;
     bottom: 0;
@@ -23,6 +31,7 @@ table {
     justify-content: center;
     transition: 0.4s;
     cursor: pointer;
+    z-index: 3;
 }
 
 .card:hover .img-footer{
@@ -41,6 +50,19 @@ table {
     color: white;
 }
 
+.img-container::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    z-index: 1;
+  }
+  
+  .card:hover .img-container::after {
+    background-color: rgba(128, 128, 128, 0.15); 
+  }
+
 .icons-container {
     position: absolute;
     border-radius: 999px;
@@ -53,6 +75,7 @@ table {
     transition: 0.4s;
     right: 15px;
     padding: 0 20px;
+    z-index: 2;
 }
 
 .sum-icons-container {
@@ -64,7 +87,6 @@ table {
     gap: 5px;
     margin-left: -15px;
 }
-
 
 .cart {
     border-radius: 999px;
@@ -82,6 +104,5 @@ table {
     font-size: 1em;
     color: white;
     cursor: pointer;
-  }
+}
 
-  
