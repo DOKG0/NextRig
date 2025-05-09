@@ -9,6 +9,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: ContentContainerComponent, pathMatch: 'full' },
   { path : "products", component : ProductsGridComponent},
+  { path : "products/category/:category", component : ProductsGridComponent},
   { path : "products/:id", component : ProductDetailsComponent},
   { path: 'home', component: ContentContainerComponent, pathMatch: 'full' }
 ];

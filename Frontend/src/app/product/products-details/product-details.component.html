@@ -1,5 +1,9 @@
 <div *ngIf="producto as p" class="details-container">
+  
   <div class="details-content">
+    <div class="arrow"  [routerLink]="['/products']" routerLinkActive="router-link-active">
+      <i class="bx bx-chevron-left"></i>
+    </div>
     <div class="image-section">
       <img [src]="p.imageUrl" alt="{{ p.name }}" />
     </div>
@@ -12,8 +16,18 @@
       <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">
         {{ p.stock > 0 ? 'Stock disponible' : 'Sin stock' }}
       </p>
-      <button [disabled]="p.stock === 0">Agregar al carrito</button>
+      <div class="buttons-container">
+        <div class="sum-icons-container">
+          <i class='bx bx-minus icono' (click)="minusQuantity()"></i>
+          <span class="number icono">{{quantity}}</span>
+          <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
+        </div>
+        <button [disabled]="p.stock === 0">Agregar al carrito</button>
+      </div>
+      
       <p class="description">Descripcion: {{ p.description }}</p>
     </div>
+    
   </div>
+
 </div>

@@ -9,7 +9,6 @@
 .details-content{
   display: flex;
   width: 80%;
-  height: 32em;
   background-color: var(--color-surface);
   margin: auto;
   margin-top: 3em;
@@ -37,7 +36,8 @@
     justify-content: center;
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-border);
+    min-width: 0;
   }
   
   .info-section h1 {
@@ -60,12 +60,16 @@
     color: var(--color-text-primary);
   }
   
-  .category, .admin {
+  .category {
     font-size: 0.95rem;
     margin-bottom: 0.5rem;
     color: var(--color-text-primary);
   }
   
+  h1, .category, .stock, .description  {
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
   .stock {
     margin: 1rem 0;
     font-weight: bold;
@@ -79,7 +83,7 @@
   button {
     padding: 1rem 1.5rem;
     font-size: 1rem;
-    background-color: #4caf50;
+    background-color: rgb(149, 150, 218);
     color: white;
     border: none;
     border-radius: 6px;
@@ -89,10 +93,68 @@
   }
   
   button:hover:not([disabled]) {
-    background-color: #388e3c;
+    background-color: rgb(134, 135, 189);
   }
   
   button[disabled] {
     background-color: #aaa;
     cursor: not-allowed;
   }
+
+  .icons-container {
+    position: absolute;
+    border-radius: 999px;
+    height: 2em;
+    top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    transition: 0.4s;
+    right: 15px;
+    padding: 0 20px;
+    z-index: 2;
+}
+
+.buttons-container{
+  display: flex;
+  align-items: center;
+
+}
+
+.sum-icons-container {
+    border-radius: 999px;
+    border: 1px solid var(--color-text-primary);
+    height: 2.5em;
+    width: 5em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-left: 0.7em;
+    margin-right: 2em;
+}
+
+.icono {
+    font-size: 1em;
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.arrow{
+    margin: 1rem 1.5rem;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    box-shadow: 2px 2px 5px var(--shadow-border);
+    cursor: pointer;
+    transition: right 0.3s ease;
+}
+
+.arrow i{
+  font-size: 1.5rem;
+}

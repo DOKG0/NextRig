@@ -1,17 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { RouterOutlet, RouterLink, Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../product-card/products.mock';
 
 @Component({
   selector: 'app-product-details',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
 export class ProductDetailsComponent implements OnInit {
   producto: Product | undefined;
+  quantity: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,7 +23,21 @@ export class ProductDetailsComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
-      this.producto = this._productService.getProductoById(id);
+      this.producto = this._productService.getProductById(id);
     }
+  }
+
+  minusQuantity() {
+    if (this.quantity > 0) {
+      this.quantity--;
+    }
+  }
+
+  plusQuantity() {
+    this.quantity++;
+  }
+
+  resetQuantity() {
+    this.quantity = 0;
   }
 }

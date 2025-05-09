@@ -1,19 +1,25 @@
 <div class="content-wrapper" >
     <div class="grid-container">
         <div class="grid-header">
-            <h2 style="color: var(--color-text-primary);">Productos</h2>
+            <h2>Productos</h2>
             <div class="grid-header-buttons">
-
+                <span>Selecciona una opcion:</span>
+                <select [(ngModel)]="selectedSort" (ngModelChange)="handleSort($event)">
+                    <option value="priceAsc">Precio: Menor a mayor</option>
+                    <option value="priceDesc">Precio: Mayor a menor</option>
+                    <option value="nameAsc">Nombre: A-Z</option>
+                    <option value="nameDesc">Nombre: Z-A</option>
+                  </select>
             </div>
         <div class="product-grid">
-            <div *ngFor="let producto of products">
+            <div *ngFor="let producto of productsSorted">
                 <app-product-card [producto]="producto"></app-product-card>
             </div>
         </div>
     </div>
 
-    <div>
-        <app-footer></app-footer>
+    <div class="footer-container">
+        <app-footer class="footer"></app-footer>
     </div>
 
 </div>

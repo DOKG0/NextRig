@@ -9,11 +9,16 @@ export class ProductService {
 
   constructor() { }
 
-  getProductoById(id: string | number): Product | undefined {
+  getProductById(id: string | number): Product | undefined {
     return productsList.find(p => p.id == id);
   }
 
-  getAllProductos(): Product[] {
+  getAllProducts(): Product[] {
     return productsList;
+  }
+
+  getProductsByCategory(category : string): Product[] {
+    const products : Product[] = productsList.filter((product) => product.category === category);
+    return products;
   }
 }

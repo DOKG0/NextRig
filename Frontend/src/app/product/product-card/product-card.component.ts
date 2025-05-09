@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, Input, Output, EventEmitter } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { productsList } from './products.mock';
 import { CommonModule } from '@angular/common';
 
 declare var bootstrap: any;
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })
