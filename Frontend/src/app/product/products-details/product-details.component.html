@@ -1,33 +1,54 @@
 <div *ngIf="producto as p" class="details-container">
   
   <div class="details-content">
-    <div class="arrow"  [routerLink]="['/products']" routerLinkActive="router-link-active">
-      <i class="bx bx-chevron-left"></i>
-    </div>
-    <div class="image-section">
-      <img [src]="p.imageUrl" alt="{{ p.name }}" />
-    </div>
-  
-    <div class="info-section">
-      <h1>{{ p.name }}</h1>
-      <p class="price">{{ p.price | currency:'USD' }}</p>
-      <p class="description">{{ p.description }}</p>
-      <p class="category">Categoría: {{ p.category }}</p>
-      <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">
-        {{ p.stock > 0 ? 'Stock disponible' : 'Sin stock' }}
-      </p>
-      <div class="buttons-container">
-        <div class="sum-icons-container">
-          <i class='bx bx-minus icono' (click)="minusQuantity()"></i>
-          <span class="number icono">{{quantity}}</span>
-          <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
+    <div class="details-top">
+      <div class="arrow"  [routerLink]="['/products']" routerLinkActive="router-link-active">
+        <i class="bx bx-chevron-left"></i>
+      </div>
+      <div class="image-section">
+        <img [src]="p.imageUrl" alt="{{ p.name }}" />
+      </div>
+    
+      <div class="info-section">
+        <h1>{{ p.name }}</h1>
+        <p class="price">{{ p.price | currency:'USD' }}</p>
+        <p class="description">{{ p.description }}</p>
+        <p class="category">Categoría: {{ p.category }}</p>
+        <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">
+          {{ p.stock > 0 ? 'Stock disponible' : 'Sin stock' }}
+        </p>
+        <div class="buttons-container">
+          <div class="sum-icons-container">
+            <i class='bx bx-minus icono' (click)="minusQuantity()"></i>
+            <span class="number icono">{{quantity}}</span>
+            <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
+          </div>
+          <button [disabled]="p.stock === 0">Agregar al carrito</button>
         </div>
-        <button [disabled]="p.stock === 0">Agregar al carrito</button>
+      </div>
+  </div>
+  <div class="footer-container">
+
+      <div class="footer-info">
+        <span [class.active]="activeTab === 'general'" (click)="selectTab('general')">Detalles Generales</span>
+        <span [class.active]="activeTab === 'additional'" (click)="selectTab('additional')">Detalles Adicionales</span>
+      </div>
+      <div class="info-container general" *ngIf="activeTab === 'general'">
+        <p >Descripcion: {{ p.description }}</p>
+        <p >Categoria: {{ p.category }}</p>
+        
+      </div>
+
+      <div class="info-container additional" *ngIf="activeTab === 'additional'">
+        
       </div>
       
-      <p class="description">Descripcion: {{ p.description }}</p>
-    </div>
-    
-  </div>
-
+      <div class="footer">
+        <h2>Otros articulos que podrian interesarte:</h2>
+      </div>
+      <div class="product-grid">
+        <div *ngFor="let producto of productosSimilares" class="product-card">
+          <app-product-card [producto]="producto"></app-product-card>
+        </div>
+  </div>  
 </div>

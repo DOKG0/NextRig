@@ -1,6 +1,7 @@
 .card {
     height: 400px;
     background-color: var(--color-surface);
+    box-shadow: 0 2px 5px var(--shadow-border);
 }
 
 .card h5 {

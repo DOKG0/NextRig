@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { productsList } from '../product-card/products.mock';
 import { CommonModule } from '@angular/common';
@@ -18,6 +18,7 @@ export class ProductsGridComponent implements OnInit {
 
   productsSorted: Product[] = productsList;
   selectedSort: string = '';
+
   constructor(
     private route: ActivatedRoute,
     private _productService: ProductService
@@ -28,6 +29,7 @@ export class ProductsGridComponent implements OnInit {
 
     if (category) {
       this.productsSorted = [...this._productService.getProductsByCategory(category)];
+      this._productService.setProductsSortedByCat(this.productsSorted);
     }
   }
 
@@ -63,4 +65,6 @@ export class ProductsGridComponent implements OnInit {
         break;
     }
   }
+
+  
 }

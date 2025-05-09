@@ -7,7 +7,17 @@ import { productsList, Product } from '../product/product-card/products.mock';
 })
 export class ProductService {
 
+  products: Product[] = productsList;
+  productsSortedByCat: Product[] = productsList;
   constructor() { }
+
+  setProductsSortedByCat(products: Product[]) {
+    this.productsSortedByCat = products;
+  }
+
+  getProductsSortedByCat() {
+    return this.productsSortedByCat;
+  }
 
   getProductById(id: string | number): Product | undefined {
     return productsList.find(p => p.id == id);

@@ -2,11 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarrouselComponent } from "../carrousel/carrousel.component";
 import { FooterComponent } from "../footer/footer.component";
+import { RouterModule } from '@angular/router'; // 👈 Necesario para <router-outlet>
+
 
 @Component({
   selector: 'app-content-container',
   standalone: true,
-  imports: [CommonModule, CarrouselComponent, FooterComponent],
+  imports: [CommonModule, CarrouselComponent, FooterComponent, RouterModule],
   templateUrl: './content-container.component.html',
   styleUrls: ['./content-container.component.css']
 })
