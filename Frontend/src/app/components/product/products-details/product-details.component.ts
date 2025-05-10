@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../../services/product.service';
 import { Product } from '../product-card/products.mock';
 import { ProductCardComponent } from '../product-card/product-card.component';
 
@@ -24,13 +24,17 @@ export class ProductDetailsComponent implements OnInit {
     private _productService: ProductService
   ) {}
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.productosSimilares = this._productService.getProductsSortedByCat();
 
-    if (id) {
-      this.producto = this._productService.getProductById(id);
-    }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.productosSimilares = this._productService.getProductsSortedByCat(this._productService.getCategory());
+      if (id) {
+        this.producto = this._productService.getProductById(id);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
   }
 
   minusQuantity() {
@@ -50,4 +54,5 @@ export class ProductDetailsComponent implements OnInit {
   selectTab(tab: 'general' | 'additional') {
     this.activeTab = tab;
   }
+  
 }

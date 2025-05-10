@@ -2,15 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { productsList } from '../product-card/products.mock';
 import { CommonModule } from '@angular/common';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../../services/product.service';
 import { Product } from '../product-card/products.mock';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-products-grid',
-  imports: [ProductCardComponent, CommonModule, FooterComponent, FormsModule],
+  imports: [ProductCardComponent, CommonModule, FormsModule],
   templateUrl: './products-grid.component.html',
   styleUrl: './products-grid.component.css'
 })
@@ -27,10 +26,17 @@ export class ProductsGridComponent implements OnInit {
   ngOnInit(): void {
     const category = this.route.snapshot.paramMap.get('category');
 
-    if (category) {
-      this.productsSorted = [...this._productService.getProductsByCategory(category)];
+    console.log(category);
+  if (category) {
+    const cached = this._productService.getProductsSortedByCat(category);
+    console.log(cached);
+    if (cached.length > 0) {
+      this.productsSorted = [...cached];
+    } else {
+      this.productsSorted = this._productService.getProductsByCategory(category);
       this._productService.setProductsSortedByCat(this.productsSorted);
     }
+  }
   }
 
   sortedByPriceAsc() {

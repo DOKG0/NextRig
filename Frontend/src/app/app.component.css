@@ -5,7 +5,6 @@
     margin: 0;
     padding: 0;
     font-family: "Poppins", sans-serif;
-    
 }
 :root {
     --color-bg: #EBECF2;
@@ -25,7 +24,6 @@ body {
     height: 100vh;
     background-color: var(--color-bg);
     transition: color 0.5s ease, background-color 0.5s ease, left 0.5s ease;
-    overflow-x: hidden;
 }
 
 body.dark-mode{
@@ -176,6 +174,7 @@ body.dark-mode{
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    padding-left: 0;
 }
 
 .menu .menu-item{
@@ -380,7 +379,7 @@ body.dark-mode .logoD{
 }
 
 .dark-mode-btn{
-    position: fixed;
+    position: absolute;
     z-index: 100;
     width: 2.4rem;
     height: 2.4rem;
@@ -486,4 +485,3 @@ body.dark-mode .dark-mode-btn i:first-child{
     height: 100vh;
     min-width: 0;
   }
-

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarrouselComponent } from "../carrousel/carrousel.component";
 import { FooterComponent } from "../footer/footer.component";
-import { RouterModule } from '@angular/router'; // 👈 Necesario para <router-outlet>
+import { RouterModule } from '@angular/router'; 
 
 
 @Component({

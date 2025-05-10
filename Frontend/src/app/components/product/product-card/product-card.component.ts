@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, Input, Output, EventEmitter } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { productsList } from './products.mock';
 import { CommonModule } from '@angular/common';
+import { ViewportScroller } from '@angular/common';
+import { filter } from 'rxjs';
+
 
 declare var bootstrap: any;
 @Component({
@@ -15,6 +18,15 @@ export class ProductCardComponent implements AfterViewInit {
   products = productsList;
   quantity : number = 0;
   @Input() producto: any;
+
+ constructor(private router: Router, private viewportScroller: ViewportScroller) {
+  this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe(() => {
+    this.viewportScroller.scrollToPosition([0, 0]);
+  });
+}
+
 
   minusQuantity() {
     if (this.quantity > 0) {
@@ -37,4 +49,8 @@ export class ProductCardComponent implements AfterViewInit {
     });
   }
 
+  scrollToTop() {
+    this.viewportScroller.scrollToPosition([0, 0]);
+    window.scrollTo(0, 0);
+  }
 }
