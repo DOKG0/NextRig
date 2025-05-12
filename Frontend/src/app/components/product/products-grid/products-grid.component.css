@@ -8,7 +8,6 @@
   overflow-x: hidden;
   flex: 1; 
   background-color: var(--color-surface);
-  background-color: red;
 }
 
 .content-wrapper {
@@ -37,6 +36,11 @@
   .grid-header-buttons {
     margin: 1rem;
   }
+
+   .grid-header {
+    display: flex;
+    align-items: center;
+   }
 
 
   

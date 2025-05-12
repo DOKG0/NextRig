@@ -6,10 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../product-card/products.mock';
 import { FormsModule } from '@angular/forms';
+import { MarcasCarrouselComponent } from '../../marcas-carrousel/marcas-carrousel.component';
+
 
 @Component({
   selector: 'app-products-grid',
-  imports: [ProductCardComponent, CommonModule, FormsModule],
+  imports: [ProductCardComponent, CommonModule, FormsModule, MarcasCarrouselComponent],
   templateUrl: './products-grid.component.html',
   styleUrl: './products-grid.component.css'
 })
