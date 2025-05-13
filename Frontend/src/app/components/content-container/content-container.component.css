@@ -63,6 +63,7 @@
 
 /* footer */
 app-footer, .footer {
+  display: flex;
   margin-top: auto;
 }
 
@@ -75,3 +76,10 @@ app-footer, .footer {
     padding: 0.3rem;
   }
 }
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+

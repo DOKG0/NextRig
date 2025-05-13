@@ -48,6 +48,11 @@ CREATE TABLE `Carrito` (
   CONSTRAINT `fk_carrito_comprador` FOREIGN KEY (`ci`) REFERENCES `Comprador` (`ci`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `Marca` (
+  `NombreMarca` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`NombreMarca`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE `Productos` (
   `id` VARCHAR(50) NOT NULL,
@@ -57,9 +62,12 @@ CREATE TABLE `Productos` (
   `imagen` VARCHAR(255) DEFAULT NULL,
   `nombre` VARCHAR(100) NOT NULL,
   `admin_ci` VARCHAR(50) NOT NULL,
+  `marca_nombre` VARCHAR(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_productos_administrador` FOREIGN KEY (`admin_ci`) REFERENCES `Administrador` (`ci`) ON DELETE CASCADE
+  CONSTRAINT `fk_productos_administrador` FOREIGN KEY (`admin_ci`) REFERENCES `Administrador` (`ci`) ON DELETE CASCADE,
+  CONSTRAINT `fk_productos_marca` FOREIGN KEY (`marca_nombre`) REFERENCES `Marca` (`NombreMarca`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 CREATE TABLE `Componentes` (
@@ -79,7 +87,6 @@ CREATE TABLE `Componentes` (
   CONSTRAINT `fk_componentes_productos` FOREIGN KEY (`id`) REFERENCES `Productos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `Carrito_Productos` (
   `idCarrito` INT NOT NULL,
   `idProducto` VARCHAR(50) NOT NULL,
@@ -88,3 +95,13 @@ CREATE TABLE `Carrito_Productos` (
   CONSTRAINT `fk_carrito_productos_productos` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `Resena` (
+  `id` INT AUTO_INCREMENT,
+  `mensaje` VARCHAR(250),
+  `puntaje` INT NOT NULL CHECK (`puntaje` BETWEEN 1 AND 5),
+  `idProducto` VARCHAR(50) NOT NULL,
+  `ciComprador` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_resena_producto` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`)  ON DELETE CASCADE,
+  CONSTRAINT `fk_resena_comprador` FOREIGN KEY (`ciComprador`) REFERENCES `Comprador` (`ci`)  ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
