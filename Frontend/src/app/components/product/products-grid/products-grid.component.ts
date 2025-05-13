@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductCardComponent } from '../product-card/product-card.component';
-import { productsList } from '../product-card/products.mock';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
-import { Product } from '../product-card/products.mock';
+import { Product } from '../../../models/product.model';
 import { FormsModule } from '@angular/forms';
 import { MarcasCarrouselComponent } from '../../marcas-carrousel/marcas-carrousel.component';
 

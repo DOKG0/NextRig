@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, Input, Output, EventEmitter } from '@angular/core';
 import { NavigationEnd, Router, RouterConfigOptions, RouterModule } from '@angular/router';
-import { productsList } from './products.mock';
 import { CommonModule } from '@angular/common';
 import { ViewportScroller } from '@angular/common';
 import { filter } from 'rxjs';
@@ -14,8 +13,6 @@ declare var bootstrap: any;
   styleUrl: './product-card.component.css'
 })
 export class ProductCardComponent implements AfterViewInit {
-
-  products = productsList;
   quantity : number = 0;
   @Input() producto: any;
 
