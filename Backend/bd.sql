@@ -48,6 +48,11 @@ CREATE TABLE `Carrito` (
   CONSTRAINT `fk_carrito_comprador` FOREIGN KEY (`ci`) REFERENCES `Comprador` (`ci`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `Marca` (
+  `NombreMarca` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`NombreMarca`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE `Productos` (
   `id` VARCHAR(50) NOT NULL,
@@ -63,10 +68,7 @@ CREATE TABLE `Productos` (
   CONSTRAINT `fk_productos_marca` FOREIGN KEY (`marca_nombre`) REFERENCES `Marca` (`NombreMarca`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `Marca` (
-  `NombreMarca` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`NombreMarca`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE `Componentes` (
   `id` VARCHAR(50) NOT NULL,
