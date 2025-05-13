@@ -16,8 +16,8 @@ export class ProductDetailsComponent implements OnInit {
   producto: Product | undefined;
   quantity: number = 0;
   productosSimilares: Product[] = [];
+  productosSimilaresRandom : Product[] = [];
   activeTab: 'general' | 'additional' = 'general';
-
 
   constructor(
     private route: ActivatedRoute,
@@ -29,12 +29,25 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
+      console.log(id);
       this.productosSimilares = this._productService.getProductsSortedByCat(this._productService.getCategory());
       if (id) {
-        this.producto = this._productService.getProductById(id);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this._productService.getProductoById(id).subscribe({
+          next: (producto) => {
+            this.producto = producto; 
+            console.log('Producto cargado:', producto);
+          },
+          error: (err) => {
+            console.error('Error al obtener el producto:', err);
+          }
+        });
       }
     });
+    this.setRandomProducts() 
+  }
+
+  getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   minusQuantity() {
@@ -54,5 +67,20 @@ export class ProductDetailsComponent implements OnInit {
   selectTab(tab: 'general' | 'additional') {
     this.activeTab = tab;
   }
-  
+
+  setRandomProducts() {
+  const randomProducts: Product[] = [];
+  const usedIndexes = new Set<number>();
+
+  while (randomProducts.length < 3 && this.productosSimilares.length > 0) {
+    const randomIndex = this.getRandomInt(0, this.productosSimilares.length - 1);
+    
+    if (!usedIndexes.has(randomIndex)) {
+      usedIndexes.add(randomIndex);
+      randomProducts.push(this.productosSimilares[randomIndex]);
+    }
+  }
+  console.log(randomProducts);
+  this.productosSimilaresRandom = randomProducts;
+}
 }

@@ -4,15 +4,23 @@
   width: 100%;
   min-height: 100vh;
   overflow-y: auto;
+<<<<<<< HEAD
   background-color: var(--color-surface);
   flex: 1; 
+=======
+  z-index: 100000;
+  background-color: var(--color-surface);
+>>>>>>> MichelUltimo
 }
 
 .details-container {
     position: relative;
     gap: 3rem;
     width: 100%;
+<<<<<<< HEAD
     min-height: 100vh;
+=======
+>>>>>>> MichelUltimo
   }
 
 .details-content{
@@ -241,8 +249,12 @@ button[disabled] {
 
 .product-grid {
   padding: 3em;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2em;
   justify-content: center;
-  display: flex;
+  max-width: 1000px; /* opcional, para controlar el ancho total */
+  margin: 0 auto;
 }
 
 .product-grid .product-card {

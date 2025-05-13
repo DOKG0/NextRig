@@ -10,6 +10,8 @@
                     <option value="nameDesc">Nombre: Z-A</option>
                   </select>
             </div>
+            <app-marcas-carrousel></app-marcas-carrousel>
+        </div>
         <div class="product-grid">
             <div *ngFor="let producto of productsSorted">
                 <app-product-card [producto]="producto"></app-product-card>
