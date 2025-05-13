@@ -59,18 +59,5 @@ export class ProductService {
   getCategory(): string {
     return this.category;
   }
-
-  getProductById(id: string | number): Product | undefined {
-    return productsList.find(p => p.id == id);
-  }
-
-  getAllProducts(): Product[] {
-    return productsList;
-  }
-
-  getProductsByCategory(category : string): Product[] {
-    const products : Product[] = productsList.filter((product) => product.categoria === category);
-    return products;
-  }
   
 }

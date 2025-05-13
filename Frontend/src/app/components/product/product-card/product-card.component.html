@@ -13,7 +13,7 @@
            
           </div>
             <img src="{{producto.imagen}}" class="card-img-top" alt="..." id="img">
-            <a [routerLink]="['/products', producto.id]" routerLinkActive="router-link-active" (click)="scrollToTop()"><div class="img-footer"><span>Ver Detalle</span></div></a>
+            <a [routerLink]="['/products', producto.id]" routerLinkActive="router-link-active"><div class="img-footer"><span>Ver Detalle</span></div></a>
         </div>
         <div class="card-body">
           <h5 class="card-title" style="cursor: pointer;" [routerLink]="['/products', producto.id]" routerLinkActive="router-link-active">{{producto.nombre}}</h5>

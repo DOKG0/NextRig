@@ -22,14 +22,14 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private _productService: ProductService
+    
   ) {}
-
-
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       console.log(id);
+
       this.productosSimilares = this._productService.getProductsSortedByCat(this._productService.getCategory());
       if (id) {
         this._productService.getProductoById(id).subscribe({
@@ -43,7 +43,7 @@ export class ProductDetailsComponent implements OnInit {
         });
       }
     });
-    this.setRandomProducts() 
+    this.setRandomProducts();
   }
 
   getRandomInt(min: number, max: number): number {
