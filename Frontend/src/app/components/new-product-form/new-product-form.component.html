@@ -1,0 +1,32 @@
+<section>
+    <h2>Añadir nuevo producto</h2>
+    <form [formGroup]="productFormGroup">
+        <div *ngFor="let inputModel of inputModels">
+            <app-form-input [model]="inputModel" [productFormGroup]="productFormGroup"></app-form-input>
+        </div>
+
+        <div class="mb-3">
+            <label for="accionMarca">Marca: </label>
+            <select class="form-select" (change)="onChangeAccionMarca($event)" name="accionMarca">
+                <option value="0">Seleccionar marca más tarde</option>
+                <option value="1">Seleccionar marca existente</option>
+                <option value="2">Ingresar nueva marca</option>
+            </select>
+        </div>
+
+        <div class="{{setVisibilityClass()}}">
+            <app-form-input [model]="nuevaMarcaInputModel" [productFormGroup]="productFormGroup"></app-form-input>
+        </div>
+
+        <div *ngIf="accionMarca === '1'">
+            <app-select-marca (marcaSeleccionadaEvent)="captureSeleccionMarca($event)"></app-select-marca>
+        </div>
+
+        <button 
+            class="btn btn-primary mt-3" 
+            type="submit" 
+            (click)="onFormSubmit()">
+            Enviar
+        </button>
+    </form>
+</section>
