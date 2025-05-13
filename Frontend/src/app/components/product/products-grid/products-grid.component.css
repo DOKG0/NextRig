@@ -6,6 +6,7 @@
   overflow-y: auto;
   padding: 0.5rem;
   overflow-x: hidden;
+
   flex: 1; 
   background-color: var(--color-surface);
 }
@@ -25,6 +26,7 @@
     padding: 1rem;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-right: 2rem;
   }
 
   .grid-header-buttons span {

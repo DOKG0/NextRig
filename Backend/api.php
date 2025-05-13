@@ -37,6 +37,7 @@ switch ($method) {
 
 function setHeaders()
 {
+    error_log("setHeaders ejecutado");
     header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
@@ -97,6 +98,10 @@ function handleGetRequest($request)
         return;
     }
 
+    
+
+    
+
     if ($request[0] == 'productos') {
         $productosService = new ProductoService();
         switch ($request[1]) {
@@ -138,6 +143,10 @@ function handleGetRequest($request)
 
             case 'mouse':
                 echo json_encode($productosService->getComponentsByCategory('MOUSE'));
+                break;
+            
+            case 'id':
+                echo json_encode($productosService->getComponentById($request[2]));
                 break;
 
             default:

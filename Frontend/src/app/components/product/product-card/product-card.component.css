@@ -1,7 +1,65 @@
+@keyframes rotateBorder {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    padding: 3px; 
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.image-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+/* Aplica la animación solo en hover */
+.image-wrapper:hover::before {
+    background: conic-gradient(
+        from 0deg,
+        #ff00cc,
+        #3333ff,
+        #00ff99,
+        #ffcc00,
+        #ff00cc,
+        #ff00cc,
+        #3333ff,
+        #00ff99,
+        #ffcc00,
+        #ff00cc
+    );
+    animation: rotateBorder 3s linear infinite;
+}
+
+.image-wrapper::after {
+    content: '';
+    position: absolute;
+    opacity: 0;
+    border-radius: 5px;
+}
+
+
+
 .card {
     height: 400px;
     background-color: var(--color-surface);
     box-shadow: 0 2px 5px var(--shadow-border);
+    
 }
 
 .card h5 {
@@ -12,6 +70,7 @@
     position: relative;
     overflow: hidden;
     height: 250px;
+    z-index: 3;
   }
 
   img {
@@ -38,11 +97,17 @@
 .card:hover .img-footer{
     opacity: 1;
     background-color: rgba(149, 150, 218, 0.7);
+    z-index: 5;
 }
 
 .card:hover .icons-container{
     opacity: 1;
     background-color: rgba(149, 150, 218, 0.7);
+}
+
+.card:hover .img-footer:hover {
+    background-color: rgba(149, 150, 218, 1);
+    z-index: 10;
 }
 
 .img-footer span{

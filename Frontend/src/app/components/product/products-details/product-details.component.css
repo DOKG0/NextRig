@@ -240,8 +240,12 @@ button[disabled] {
 
 .product-grid {
   padding: 3em;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2em;
   justify-content: center;
-  display: flex;
+  max-width: 1000px; /* opcional, para controlar el ancho total */
+  margin: 0 auto;
 }
 
 .product-grid .product-card {

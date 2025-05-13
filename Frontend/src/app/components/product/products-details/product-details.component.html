@@ -4,19 +4,19 @@
     <div class="details-content">
       <div class="details-top">
 
-        <div class="arrow"  [routerLink]="['/products/category', p.category]" routerLinkActive="router-link-active">
+        <div class="arrow"  [routerLink]="['/products/category', p.categoria]" routerLinkActive="router-link-active">
           <i class="bx bx-chevron-left"></i>
         </div>
 
         <div class="image-section">
-          <img [src]="p.imageUrl" alt="{{ p.name }}" />
+          <img [src]="p.imagen" alt="{{ p.nombre }}" />
         </div>
       
         <div class="info-section">
-          <h1>{{ p.name }}</h1>
-          <p class="price">{{ p.price | currency:'USD' }}</p>
-          <p class="description">{{ p.description }}</p>
-          <p class="category">Categoría: {{ p.category }}</p>
+          <h1>{{ p.nombre }}</h1>
+          <p class="price">{{ p.precio | currency:'USD' }}</p>
+          <p class="description">{{ p.descripcion }}</p>
+          <p class="category">Categoría: {{ p.categoria }}</p>
           <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">
             {{ p.stock > 0 ? 'Stock disponible' : 'Sin stock' }}
           </p>
@@ -40,8 +40,8 @@
       </div>
 
       <div class="info-container general" *ngIf="activeTab === 'general'">
-        <p >Descripcion: {{ p.description }}</p>
-        <p >Categoria: {{ p.category }}</p>
+        <p >Descripcion: {{ p.descripcion }}</p>
+        <p >Categoria: {{ p.categoria }}</p>
       </div>
 
       <div class="info-container additional" *ngIf="activeTab === 'additional'">
@@ -54,7 +54,7 @@
       
       <div class="product-carrousel"></div>
         <div class="product-grid">
-          <div *ngFor="let producto of productosSimilares" class="product-card">
+          <div *ngFor="let producto of productosSimilaresRandom" class="product-card">
             <app-product-card [producto]="producto"></app-product-card>
           </div>
         </div>  

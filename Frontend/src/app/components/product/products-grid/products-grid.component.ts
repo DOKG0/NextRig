@@ -17,44 +17,70 @@ import { MarcasCarrouselComponent } from '../../marcas-carrousel/marcas-carrouse
 })
 export class ProductsGridComponent implements OnInit {
 
-  productsSorted: Product[] = productsList;
+  productsSorted: Product[] = [];
   selectedSort: string = '';
-
+  selectedSortTest : string = "";
   constructor(
     private route: ActivatedRoute,
     private _productService: ProductService
   ) {}
 
+  // ngOnInit(): void {
+  //   const category = this.route.snapshot.paramMap.get('category');
+
+  //   console.log(category);
+  //   if (category) {
+  //     const cached = this._productService.getProductsSortedByCat(category);
+  //     console.log(cached);
+  //     if (cached.length > 0) {
+  //       this.productsSorted = [...cached];
+  //     } else {
+  //       this.productsSorted = this._productService.getProductsByCategory(category);
+  //       this._productService.setProductsSortedByCat(this.productsSorted);
+  //     }
+  //   }
+  // }
+
   ngOnInit(): void {
     const category = this.route.snapshot.paramMap.get('category');
-
-    console.log(category);
-  if (category) {
-    const cached = this._productService.getProductsSortedByCat(category);
-    console.log(cached);
-    if (cached.length > 0) {
-      this.productsSorted = [...cached];
-    } else {
-      this.productsSorted = this._productService.getProductsByCategory(category);
-      this._productService.setProductsSortedByCat(this.productsSorted);
-    }
+    
+    if (category) {
+      const cached = this._productService.getProductsSortedByCat(category);
+      if (cached.length > 0){
+        this.productsSorted = [...cached];
+      } else {
+        this._productService.getProductosByCategory(category).subscribe({
+          next: (productos) => {
+            this.productsSorted = productos;
+            this._productService.setProductsSortedByCat(this.productsSorted);
+          },
+          error: (err) => {
+            console.error("Error obteniendo todos los productos:", err);
+          },
+          complete: () => {
+            console.log('Petición finalizada');
+          }
+        });
+      }
+    } 
+    console.log(this.selectedSortTest);
   }
-  }
+  
 
   sortedByPriceAsc() {
-    this.productsSorted = this.productsSorted.sort((a, b) => a.price - b.price);
+    this.productsSorted = this.productsSorted.sort((a, b) => a.precio - b.precio);
   }
   
   sortedByPriceDesc() {
-    this.productsSorted = this.productsSorted.sort((a, b) => b.price - a.price);
+    this.productsSorted = this.productsSorted.sort((a, b) => b.precio - a.precio);
   }
   
   sortedByNameAsc() {
-    this.productsSorted = this.productsSorted.sort((a, b) => a.name.localeCompare(b.name));
+    this.productsSorted = this.productsSorted.sort((a, b) => a.nombre.localeCompare(b.nombre));
   }
   
   sortedByNameDesc() {
-    this.productsSorted = [...this.productsSorted].sort((a, b) => b.name.localeCompare(a.name));
+    this.productsSorted = [...this.productsSorted].sort((a, b) => b.nombre.localeCompare(a.nombre));
   }
 
   handleSort(option: string) {
