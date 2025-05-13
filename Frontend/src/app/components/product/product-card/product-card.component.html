@@ -1,0 +1,26 @@
+
+    <div class="image-wrapper">
+    <div class="card" style="width: 18rem;">
+        <div class="img-container">
+          <div class="icons-container">
+            <div class="sum-icons-container">
+              <i class='bx bx-minus icono' (click)="minusQuantity()"></i>
+              <span class="number icono">{{quantity}}</span>
+              <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
+            </div>
+
+            <i class='bx bx-cart-add icono cart' data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar al carrito"></i>
+           
+          </div>
+            <img src="{{producto.imagen}}" class="card-img-top" alt="..." id="img">
+            <a [routerLink]="['/products', producto.id]" routerLinkActive="router-link-active"><div class="img-footer"><span>Ver Detalle</span></div></a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" style="cursor: pointer;" [routerLink]="['/products', producto.id]" routerLinkActive="router-link-active">{{producto.nombre}}</h5>
+          <p class="card-price" style="color: rgb(226, 94, 94);">{{producto.precio | currency}}</p>
+        </div>
+      </div>
+      </div>
+      
+
+     
