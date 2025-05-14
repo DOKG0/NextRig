@@ -4,6 +4,8 @@ import { ContentContainerComponent } from './components/content-container/conten
 import { ProductsGridComponent } from './components/product/products-grid/products-grid.component';
 import { ProductDetailsComponent } from './components/product/products-details/product-details.component';
 import { HomeComponent } from './components/home/home.component';
+import { NewProductFormComponent } from './components/new-product-form/new-product-form.component';
+
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -16,6 +18,8 @@ export const routes: Routes = [
       { path: 'products', component: ProductsGridComponent },
       { path: 'products/category/:category', component: ProductsGridComponent },
       { path: 'products/:id', component: ProductDetailsComponent },
+      { path: 'product-form', component: NewProductFormComponent },
+      { path: 'product-form/update/:id', component: NewProductFormComponent }
     ]
   },
   { path: '**', redirectTo: '' } // redirección por defecto para rutas no válidas

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
-import { Product } from '../../../models/product.model';
+import { Product } from '../../../interfaces/product'
 import { ProductCardComponent } from '../product-card/product-card.component';
 
 @Component({

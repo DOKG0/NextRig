@@ -2,6 +2,7 @@
 include_once 'usuarioService.php';
 include_once 'adminService.php';
 include_once 'productoService.php';
+include_once 'marcaService.php';
 
 setHeaders();
 
@@ -155,6 +156,11 @@ function handleGetRequest($request)
                 break;
         }
     }
+    if ($request[0] == 'marcas') {
+        $marcasService = new MarcaService();
+        $marcas = $marcasService->listarMarcas();
+        echo json_encode($marcas);
+    }
 }
 
 function handlePutRequest($request)
@@ -250,6 +256,14 @@ function handleAdminRequest($adminService, $action, $data)
                 $data['admin_ci'],
                 $data['marca_nombre']
             ));
+            break;
+        case 'addMarca':
+            if (!requiredFieldsExist($data, ['marca'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Datos incompletos']);
+                return;
+            }
+            echo json_encode($adminService->addMarca);
             break;
     }
 }
