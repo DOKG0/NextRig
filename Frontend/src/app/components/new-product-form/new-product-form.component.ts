@@ -23,6 +23,7 @@ enum AccionesMarca {
   styleUrl: './new-product-form.component.css'
 })
 export class NewProductFormComponent {
+  title: string = "Alta de Producto";
   private route: ActivatedRoute = inject(ActivatedRoute);
   formBuilder: FormBuilder = inject(FormBuilder);
 	productsHttpService: ProductService = inject(ProductService);
@@ -54,6 +55,7 @@ export class NewProductFormComponent {
     const productId = this.route.snapshot.paramMap.get('id');
     if (productId) {
       this.fetchProductData(productId);
+      this.title = "Modificación de Producto"
     }
     
     this.createFormInstance();

@@ -1,5 +1,5 @@
 <section>
-    <h2>Añadir nuevo producto</h2>
+    <h2>{{title}}</h2>
     <form [formGroup]="productFormGroup">
         <div *ngFor="let inputModel of inputModels">
             <app-form-input [model]="inputModel" [productFormGroup]="productFormGroup"></app-form-input>

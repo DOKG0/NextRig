@@ -3,7 +3,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
-import { Product } from '../../../models/product.model';
+import { Product } from '../../../interfaces/product';
 import { FormsModule } from '@angular/forms';
 import { MarcasCarrouselComponent } from '../../marcas-carrousel/marcas-carrousel.component';
 
