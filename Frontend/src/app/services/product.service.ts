@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Product } from '../models/product.model';
-import { HttpClient } from '@angular/common/http';
+import { Product } from '../interfaces/product';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +12,18 @@ export class ProductService {
   productsSortedByCat: Product[] = [];
   category: string = '';
 
-  
+  private apiAdminUrl = "http://localhost/NextRig/Backend/api.php";
   private apiUrl = 'http://localhost/NextRig/Backend/api.php/productos';
   constructor(private http: HttpClient) { }
+
+  addProduct(product: Product): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }    
+    return this.http.post(`${this.apiAdminUrl}/addProducto`, product, httpOptions);
+  }
 
   getProductos(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);

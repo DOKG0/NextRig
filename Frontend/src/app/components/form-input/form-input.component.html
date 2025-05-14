@@ -1,0 +1,62 @@
+<div [formGroup]="productFormGroup">
+    <label class="form-label mt-1" for="{{model?.name}}">
+        {{model?.text}}: 
+    </label>
+
+    @switch (model?.type) {
+        @case ("select") {
+            <select 
+                class="form-select mb-2 {{getInputValidationClass()}}"
+                id="{{model?.id}}" 
+                name="{{model?.name}}" 
+                [formControlName]="model?.name || ''"
+                [attr.disabled]="model?.config?.disabled"
+            >
+                <option 
+                    *ngFor="let option of model?.optionSelectValues"  
+                    [value]="option">
+                    {{option}}
+                </option> 
+            </select>
+        }
+        @case ("number") {
+            <input 
+                class="form-control mb-2 {{getInputValidationClass()}}" 
+                id="{{model?.id}}"
+                type="{{model?.type}}" 
+                name="{{model?.name}}" 
+                [formControlName]="model?.name || ''"
+                step="{{model?.config?.step || 1}}" 
+                value="{{model?.value}}"
+                [attr.disabled]="model?.config?.disabled"
+            >
+        }
+        @case ("textarea") {
+            <textarea
+                class="form-control mb-2 {{getInputValidationClass()}}" 
+                id="{{model?.id}}"
+                name="{{model?.name}}" 
+                [formControlName]="model?.name || ''"
+                value="{{model?.value}}"
+                [attr.disabled]="model?.config?.disabled"
+                >
+            </textarea>
+        }
+        @default {
+            <input 
+            class="form-control mb-2 {{getInputValidationClass()}}" 
+            id="{{model?.id}}"
+            type="{{model?.type}}" 
+            name="{{model?.name}}" 
+            [formControlName]="model?.name || ''" 
+            value="{{model?.value}}"
+            [attr.disabled]="model?.config?.disabled"
+            placeholder="{{model?.config?.placeholder}}"
+            >
+        }
+    }
+    
+    <div *ngIf="inputIsInvalid()" class="form-error" >
+        <p>{{inputErrorMessage}}</p>
+    </div>
+</div>

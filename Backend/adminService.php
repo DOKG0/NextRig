@@ -9,11 +9,50 @@ class AdminService
         $this->db_conn = $database->getConnection();
     }
 
+    public function addMarca($nombre_marca) 
+    {   
+
+        $nombre_marca = mysqli_real_escape_string($this->db_conn, $nombre_marca);
+
+        $query = "INSERT INTO Marca VALUES ('$nombre_marca')";
+        mysqli_query($this->db_conn, $query);
+
+        if (mysqli_affected_rows($this->db_conn) > 0) {
+            return [
+                "success" => true,
+                "mensaje" => "Marca agregada exitosamente",
+                "marca" => $nombre_marca
+            ];
+        } else {
+            return [
+                "success" => false,
+                "mensaje" => "Error al insertar la nueva marca",
+                "marca" => $nombre_marca
+            ];
+        }
+    }
 
     public function addProducto($id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre)
     {
-        $query = "INSERT INTO Productos (id, nombre, precio, stock, descripcion, imagen, admin_ci, marca_nombre) 
+
+        $id = mysqli_real_escape_string($this->db_conn, $id);
+        $nombre = mysqli_real_escape_string($this->db_conn, $nombre);
+        $precio = mysqli_real_escape_string($this->db_conn, $precio);
+        $stock = mysqli_real_escape_string($this->db_conn, $stock);
+        $descripcion = mysqli_real_escape_string($this->db_conn, $descripcion);
+        $imagen = mysqli_real_escape_string($this->db_conn, $imagen);
+        $categoria = mysqli_real_escape_string($this->db_conn, $categoria);
+        $admin_ci = mysqli_real_escape_string($this->db_conn, $admin_ci);
+        $marca_nombre = mysqli_real_escape_string($this->db_conn, $marca_nombre);
+
+        if (empty($marca_nombre)) {
+            $query = "INSERT INTO Productos (id, nombre, precio, stock, descripcion, imagen, admin_ci) 
+                      VALUES ('$id', '$nombre', '$precio', '$stock', '$descripcion', '$imagen', '$admin_ci')";
+        } else {
+            $query = "INSERT INTO Productos (id, nombre, precio, stock, descripcion, imagen, admin_ci, marca_nombre) 
                       VALUES ('$id', '$nombre', '$precio', '$stock', '$descripcion', '$imagen', '$admin_ci', '$marca_nombre')";
+        }
+
         mysqli_query($this->db_conn, $query);
         if (mysqli_affected_rows($this->db_conn) > 0) {
             switch ($categoria) {
@@ -74,8 +113,11 @@ class AdminService
             return true;
         } else return false;
     }
+
     public function eliminarProducto($producto_id)
     {
+
+        $producto_id = mysqli_real_escape_string($this->db_conn, $producto_id);
 
         $query = "DELETE FROM Componentes WHERE id = '$producto_id'";
         mysqli_query($this->db_conn, $query);

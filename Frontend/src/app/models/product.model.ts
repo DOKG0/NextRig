@@ -1,4 +1,6 @@
- export const productsList: Product[] = [
+import { Product } from "../interfaces/product";
+
+export const productsList: Product[] = [
 //   // 🧠 CPU
 //   {
 //     id: 1,
@@ -319,15 +321,3 @@
 //       adminCI: '12345678'
 //     }
 ];
-
-export interface Product {
-  admin_ci: string;
-  categoria: string;
-  descripcion: string;
-  id: number | string;
-  imagen: string;
-  marca_nombre : string;
-  nombre: string;
-  precio: number;
-  stock: number;
-}
