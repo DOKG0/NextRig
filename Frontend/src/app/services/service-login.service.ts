@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 
 export class ServiceLoginService {
   private _http = inject(HttpClient); // Inyecta HttpClient en la variable _http para realizar solicitudes HTTP
-  private urlBase: string = '/Backend/api.php/login';
+  //private urlBase: string = '/Backend/api.php/login';
+  private urlBase: string = 'http://localhost/NextRig/Backend/api.php/login';
 
   public enviarDatos(datos: any): Observable<any> {
     return this._http.post(this.urlBase, datos);

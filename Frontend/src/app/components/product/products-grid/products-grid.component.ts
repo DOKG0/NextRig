@@ -6,6 +6,7 @@ import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product';
 import { FormsModule } from '@angular/forms';
 import { MarcasCarrouselComponent } from '../../marcas-carrousel/marcas-carrousel.component';
+import { MarcasService } from '../../../services/marcas.service';
 
 
 @Component({
@@ -18,32 +19,19 @@ export class ProductsGridComponent implements OnInit {
 
   productsSorted: Product[] = [];
   selectedSort: string = '';
-
+  marcas : String[] = [];
+  marcasSorted : string[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private _productService: ProductService
+    private _productService: ProductService,
+    private _marcasService: MarcasService
   ) {}
-
-  // ngOnInit(): void {
-  //   const category = this.route.snapshot.paramMap.get('category');
-
-  //   console.log(category);
-  //   if (category) {
-  //     const cached = this._productService.getProductsSortedByCat(category);
-  //     console.log(cached);
-  //     if (cached.length > 0) {
-  //       this.productsSorted = [...cached];
-  //     } else {
-  //       this.productsSorted = this._productService.getProductsByCategory(category);
-  //       this._productService.setProductsSortedByCat(this.productsSorted);
-  //     }
-  //   }
-  // }
 
   ngOnInit(): void {
     const category = this.route.snapshot.paramMap.get('category');
     
+
     if (category) {
       const cached = this._productService.getProductsSortedByCat(category);
       if (cached.length > 0){
@@ -63,8 +51,28 @@ export class ProductsGridComponent implements OnInit {
         });
       }
     } 
+    this.fetchMarcas();
   }
-  
+
+  fetchMarcas(): void {
+    this._marcasService.getMarcas().subscribe({
+      next: response => {
+        this.marcas = response; 
+        this.sortMarcas();
+        console.log(this.marcasSorted);
+      },
+      error: err => {
+        console.log("Error");        
+      }
+    });   
+  }
+
+  sortMarcas(){
+     for(const producto of this.productsSorted){
+      if(!this.marcasSorted.includes(producto.marca_nombre))
+        this.marcasSorted.push(producto.marca_nombre);
+     }
+  }
 
   sortedByPriceAsc() {
     this.productsSorted = this.productsSorted.sort((a, b) => a.precio - b.precio);
@@ -79,7 +87,7 @@ export class ProductsGridComponent implements OnInit {
   }
   
   sortedByNameDesc() {
-    this.productsSorted = [...this.productsSorted].sort((a, b) => b.nombre.localeCompare(a.nombre));
+    this.productsSorted = this.productsSorted.sort((a, b) => b.nombre.localeCompare(a.nombre));
   }
 
   handleSort(option: string) {

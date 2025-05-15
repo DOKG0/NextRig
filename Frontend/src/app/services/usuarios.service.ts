@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UsuarioService {
-    private apiUrl = 'http://localhost/Backend/api.php';
+    //private apiUrl = 'http://localhost/Backend/api.php';
+    private apiUrl = 'http://localhost/NextRig/Backend/api.php';
     constructor(private http: HttpClient) { }
 
     login(correo: string, password: string): Observable<any> {
