@@ -1,5 +1,5 @@
 #si tienen los directorios distintos en opt/lampp/htdocs entonces cambiar esta variable, por ejemplo:
-apiEndpoint="http://localhost:4200/NextRig/Backend/api.php/usuario/registro"
+apiEndpoint="http://localhost/NextRig/Backend/api.php/usuario/registro"
 #apiEndpoint="http://localhost/Backend/api.php/usuario/registro"
 
 
