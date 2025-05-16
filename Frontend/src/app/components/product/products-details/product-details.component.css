@@ -41,8 +41,8 @@
   
 .image-section img {
   object-fit: contain;
-  width: 28em;
-  height: 28em;
+  width: 80%;
+  height: 80%;
 }
 
 

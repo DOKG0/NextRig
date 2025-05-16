@@ -1,4 +1,4 @@
-<div class="main-container">
+<div class="main-container" #topOfDetails>
   <div *ngIf="producto as p" class="details-container">
     
     <div class="details-content">
@@ -39,7 +39,7 @@
         <span [class.active]="activeTab === 'additional'" (click)="selectTab('additional')">Detalles Adicionales</span>
       </div>
 
-      <div class="info-container general" *ngIf="activeTab === 'general'">
+      <div class="info-container general" *ngIf="activeTab === 'general'" #generalInfo>
         <p >Descripcion: {{ p.descripcion }}</p>
         <p >Categoria: {{ p.categoria }}</p>
       </div>
@@ -47,7 +47,7 @@
       <div class="info-container additional" *ngIf="activeTab === 'additional'">
         <p >Material: Plastico</p>
       </div>
-      
+y
       <div class="footer">
         <h2>Otros articulos que podrian interesarte:</h2>
       </div>
@@ -55,7 +55,7 @@
       <div class="product-carrousel"></div>
         <div class="product-grid">
           <div *ngFor="let producto of productosSimilaresRandom" class="product-card">
-            <app-product-card [producto]="producto"></app-product-card>
+            <app-product-card [producto]="producto" (ejecutarTopPadre)="top()"></app-product-card>
           </div>
         </div>  
       </div>
