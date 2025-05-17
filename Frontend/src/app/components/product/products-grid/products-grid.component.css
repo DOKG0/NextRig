@@ -41,7 +41,26 @@
    .grid-header {
     display: flex;
     align-items: center;
+    width: 100%;
    }
 
 
-  
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pagination-controls button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: var(--shadow-border); 
+    color: var(--color-text-primary);
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .pagination-controls button.active {
+    background-color: var(--color-surface);
+  }

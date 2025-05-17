@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MarcasService {
-  private apiUrl = 'http://localhost/sites/NextRig/Backend/api.php/marcas';
+  private apiUrl = 'http://localhost/NextRig/Backend/api.php/marcas';
+  //private apiUrl = 'http://localhost/sites/NextRig/Backend/api.php/marcas';
 
   constructor(private http: HttpClient) { }
 

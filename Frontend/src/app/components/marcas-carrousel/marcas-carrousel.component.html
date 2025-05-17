@@ -1,15 +1,9 @@
 <div class="content-wrapper">
-    <label class="marca-card">
-        <input type="radio" name="marca" value="HyperX" hidden>
-        <div class="marca-card">
-            <p>HyperX</p>
-        </div>
+  <div class="marcas-container">
+    <label class="marca-card" *ngFor="let marca of marcasSorted">
+      <div class="marca-card">
+        <p>{{ marca }}</p>
+      </div>
     </label>
-    
-    <label class="marca-card">
-        <input type="radio" name="marca" value="HyperX2" hidden>
-        <div class="marca-card">
-            <p>HyperX2</p>
-        </div>
-    </label>
+  </div>
 </div>
