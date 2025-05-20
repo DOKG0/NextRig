@@ -12,7 +12,7 @@ export class ProductService {
   productsSortedByCat: Product[] = [];
   category: string = '';
 
-  private apiAdminUrl = "http://localhost/NextRig/Backend/api.php";
+  private apiAdminUrl = "http://localhost/NextRig/Backend/api.php/admin";
   private apiUrl = 'http://localhost/NextRig/Backend/api.php/productos';
   constructor(private http: HttpClient) { }
 

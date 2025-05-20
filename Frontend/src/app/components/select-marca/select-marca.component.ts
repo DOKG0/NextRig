@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { MarcasService } from '../../services/marcas.service';
 import { FormsModule } from '@angular/forms';
 
@@ -12,14 +12,14 @@ import { FormsModule } from '@angular/forms';
 })
 export class SelectMarcaComponent implements OnInit {
   fetchErrorMsg: string = "";
-  marcaSeleccionada: string = "";
+  @Input() marcaSeleccionada: string = "";
   marcas: { NombreMarca: string }[] = []; //Marcas guardadas en la BD
   marcasHttpService: MarcasService = inject(MarcasService);
   @Output() marcaSeleccionadaEvent = new EventEmitter<any>(); 
 
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
       this.fetchMarcas();
   }
 
@@ -27,7 +27,9 @@ export class SelectMarcaComponent implements OnInit {
     this.marcasHttpService.getMarcas().subscribe({
       next: response => {
         this.marcas = response; 
-        this.marcaSeleccionada = this.marcas[0].NombreMarca;     
+        if (!this.marcaSeleccionada) {
+          this.marcaSeleccionada = this.marcas[0].NombreMarca;     
+        }
         this.marcaSeleccionadaEvent.emit(this.marcaSeleccionada);  
       },
       error: err => {

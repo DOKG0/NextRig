@@ -113,9 +113,9 @@ export const formInputTemplates = {
 		order: 3,
 		validators: [ { validate: 'required' } ],
         optionSelectValues: [
-            'cpu', 'motherboard', 'tarjeta_grafica', 
-            'almacenamiento', 'memorias', 'cooling', 
-            'gabinetes', 'monitores', 'teclados', 'mouse'
+            'CPU', 'MOTHERBOARD', 'TARJETA_GRAFICA', 
+            'ALMACENAMIENTO', 'MEMORIAS', 'COOLING', 
+            'GABINETES', 'MONITORES', 'TECLADOS', 'MOUSE'
         ],
         id: '',
         value: '',

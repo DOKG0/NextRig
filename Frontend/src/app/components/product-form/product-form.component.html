@@ -7,7 +7,7 @@
 
         <div class="mb-3">
             <label for="accionMarca">Marca: </label>
-            <select class="form-select" (change)="onChangeAccionMarca($event)" name="accionMarca">
+            <select class="form-select" (change)="onChangeAccionMarca($event)" name="accionMarca" id="accionMarca">
                 <option value="0">Seleccionar marca más tarde</option>
                 <option value="1">Seleccionar marca existente</option>
                 <option value="2">Ingresar nueva marca</option>
@@ -19,7 +19,10 @@
         </div>
 
         <div *ngIf="accionMarca === '1'">
-            <app-select-marca (marcaSeleccionadaEvent)="captureSeleccionMarca($event)"></app-select-marca>
+            <app-select-marca 
+                [marcaSeleccionada]="this.marcaSeleccionada" 
+                (marcaSeleccionadaEvent)="captureSeleccionMarca($event)">
+            </app-select-marca>
         </div>
 
         <button 
