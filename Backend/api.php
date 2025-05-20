@@ -161,6 +161,17 @@ function handleGetRequest($request)
         $marcas = $marcasService->listarMarcas();
         echo json_encode($marcas);
     }
+
+    if($request[0] == 'carrito') {
+        $carritoService = new CarritoService();
+        $productos = $carritoService->getProductosCarrito($request[1]);
+        echo json_encode($productos);
+    }
+
+    if( $request[0] == 'historial'){
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->getHistorialCompras($request[1]));
+    }
 }
 
 function handlePutRequest($request)
@@ -201,6 +212,10 @@ function handleDeleteRequest($request)
         $adminService = new AdminService();
         echo json_encode($adminService->eliminarProducto($data->producto_id));
     }
+    if ($request[0] == 'usuario' && $request[1] == 'eliminarProductoCarrito') {
+        $carritoService = new CarritoService();
+        echo json_encode($carritoService->deleteProductoCarrito($data->username, $data->idProducto));
+    }
 }
 
 function handleUsuarioRequest($usuarioService, $action, $data)
@@ -232,6 +247,21 @@ function handleUsuarioRequest($usuarioService, $action, $data)
                 $data['fechaNac']
             );
             echo json_encode($result);
+            break;
+
+            case 'cantidad':
+            
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->postCantidadProductoCarrito(
+                $data['username'],
+                $data['idProducto'],
+                $data['cantidad']
+            ));
+            break;
+
+        case 'comprarCarrito':
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->comprarCarrito($data['username'],$data['idProducto'],$data['costoCarrito'], $data['cantidad']));
             break;
 
         default:
