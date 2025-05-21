@@ -9,7 +9,7 @@
               <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
             </div>
 
-            <i class='bx bx-cart-add icono cart' data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar al carrito"></i>
+            <i class='bx bx-cart-add icono cart' data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar al carrito" (click)="agregarAlCarrito(quantity)"></i>
            
           </div>
             <img src="{{producto.imagen}}" class="card-img-top" alt="..." id="img">

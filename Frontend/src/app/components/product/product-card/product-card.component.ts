@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterConfigOptions, RouterModule } from '@angul
 import { CommonModule } from '@angular/common';
 import { ViewportScroller } from '@angular/common';
 import { filter } from 'rxjs';
+import { UsuarioService } from '../../../services/usuarios.service';
 
 
 declare var bootstrap: any;
@@ -17,7 +18,7 @@ export class ProductCardComponent implements AfterViewInit {
   @Input() producto: any;
   @Output() ejecutarTopPadre = new EventEmitter<void>();
 
-  constructor() {   
+  constructor(private usuarioService: UsuarioService) {   
   }
 
   minusQuantity() {
@@ -44,4 +45,24 @@ export class ProductCardComponent implements AfterViewInit {
   enviarPadre() {
     this.ejecutarTopPadre.emit(); 
   }
+
+  agregarAlCarrito(quantity : number) {
+
+  if(quantity === 0){
+    quantity = 1;
+  }
+  let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
+    if (!this.producto || this.producto.id === undefined) {
+    console.error('Producto no definido o sin ID');
+    return;
+  }else{
+    let idProducto = this.producto.id as string;
+    console.log('ID del producto:', idProducto);
+    console.log('Nombre de usuario:', nombreUsuario);
+    console.log('Cantidad:', quantity);
+  this.usuarioService.agregarCarrito(nombreUsuario,idProducto,quantity).subscribe((data: any) => {
+      }
+    );
+}
+}
 }

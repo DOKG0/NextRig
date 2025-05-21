@@ -4,6 +4,7 @@ import { RouterOutlet, RouterLink, Router, NavigationEnd, ActivatedRoute, Router
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product'
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { UsuarioService } from '../../../services/usuarios.service';
 
 @Component({
   selector: 'app-product-details',
@@ -23,7 +24,8 @@ export class ProductDetailsComponent implements OnInit {
   @ViewChild('generalInfo') generalInfo!: ElementRef;
   constructor(
     private route: ActivatedRoute,
-    private _productService: ProductService
+    private _productService: ProductService,
+    private usuarioService: UsuarioService,
   ) {}
 
   ngOnInit(): void {
@@ -88,4 +90,24 @@ export class ProductDetailsComponent implements OnInit {
       this.topOfDetails.nativeElement.scrollIntoView({ behavior: 'smooth' });
     }, 0);
   }
+
+  agregarAlCarrito(quantity : number) {
+
+  if(quantity === 0){
+    quantity = 1;
+  }
+  let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
+    if (!this.producto || this.producto.id === undefined) {
+    console.error('Producto no definido o sin ID');
+    return;
+  }else{
+    let idProducto = this.producto.id as string;
+    console.log('ID del producto:', idProducto);
+    console.log('Nombre de usuario:', nombreUsuario);
+    console.log('Cantidad:', quantity);
+  this.usuarioService.agregarCarrito(nombreUsuario,idProducto,quantity).subscribe((data: any) => {
+      }
+    );
+}
+}
 }

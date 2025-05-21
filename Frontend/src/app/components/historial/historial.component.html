@@ -1,0 +1,56 @@
+
+<ng-container *ngIf="hayProductos; then conProductos; else sinProductos"></ng-container>
+
+
+
+<ng-template #conProductos>
+  
+<div class="container mt-4">
+  <h2 class="fw-bold mb-4">Mis pedidos</h2>
+
+  <div class="d-flex align-items-center mb-3 gap-3">
+    <input type="text" class="form-control w-50" placeholder="Buscar..." [(ngModel)]="searchText">
+    
+    <span class="text-muted">{{ productos.length }} compras</span>
+  </div>
+
+    
+
+    <div *ngFor="let compra of productos" class="card border-0 border-bottom px-3 py-3 d-flex flex-md-row align-items-center justify-content-between">
+      
+      <div class="d-flex align-items-center gap-3">
+        <img [src]="compra.imagen" class="img-thumbnail" style="width: 64px; height: 64px; object-fit: cover;">
+        <div>
+          <div class="text-success fw-semibold small"> {{compra.fechaCompra}}</div>
+          <div class="fw-bold">{{ compra.nombre }}</div>
+          <div class="text-muted small">${{compra.precio}}</div>
+        </div>
+      </div>
+
+      <div class="d-none d-md-block text-end text-muted small">
+        {{ compra.marca }} <br>
+        <a href="#" class="text-primary">Dejar reseña</a>
+      </div>
+
+      <div class="d-flex flex-column gap-2">
+        <button class="btn btn-primary btn-sm">Ver compra</button>
+        <button class="btn btn-outline-primary btn-sm" (click)="volverAComprar(compra.id)">Volver a comprar</button>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+</ng-template>
+  
+
+
+<ng-template #sinProductos>
+  <h1 class="text-center">No has realizado ninguna compra</h1>
+  
+</ng-template>

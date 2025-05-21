@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarrouselComponent } from "../carrousel/carrousel.component";
 import { FooterComponent } from "../footer/footer.component";
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-content-container',
@@ -14,6 +15,21 @@ import { RouterOutlet } from '@angular/router';
 export class ContentContainerComponent implements OnInit, OnDestroy {
   sidebarState = 'sidebar-hidden';
   private sidebarStateListener: any;
+    mostrarCarrousel: boolean = true;
+
+constructor(private router: Router) {
+     this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        // Verificamos si la URL contiene "/cart"
+        if (event.url.includes('/cart') || event.url.includes('/profile') || event.url.includes('/orders')) {
+          this.mostrarCarrousel = false;
+        }
+        
+      });
+  }
+
+
 
   ngOnInit(): void {
     // estado nicial del sidebar

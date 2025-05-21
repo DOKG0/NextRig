@@ -1,6 +1,6 @@
 <div class="content-wrapper" [ngClass]="sidebarState">
   <div class="content-container">
-    <div class="carousel-section">
+    <div class="carousel-section" *ngIf="mostrarCarrousel">
       <app-carrousel></app-carrousel>
     </div>
 
