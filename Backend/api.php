@@ -150,6 +150,10 @@ function handleGetRequest($request)
                 echo json_encode($productosService->getComponentById($request[2]));
                 break;
 
+            case 'top-rated':
+                echo json_encode($productosService->getTopRatedProducts(5));
+                break;
+
             default:
                 $productos = $productosService->listarProductos();
                 echo json_encode($productos);
