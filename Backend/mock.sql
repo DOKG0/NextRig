@@ -10,10 +10,10 @@ INSERT INTO Marca (NombreMarca) VALUES
 ('Phanteks'), ('BenQ'), ('Acer'), ('ViewSonic'), ('Sapphire'), ('XFX'),
 ('PowerColor'), ('Gainward'), ('Palit');
 
--- 2. Insertar usuario administrador
+-- 2. Insertar usuario administrador --Password Hasheada -> admin
 INSERT INTO Usuario (ci, nombre, username, apellido, fechanac, correo, password) VALUES 
-('ADM001', 'Admin', 'admin', 'Sistema', '1985-01-15', 'admin@techstore.com', 'admin123'),
-('ADM002', 'Admin2', 'admin2', 'Sistema', '2025-01-15', 'admin', 'admin123');
+('ADM001', 'Admin', 'admin', 'Sistema', '1985-01-15', 'admin@techstore.com', '$2y$10$Dqf.jUXINvpPXGozwyyPkOwduP.uPs8gOTE4QlYsG4r078Y0XGP5S'),
+('ADM002', 'Admin2', 'admin2', 'Sistema', '2025-01-15', 'admin', '$2y$10$Dqf.jUXINvpPXGozwyyPkOwduP.uPs8gOTE4QlYsG4r078Y0XGP5S');
 
 INSERT INTO Administrador (ci) VALUES ('ADM001');
 -- 3. Insertar 50 productos electrónicos reales con IDs personalizados
