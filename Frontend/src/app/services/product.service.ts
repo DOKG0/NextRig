@@ -63,5 +63,8 @@ export class ProductService {
   getCategory(): string {
     return this.category;
   }
-  
+
+  getTopRatedProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>('http://localhost/NextRig/Backend/api.php/productos/top-rated');
+  }
 }
