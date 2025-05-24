@@ -1,0 +1,50 @@
+main{
+    margin-top: 1rem;
+}
+
+.banner img{
+    width: 100%;
+    max-width: 100%;
+    height: 100px;
+    object-fit: cover;  
+    display: block;
+    margin-top: 1rem;
+}
+
+.cupones{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 5rem;
+    margin-top: 1rem;
+}
+
+.cupon {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.cupon img{
+    width: 100%;
+    max-width: 100%;
+    height: 400px;
+    display: block;
+    object-fit: contain;
+}
+
+@media (max-width: 940px) {
+  .cupones {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+  .cupon {
+    width: 100%;
+    justify-content: center;
+  }
+  .cupon img {
+    max-width: 90vw;
+    height: 400px;
+  }
+}
