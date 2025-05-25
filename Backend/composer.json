@@ -1,0 +1,20 @@
+{
+    "name": "dokgo/backend",
+    "description": "recibir y enviar correos",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Dokgo\\Backend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DOKG0",
+            "email": "agustin-26-4-1996@hotmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpmailer/phpmailer": "^6.10"
+    }
+}
