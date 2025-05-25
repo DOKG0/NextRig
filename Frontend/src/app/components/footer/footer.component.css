@@ -110,6 +110,24 @@
     flex: 1 1 120px;
     min-width: 0;
   }
+
+  .footer-message {
+    resize: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    min-height: 2.2rem;
+    background-color: transparent;
+    color: var(--color-text-primary);
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .footer-message::placeholder{
+    color: var(--color-text-secondary);
+  }
   
   .footer-name::placeholder {
     color: var(--color-text-secondary);
@@ -130,6 +148,9 @@
     cursor: pointer;
     font-size: 0.95rem;
     transition: background 0.2s, color 0.2s;
+    margin: 0.5rem auto 0 auto;
+    width: 70%;
+    max-width: 420px;
   }
   
   .footer-submit:hover {

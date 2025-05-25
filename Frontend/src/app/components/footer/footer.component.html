@@ -24,10 +24,11 @@
           <p class="footer-info">Direccion: Av. Cachimba del Rey entre Bvar. Artigas y Av. Aparicio Saravia</p>
         </article>
   
-        <form class="footer-newsletter">
-            <input type="text" placeholder="Nombre" class="footer-name">
-          <input type="email" placeholder="Email" class="footer-email">
-          <input type="submit" value="Suscribete" class="footer-submit">
+        <form class="footer-newsletter" (ngSubmit)="enviarContacto()" #contactoForm="ngForm">
+            <input type="text" placeholder="Nombre" class="footer-name" [(ngModel)]="nombre" name="nombre" required>
+          <input type="email" placeholder="Email" class="footer-email" [(ngModel)]="email" name="email" required>
+          <textarea placeholder="Mensaje" class="footer-message" rows="3" [(ngModel)]="mensaje" name="mensaje" required></textarea>
+          <input type="submit" value="Submit" class="footer-submit">
         </form>
   
         <nav class="footer-social">
