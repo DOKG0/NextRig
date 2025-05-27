@@ -29,4 +29,30 @@ export class UsuarioService {
             fechaNac
         });
     }
+
+    getCarrito(username : string): Observable<any> {
+       
+        return this.http.get(`${this.apiUrl}/carrito/${username}`);
+    }
+
+    agregarCarrito(username: string, idProducto: string,cantidad: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/usuario/cantidad`, { username, idProducto,cantidad });
+    }
+
+    eliminarProductoCarrito(username: string, idProducto: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/usuario/eliminarProductoCarrito`,{body:{ username,idProducto}});
+    }
+
+    comprarCarrito(username: string, idProducto: string, costoCarrito: number,cantidad: number): Observable<any> {
+  return this.http.post(`${this.apiUrl}/usuario/comprarCarrito`, {
+    username,
+    idProducto,
+    costoCarrito,
+    cantidad
+  });
+}
+
+getHistorial(username: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/historial/${username}`);
+}
 }
