@@ -3,3 +3,23 @@
     font-size: .75em;
     margin-top: .5em;
 }
+
+label {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+input, textarea, select {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg);
+}
+
+input:disabled {
+    color: var(--color-text-primary);
+    background-color: var(--color-input-disabled);
+    text-decoration-line: line-through;
+}
+
+input::placeholder {
+    color: var(--color-text-secondary);
+}

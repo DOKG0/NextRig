@@ -13,7 +13,7 @@ export class ProductService {
   productsSortedByCat: Product[] = [];
   category: string = '';
 
-  private apiAdminUrl = "http://localhost/NextRig/Backend/api.php";
+  private apiAdminUrl = "http://localhost/NextRig/Backend/api.php/admin";
   private apiUrl = 'http://localhost/NextRig/Backend/api.php/productos';
 
   constructor(private http: HttpClient) { }
@@ -25,7 +25,16 @@ export class ProductService {
         'Content-Type': 'application/json'
       })
     }    
-    return this.http.post(`${this.apiAdminUrl}/addProducto`, product, httpOptions);
+    return this.http.post(`${this.apiAdminUrl}/addProduct`, product, httpOptions);
+  }
+
+  updateProduct(product: Product): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+    return this.http.post(`${this.apiAdminUrl}/updateProduct`, product, httpOptions);
   }
 
   getProductos(): Observable<any[]> {

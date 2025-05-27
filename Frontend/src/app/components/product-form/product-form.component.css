@@ -1,0 +1,50 @@
+.form-section {
+    border: 1px solid var(--color-border);
+    box-shadow: 0 -1px 8px var(--shadow-border);
+}
+
+h2 {
+    color: var(--color-text-primary);
+    font-weight: bold;
+}
+
+label {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+input, textarea, select {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg);
+}
+
+input:disabled {
+    color: var(--color-text-primary);
+    background-color: var(--color-input-disabled);
+    text-decoration-line: line-through;
+}
+
+input::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.btn-custom {
+    font-weight: bold;
+    padding: .75rem 1rem;
+    border-radius: 15px;
+    max-width: 25em;
+    margin: 2em .5em;
+    color: var(--color-text-primary);
+    background-color: var(--color-btn-submit);
+    border: 1px solid #e7eaed;
+    outline: none;
+}
+
+.btn-custom:focus {
+    outline: 3px solid #7e7f80;
+}
+
+.btn-custom:hover {
+    background-color: var(--color-btn-submit-hover);
+    color: var(--color-tooltip-text);
+}

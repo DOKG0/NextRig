@@ -111,10 +111,6 @@ function handleGetRequest($request)
         return;
     }
 
-    
-
-    
-
     if ($request[0] == 'productos') {
         $productosService = new ProductoService();
         switch ($request[1]) {
@@ -174,8 +170,13 @@ function handleGetRequest($request)
     }
     if ($request[0] == 'marcas') {
         $marcasService = new MarcaService();
-        $marcas = $marcasService->listarMarcas();
-        echo json_encode($marcas);
+
+        if (sizeof($request) > 1) {
+            $result = $marcasService->existeMarca($request[1]);
+        } else {
+            $result = $marcasService->listarMarcas();
+        }
+        echo json_encode($result);
     }
 }
 
@@ -260,8 +261,10 @@ function handleUsuarioRequest($usuarioService, $action, $data)
 function handleAdminRequest($adminService, $action, $data)
 {
     switch ($action) {
-        case 'addProducto':
-            echo json_encode($adminService->addProducto(
+        case 'addProduct':
+
+            $marca = array_key_exists('marca_nombre', $data) ? $data['marca_nombre'] : null;
+            $result_addProduct = $adminService->addProducto(
                 $data['id'],
                 $data['nombre'],
                 $data['precio'],
@@ -270,16 +273,44 @@ function handleAdminRequest($adminService, $action, $data)
                 $data['imagen'],
                 $data['categoria'],
                 $data['admin_ci'],
-                $data['marca_nombre']
-            ));
+                $marca
+            );
+            if (!$result_addProduct['success']) {
+                http_response_code(500);
+            } 
+            echo json_encode($result_addProduct);
+            break;
+        case 'updateProduct':
+            $marca = array_key_exists('marca_nombre', $data) ? $data['marca_nombre'] : null;
+            $result_updateProduct = $adminService->updateProducto(
+                $data['id'],
+                $data['nombre'],
+                $data['precio'],
+                $data['stock'],
+                $data['descripcion'],
+                $data['imagen'],
+                $data['categoria'],
+                $data['admin_ci'],
+                $marca
+            );
+            if (!$result_updateProduct['success']) {
+                http_response_code(500);
+            } 
+            echo json_encode($result_updateProduct);
             break;
         case 'addMarca':
-            if (!requiredFieldsExist($data, ['marca'])) {
+            if (!requiredFieldsExist($data, ['marca_nombre'])) {
                 http_response_code(400);
                 echo json_encode(['error' => 'Datos incompletos']);
                 return;
             }
-            echo json_encode($adminService->addMarca);
+
+            $result_addMarca = $adminService->addMarca($data['marca_nombre']);
+
+            if (!$result_addMarca['success']) {
+                http_response_code(500);
+            } 
+            echo json_encode($result_addMarca);
             break;
     }
 }

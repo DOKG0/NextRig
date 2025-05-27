@@ -13,7 +13,7 @@ export const formInputTemplates = {
         optionSelectValues: [],
         id: '',
         value: '',
-        config: { placeholder: "ASUS-MB-1"}
+        config: { }
 	},
 	{
 		type: 'text',
@@ -82,7 +82,7 @@ export const formInputTemplates = {
 		order: 7,
 		validators: [
             { validate: 'required' }, 
-            { validate: 'minLength', value: 8},
+            { validate: 'minLength', value: 6},
             { validate: 'maxLength', value: 50}, 
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],
@@ -93,7 +93,7 @@ export const formInputTemplates = {
     },
     {
         type: 'textarea',
-		labelText: 'Descripcion',
+		labelText: 'Descripción',
 		formControlName: 'descripcion',
 		order: 8,
 		validators: [
@@ -108,14 +108,14 @@ export const formInputTemplates = {
     },
     {
         type: 'select',
-		labelText: 'Categoria',
+		labelText: 'Categoría',
 		formControlName: 'categoria',
 		order: 3,
 		validators: [ { validate: 'required' } ],
         optionSelectValues: [
-            'cpu', 'motherboard', 'tarjeta_grafica', 
-            'almacenamiento', 'memorias', 'cooling', 
-            'gabinetes', 'monitores', 'teclados', 'mouse'
+            'CPU', 'MOTHERBOARD', 'TARJETA_GRAFICA', 
+            'ALMACENAMIENTO', 'MEMORIAS', 'COOLING', 
+            'GABINETES', 'MONITORES', 'TECLADOS', 'MOUSE'
         ],
         id: '',
         value: '',
