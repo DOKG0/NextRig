@@ -1,0 +1,16 @@
+section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+}
+
+h1 {
+    font-weight: bold;
+    color: var(--color-text-primary);
+}
+
+.img-notfound {
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 15px;
+    box-shadow: 0 -1px 8px var(--shadow-border);
+}

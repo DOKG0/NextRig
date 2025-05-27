@@ -9,6 +9,8 @@ import { CarritoComponent } from './components/carrito/carrito.component';
 import { HistorialComponent } from './components/historial/historial.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { ProductFormComponent } from './components/product-form/product-form.component';
+import { AuthGuardAdmin } from './guards/auth.guard.admin';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 export const routes: Routes = [
@@ -22,14 +24,13 @@ export const routes: Routes = [
       { path: 'products', component: ProductsGridComponent },
       { path: 'products/category/:category', component: ProductsGridComponent },
       { path: 'products/:id', component: ProductDetailsComponent },
-      { path: 'product-form', component: NewProductFormComponent },
-      { path: 'product-form/update/:id', component: NewProductFormComponent },
+      { path: 'product-form', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'product-form/update/:id', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
       { path: 'cart', component: CarritoComponent},
-      {path: 'profile', component: PerfilComponent},
-      {path: 'orders',component: HistorialComponent}
-      { path: 'product-form', component: ProductFormComponent },
-      { path: 'product-form/update/:id', component: ProductFormComponent }
+      { path: 'profile', component: PerfilComponent},
+      { path: 'orders',component: HistorialComponent},
+      { path: '404', component: NotFoundComponent }
     ]
   },
-  { path: '**', redirectTo: '' } // redirección por defecto para rutas no válidas
+  { path: '**', redirectTo: '404' } // redirección por defecto para rutas no válidas
 ];
