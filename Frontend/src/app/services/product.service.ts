@@ -22,7 +22,16 @@ export class ProductService {
         'Content-Type': 'application/json'
       })
     }    
-    return this.http.post(`${this.apiAdminUrl}/addProducto`, product, httpOptions);
+    return this.http.post(`${this.apiAdminUrl}/addProduct`, product, httpOptions);
+  }
+
+  updateProduct(product: Product): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+    return this.http.post(`${this.apiAdminUrl}/updateProduct`, product, httpOptions);
   }
 
   getProductos(): Observable<any[]> {

@@ -1,15 +1,18 @@
-<label for="seleccionMarca">
-    Seleccione la marca: 
-</label>
+<div class="mt-3">
+    <label for="seleccionMarca">
+        Seleccione la marca: 
+    </label>
 
-<select 
-    (ngModelChange)="onChangeEmitSelectedMarca($event)" 
-    [(ngModel)]="marcaSeleccionada"
-    class="form-select mb-2"
-    name="seleccionMarca"
-    id="seleccionMarcaExistente">
-    <p *ngIf="fetchErrorMsg">{{fetchErrorMsg}}</p>
-    <option *ngFor="let marca of marcas" value="{{marca.NombreMarca}}">
-        {{marca.NombreMarca}}
-    </option>
-</select>
+    <select 
+        (ngModelChange)="onChangeEmitSelectedMarca($event)" 
+        [(ngModel)]="marcaSeleccionada"
+        class="form-select mb-2"
+        name="seleccionMarca"
+        id="seleccionMarcaExistente">
+        <p *ngIf="fetchErrorMsg">{{fetchErrorMsg}}</p>
+        <option *ngFor="let marca of marcas" value="{{marca.NombreMarca}}">
+            {{marca.NombreMarca}}
+        </option>
+    </select>
+</div>
+

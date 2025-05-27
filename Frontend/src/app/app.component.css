@@ -14,6 +14,9 @@
     --color-text-secondary: #3F435D;
     --color-tooltip-bg: #2A2E33;
     --color-tooltip-text: #fff;
+    --color-input-disabled: #e9ecef;
+    --color-btn-submit: #6c45bb;
+    --color-btn-submit-hover: #2c1b4f;
     --shadow-border: rgba(0, 0, 0, 0.1);
     --user-bg-color: #FAFAFC;
 }
@@ -34,6 +37,9 @@ body.dark-mode{
     --color-text-secondary: #9CA2B8;
     --color-tooltip-bg: #fff;
     --color-tooltip-text: #000;
+    --color-input-disabled: #636363;        
+    --color-btn-submit: #2c1b4f;
+    --color-btn-submit-hover: #6c45bb;
     --shadow-border: rgba(255, 255, 255, 0.1);
     --user-bg-color: #FAFAFC;
 }

@@ -23,5 +23,19 @@ require_once('config.php');
             return $marcas;
         }
 
+        public function existeMarca($nombreMarca) {
+
+            $nombreMarca = mysqli_real_escape_string($this->db_conn, $nombreMarca);
+            
+            $query = "SELECT * FROM Marca WHERE NombreMarca = '$nombreMarca'";
+            $result = mysqli_query($this->db_conn, $query);
+
+            if ($result->num_rows > 0) {
+                return true;
+            }
+
+            return false;
+        }
+
     }
 ?>
