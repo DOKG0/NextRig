@@ -1,0 +1,12 @@
+<div class="carousel-container" *ngIf="productos.length">
+  <div class="carousel-header">
+    <span class="carousel-title">{{ titulo }}</span>
+  </div>
+  <button class="carousel-btn left" (click)="prev()">&lt;</button>
+  <div class="carousel-slide">
+    <ng-container *ngFor="let producto of getVisibleProducts(); let i = index">
+      <app-product-card [producto]="producto"></app-product-card>
+    </ng-container>
+  </div>
+  <button class="carousel-btn right" (click)="next()">&gt;</button>
+</div>

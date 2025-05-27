@@ -31,9 +31,9 @@ export class FormInputComponent implements OnInit {
     let error = !errors ? null : Object.keys(this.productFormGroup.get(this.name).errors)[0];
 
     if (!error) this.inputErrorMessage = "";
+    if (error === "pattern") this.inputErrorMessage = "Input is not valid.";
     if (error === "required") this.inputErrorMessage = "This field is required.";
     if (error === "email") this.inputErrorMessage = "Email is not valid.";
-    if (error === "pattern") this.inputErrorMessage = "Input is not valid.";
   }
 
   ngOnInit(): void {

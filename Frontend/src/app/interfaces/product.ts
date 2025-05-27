@@ -1,4 +1,4 @@
-export interface Product {
+export interface Product extends Record<string, any> {
     admin_ci: string;
     categoria: string;
     descripcion: string;

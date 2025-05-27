@@ -7,7 +7,6 @@
 
         public function getConnection(){
             include './dbCredentials.php';
-
             $this->db_conn = null;
             try{
                 $this->db_conn = mysqli_connect($this->host, $DB_credentials_user, $DB_credentials_password); 

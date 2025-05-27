@@ -8,6 +8,7 @@ import { NewProductFormComponent } from './components/new-product-form/new-produ
 import { CarritoComponent } from './components/carrito/carrito.component';
 import { HistorialComponent } from './components/historial/historial.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
+import { ProductFormComponent } from './components/product-form/product-form.component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,8 @@ export const routes: Routes = [
       { path: 'cart', component: CarritoComponent},
       {path: 'profile', component: PerfilComponent},
       {path: 'orders',component: HistorialComponent}
+      { path: 'product-form', component: ProductFormComponent },
+      { path: 'product-form/update/:id', component: ProductFormComponent }
     ]
   },
   { path: '**', redirectTo: '' } // redirección por defecto para rutas no válidas
