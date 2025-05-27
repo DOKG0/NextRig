@@ -7,11 +7,13 @@ INSERT INTO Marca (NombreMarca) VALUES
 ('be quiet!'), ('Fractal Design'), ('Zotac'), ('TeamGroup'),
 ('Patriot'), ('Keychron'), ('SteelSeries'), ('Glorious'), ('Sabrent'),
 ('Kingston'), ('ASRock'), ('HyperX'), ('EVGA'), ('Thermaltake'),
-('Phanteks'), ('BenQ'), ('Acer'), ('ViewSonic'), ('Sapphire'), ('XFX');
+('Phanteks'), ('BenQ'), ('Acer'), ('ViewSonic'), ('Sapphire'), ('XFX'),
+('PowerColor'), ('Gainward'), ('Palit');
 
--- 2. Insertar usuario administrador
+-- 2. Insertar usuario administrador --Password Hasheada -> admin
 INSERT INTO Usuario (ci, nombre, username, apellido, fechanac, correo, password) VALUES 
-('ADM001', 'Admin', 'admin', 'Sistema', '1985-01-15', 'admin@techstore.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+('ADM001', 'Admin', 'admin', 'Sistema', '1985-01-15', 'admin@techstore.com', '$2y$10$Dqf.jUXINvpPXGozwyyPkOwduP.uPs8gOTE4QlYsG4r078Y0XGP5S'),
+('ADM002', 'Admin2', 'admin2', 'Sistema', '2025-01-15', 'admin', '$2y$10$Dqf.jUXINvpPXGozwyyPkOwduP.uPs8gOTE4QlYsG4r078Y0XGP5S');
 
 INSERT INTO Administrador (ci) VALUES ('ADM001');
 -- 3. Insertar 50 productos electrónicos reales con IDs personalizados
@@ -38,6 +40,24 @@ INSERT INTO Productos (id, nombre, descripcion, precio, stock, imagen, admin_ci,
 ('RX7900XTMSI', 'MSI Radeon RX 7900 XT Gaming Trio', '20GB GDDR6, 5376 Stream Processors, PCIe 4.0', 899.99, 7, 'https://i.imgur.com/WVpXqD2.jpg', 'ADM001', 'MSI'),
 ('RTX4070TIGIGA', 'Gigabyte GeForce RTX 4070 Ti Gaming OC', '12GB GDDR6X, 7680 CUDA Cores, PCIe 4.0', 849.99, 8, 'https://i.imgur.com/vQXsolr.jpg', 'ADM001', 'Gigabyte'),
 ('RTX3060ZOTAC', 'Zotac Gaming GeForce RTX 3060 Twin Edge', '12GB GDDR6, 3584 CUDA Cores, PCIe 4.0', 329.99, 12, 'https://i.imgur.com/Pwkc6nQ.jpg', 'ADM001', 'Zotac'),
+('RTX4090ASUS', 'ASUS ROG Strix RTX 4090 OC', '24GB GDDR6X, 16384 CUDA Cores, PCIe 4.0, RGB', 1799.99, 5, 'https://i.imgur.com/gGvhStA.jpg', 'ADM001', 'ASUS'),
+('RTX4080MSI', 'MSI GeForce RTX 4080 Gaming X Trio', '16GB GDDR6X, 9728 CUDA Cores, PCIe 4.0, RGB', 1299.99, 6, 'https://i.imgur.com/KgCNbZ3.jpg', 'ADM001', 'MSI'),
+('RX7900XTSAP', 'Sapphire Nitro+ Radeon RX 7900 XT', '20GB GDDR6, 5376 Stream Processors, PCIe 4.0', 949.99, 5, 'https://i.imgur.com/TC6Sxfs.jpg', 'ADM001', 'Sapphire'),
+('RTX4070ASUS', 'ASUS Dual RTX 4070 OC', '12GB GDDR6X, 5888 CUDA Cores, PCIe 4.0', 599.99, 10, 'https://i.imgur.com/xH9wLav.jpg', 'ADM001', 'ASUS'),
+('RX7800XTPOW', 'PowerColor Red Devil RX 7800 XT', '16GB GDDR6, 3840 Stream Processors, PCIe 4.0', 549.99, 8, 'https://i.imgur.com/Oky3AXZ.jpg', 'ADM001', 'PowerColor'),
+('RTX4060TIGIG', 'Gigabyte RTX 4060 Ti Gaming OC', '8GB GDDR6, 4352 CUDA Cores, PCIe 4.0', 399.99, 15, 'https://i.imgur.com/0pr6kK6.jpg', 'ADM001', 'Gigabyte'),
+('RX7700XTSAP', 'Sapphire Pulse RX 7700 XT', '12GB GDDR6, 3456 Stream Processors, PCIe 4.0', 449.99, 12, 'https://i.imgur.com/2FOTBtK.jpg', 'ADM001', 'Sapphire'),
+('RTX3090TIAS', 'ASUS TUF RTX 3090 Ti OC', '24GB GDDR6X, 10752 CUDA Cores, PCIe 4.0', 1199.99, 3, 'https://i.imgur.com/mhiyRsP.jpg', 'ADM001', 'ASUS'),
+('RX6950XTASR', 'ASRock OC Formula RX 6950 XT', '16GB GDDR6, 5120 Stream Processors, PCIe 4.0', 699.99, 4, 'https://i.imgur.com/msz9DUd.jpg', 'ADM001', 'ASRock'),
+('RTX3080EVGA', 'EVGA FTW3 RTX 3080 12GB', '12GB GDDR6X, 8960 CUDA Cores, PCIe 4.0', 799.99, 5, 'https://i.imgur.com/vJgofFV.jpg', 'ADM001', 'EVGA'),
+('RX6800XTRED', 'XFX Speedster MERC319 RX 6800 XT', '16GB GDDR6, 4608 Stream Processors, PCIe 4.0', 579.99, 7, 'https://i.imgur.com/hq8pmSN.jpg', 'ADM001', 'XFX'),
+('RTX4070MSI', 'MSI Ventus 3X RTX 4070', '12GB GDDR6X, 5888 CUDA Cores, PCIe 4.0', 579.99, 9, 'https://i.imgur.com/8AKMVeD.jpg', 'ADM001', 'MSI'),
+('RX7600XFX', 'XFX Speedster SWFT210 RX 7600', '8GB GDDR6, 2048 Stream Processors, PCIe 4.0', 269.99, 14, 'https://i.imgur.com/cYoHVuT.jpg', 'ADM001', 'XFX'),
+('RTX3060TIGA', 'Gainward Ghost RTX 3060 Ti', '8GB GDDR6, 4864 CUDA Cores, PCIe 4.0', 399.99, 11, 'https://i.imgur.com/lXEEX0M.jpg', 'ADM001', 'Gainward'),
+('RX6700XTPOW', 'PowerColor Fighter RX 6700 XT', '12GB GDDR6, 2560 Stream Processors, PCIe 4.0', 349.99, 8, 'https://i.imgur.com/T5CVIcY.jpg', 'ADM001', 'PowerColor'),
+('RTX3050PAL', 'Palit Dual RTX 3050', '8GB GDDR6, 2560 CUDA Cores, PCIe 4.0', 249.99, 13, 'https://i.imgur.com/DqcUOxl.jpg', 'ADM001', 'Palit'),
+('RX6600XTSAP', 'Sapphire Nitro+ RX 6600 XT', '8GB GDDR6, 2048 Stream Processors, PCIe 4.0', 299.99, 10, 'https://i.imgur.com/yOBhgRN.jpg', 'ADM001', 'Sapphire'),
+('RTX2080TIZOT', 'Zotac Gaming RTX 2080 Ti AMP', '11GB GDDR6, 4352 CUDA Cores, PCIe 3.0', 499.99, 3, 'https://i.imgur.com/9KE14Pq.jpg', 'ADM001', 'Zotac'),
 
 -- Almacenamiento (5 productos)
 ('2TBSAM990', 'Samsung 990 PRO 2TB', 'NVMe PCIe 4.0, 7450MB/s lectura, 6900MB/s escritura', 179.99, 20, 'https://i.imgur.com/KvaMW0R.jpg', 'ADM001', 'Samsung'),
@@ -99,6 +119,12 @@ INSERT INTO Componentes (id, categoria) VALUES
 -- GPUs
 ('RTX4090NV', 'TARJETA_GRAFICA'), ('RX7900XTX', 'TARJETA_GRAFICA'), ('RTX4080ASUS', 'TARJETA_GRAFICA'),
 ('RX7900XTMSI', 'TARJETA_GRAFICA'), ('RTX4070TIGIGA', 'TARJETA_GRAFICA'), ('RTX3060ZOTAC', 'TARJETA_GRAFICA'),
+('RTX4090ASUS', 'TARJETA_GRAFICA'), ('RTX4080MSI', 'TARJETA_GRAFICA'), ('RX7900XTSAP', 'TARJETA_GRAFICA'),
+('RTX4070ASUS', 'TARJETA_GRAFICA'), ('RX7800XTPOW', 'TARJETA_GRAFICA'), ('RTX4060TIGIG', 'TARJETA_GRAFICA'),
+('RX7700XTSAP', 'TARJETA_GRAFICA'), ('RTX3090TIAS', 'TARJETA_GRAFICA'), ('RX6950XTASR', 'TARJETA_GRAFICA'),
+('RTX3080EVGA', 'TARJETA_GRAFICA'), ('RX6800XTRED', 'TARJETA_GRAFICA'), ('RTX4070MSI', 'TARJETA_GRAFICA'),
+('RX7600XFX', 'TARJETA_GRAFICA'), ('RTX3060TIGA', 'TARJETA_GRAFICA'), ('RX6700XTPOW', 'TARJETA_GRAFICA'),
+('RTX3050PAL', 'TARJETA_GRAFICA'), ('RX6600XTSAP', 'TARJETA_GRAFICA'), ('RTX2080TIZOT', 'TARJETA_GRAFICA'),
 
 -- Almacenamiento
 ('2TBSAM990', 'ALMACENAMIENTO'), ('1TBWD850X', 'ALMACENAMIENTO'), ('2TBCRUP5', 'ALMACENAMIENTO'),
@@ -130,9 +156,9 @@ INSERT INTO Componentes (id, categoria) VALUES
 
 -- 5. Insertar usuarios compradores
 INSERT INTO Usuario (ci, nombre, username, apellido, fechanac, correo, password) VALUES 
-('COMP001', 'Juan Pérez', 'juanperez', 'Pérez', '1990-05-15', 'juan@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
-('COMP002', 'María Gómez', 'mariag', 'Gómez', '1988-08-22', 'maria@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
-('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+('COMP001', 'Juan Pérez', 'juanperez', 'Pérez', '1990-05-15', 'juan@email.com', '123'),
+('COMP002', 'María Gómez', 'mariag', 'Gómez', '1988-08-22', 'maria@email.com', '123'),
+('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '123');
 
 INSERT INTO Comprador (ci, cel) VALUES 
 ('COMP001', '0991234567'),

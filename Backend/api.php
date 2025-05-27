@@ -3,6 +3,7 @@ include_once 'usuarioService.php';
 include_once 'adminService.php';
 include_once 'productoService.php';
 include_once 'marcaService.php';
+include_once 'contactoService.php';
 
 setHeaders();
 
@@ -59,6 +60,17 @@ function requiredFieldsExist($data, $fields)
 function handlePostRequest($request)
 {
     $data = json_decode(file_get_contents("php://input"), true);
+
+    if ($request[0] == 'contacto') {
+        $contactoService = new ContactoService();
+        $result = $contactoService->recibirCorreo(
+            $data['nombre'],
+            $data['email'],
+            $data['mensaje']
+        );
+        echo json_encode($result);
+        return;
+    }
 
     // Verifica si se pudo decodificar el JSON correctamente
     if (json_last_error() !== JSON_ERROR_NONE) {
@@ -144,6 +156,10 @@ function handleGetRequest($request)
             
             case 'id':
                 echo json_encode($productosService->getComponentById($request[2]));
+                break;
+
+            case 'top-rated':
+                echo json_encode($productosService->getTopRatedProducts(5));
                 break;
 
             default:

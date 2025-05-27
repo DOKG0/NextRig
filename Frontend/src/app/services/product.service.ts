@@ -8,14 +8,17 @@ import { Observable } from 'rxjs';
 })
 export class ProductService {
 
+  //Estados
   products: Product[] = [];
   productsSortedByCat: Product[] = [];
   category: string = '';
 
   private apiAdminUrl = "http://localhost/NextRig/Backend/api.php/admin";
   private apiUrl = 'http://localhost/NextRig/Backend/api.php/productos';
+
   constructor(private http: HttpClient) { }
 
+  //Observers
   addProduct(product: Product): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -38,22 +41,15 @@ export class ProductService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-  getProductosByCategory(category: string): Observable<Product[]> {
-    if (this.category === category) {
-      const stored = localStorage.getItem('productsSortedByCat');
-    if (stored) {
-      this.productsSortedByCat = JSON.parse(stored);
-    }
-    this.category = category;
-    }
-    return this.http.get<Product[]>(`${this.apiUrl}/${category.toLowerCase()}`);
-  }
-
-    getProductoById(id: string): Observable<Product> {
+  getProductoById(id: string): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/id/${id}`);
   }
 
+  getProductosByCategory(category: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/${category.toLowerCase()}`);
+  }
 
+  //Logica de negocios
   setProductsSortedByCat(products: Product[]) {
     this.productsSortedByCat = products;
     localStorage.setItem('productsSortedByCat', JSON.stringify(products));
@@ -76,5 +72,8 @@ export class ProductService {
   getCategory(): string {
     return this.category;
   }
-  
+
+  getTopRatedProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>('http://localhost/NextRig/Backend/api.php/productos/top-rated');
+  }
 }

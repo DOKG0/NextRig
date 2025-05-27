@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { NavigationEnd, Router, RouterConfigOptions, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ViewportScroller } from '@angular/common';
@@ -15,6 +15,7 @@ declare var bootstrap: any;
 export class ProductCardComponent implements AfterViewInit {
   quantity : number = 0;
   @Input() producto: any;
+  @Output() ejecutarTopPadre = new EventEmitter<void>();
 
   constructor() {   
   }
@@ -38,5 +39,9 @@ export class ProductCardComponent implements AfterViewInit {
     tooltipTriggerList.forEach((tooltipTriggerEl: any) => {
       new bootstrap.Tooltip(tooltipTriggerEl);
     });
+  }
+
+  enviarPadre() {
+    this.ejecutarTopPadre.emit(); 
   }
 }

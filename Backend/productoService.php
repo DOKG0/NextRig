@@ -60,5 +60,24 @@ require_once('config.php');
             }
             return $productos;
         }
+
+        public function getTopRatedProducts($limit = 5) {
+            $query = "SELECT p.*, AVG(r.puntaje) as promedio
+                    FROM Productos p
+                    JOIN Resena r ON p.id = r.idProducto
+                    GROUP BY p.id
+                    ORDER BY promedio DESC
+                    LIMIT ?";
+            $stmt = mysqli_prepare($this->db_conn, $query);
+            mysqli_stmt_bind_param($stmt, "i", $limit);
+            mysqli_stmt_execute($stmt);
+            $resultado = mysqli_stmt_get_result($stmt);
+
+            $productos = [];
+            while ($fila = mysqli_fetch_object($resultado)) {
+                $productos[] = $fila;
+            }
+            return $productos;
+        }
     }
 ?>

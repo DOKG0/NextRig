@@ -13,7 +13,7 @@ export const routes: Routes = [
     path: '',
     component: ContentContainerComponent,
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' }, // redirige al iniciar
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },  // o tu componente home
       { path: 'products', component: ProductsGridComponent },
       { path: 'products/category/:category', component: ProductsGridComponent },
