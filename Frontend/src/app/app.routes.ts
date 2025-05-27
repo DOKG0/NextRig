@@ -4,7 +4,6 @@ import { ContentContainerComponent } from './components/content-container/conten
 import { ProductsGridComponent } from './components/product/products-grid/products-grid.component';
 import { ProductDetailsComponent } from './components/product/products-details/product-details.component';
 import { HomeComponent } from './components/home/home.component';
-import { NewProductFormComponent } from './components/new-product-form/new-product-form.component';
 import { CarritoComponent } from './components/carrito/carrito.component';
 import { HistorialComponent } from './components/historial/historial.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
