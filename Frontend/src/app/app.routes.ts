@@ -5,6 +5,8 @@ import { ProductsGridComponent } from './components/product/products-grid/produc
 import { ProductDetailsComponent } from './components/product/products-details/product-details.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProductFormComponent } from './components/product-form/product-form.component';
+import { AuthGuardAdmin } from './guards/auth.guard.admin';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 export const routes: Routes = [
@@ -18,9 +20,10 @@ export const routes: Routes = [
       { path: 'products', component: ProductsGridComponent },
       { path: 'products/category/:category', component: ProductsGridComponent },
       { path: 'products/:id', component: ProductDetailsComponent },
-      { path: 'product-form', component: ProductFormComponent },
-      { path: 'product-form/update/:id', component: ProductFormComponent }
+      { path: 'product-form', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'product-form/update/:id', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
+      { path: '404', component: NotFoundComponent }
     ]
   },
-  { path: '**', redirectTo: '' } // redirección por defecto para rutas no válidas
+  { path: '**', redirectTo: '404' } // redirección por defecto para rutas no válidas
 ];

@@ -13,7 +13,6 @@ import { AuthStateService } from './services/authStateService';
   standalone: true,
   imports: [RouterOutlet, RouterLink, CommonModule]
 })
-
 export class AppComponent implements AfterViewInit {
   @ViewChild('sidebar') sidebar!: ElementRef;
   isDarkMode = false;

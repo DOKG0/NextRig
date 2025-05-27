@@ -1,6 +1,6 @@
 //ANGULAR
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import {
 	FormBuilder,
@@ -45,6 +45,7 @@ enum AccionesMarca {
 	styleUrl: './product-form.component.css',
 })
 export class ProductFormComponent {
+	private router: Router = inject(Router);
 	private route: ActivatedRoute = inject(ActivatedRoute);
 	private formBuilder: FormBuilder = inject(FormBuilder);
 	private productsHttpService: ProductService = inject(ProductService);
@@ -167,12 +168,19 @@ export class ProductFormComponent {
 	fetchProductData(id: string): void {
 		this.productsHttpService.getProductoById(id).subscribe({
 			next: (response) => {
-				this.product = response;
-				if (this.product.marca_nombre == null) { this.product.marca_nombre = "";}
-				this.loadData();
+				if (response) {
+					this.product = response;
+					if (this.product.marca_nombre == null) { this.product.marca_nombre = "";}
+					this.loadData();
+				} else {
+					this.product = null;
+					this.router.navigate(['/404']);
+				}
 			},
 			error: (err) => {
+				console.error(err);
 				this.product = null;
+				this.router.navigate(['/404']);
 			},
 		});
 	}
