@@ -5,18 +5,18 @@
 
 <ng-template #conProductos>
   
-<div class="container mt-4">
+<div class="container mt-4 content-mode">
   <h2 class="fw-bold mb-4">Mis pedidos</h2>
 
   <div class="d-flex align-items-center mb-3 gap-3">
     <input type="text" class="form-control w-50" placeholder="Buscar..." [(ngModel)]="searchText">
     
-    <span class="text-muted">{{ productos.length }} compras</span>
+    <span class="content-mode">{{ productos.length }} compras</span>
   </div>
 
     
 
-    <div *ngFor="let compra of productos" class="card border-0 border-bottom px-3 py-3 d-flex flex-md-row align-items-center justify-content-between">
+    <div *ngFor="let compra of productos" class="card border-0 border-bottom px-3 py-3 d-flex flex-md-row align-items-center justify-content-between content-mode">
       
       <div class="d-flex align-items-center gap-3">
         <img [src]="compra.imagen" class="img-thumbnail" style="width: 64px; height: 64px; object-fit: cover;">
