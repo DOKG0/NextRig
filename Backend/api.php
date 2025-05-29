@@ -214,7 +214,7 @@ function handleGetRequest($request)
         return;
     }
 
-    if ($request[0] == 'usuario' && $request[1] == 'misReseñas') {
+    if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'misReseñas') {
         $reviewService = new ReviewService();
         //recibo el nombre de usuario por query param
         $resultado = $reviewService->getReviewsDeUsuario($_GET['username'] ?? null);
@@ -223,7 +223,18 @@ function handleGetRequest($request)
         return;
     }
 
-    if ($request[0] == 'puntaje') {
+    if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'habilitado-para-reseña') {
+        $reviewService = new ReviewService();
+        //recibo el nombre de usuario por query param
+        $resultado = $reviewService->usuarioHabilitadoParaReview(
+            $_GET['idProducto'] ?? null,
+            $_GET['username'] ?? null);
+        http_response_code($resultado['httpCode']);
+        echo json_encode($resultado);
+        return;
+    }
+
+    if ($request[0] == 'producto' && sizeof($request) > 1 && $request[1] == 'puntaje') {
         $reviewService = new ReviewService();
         //se recibe el id del producto por query param
         $resultado = $reviewService->getPuntajeProducto($_GET['idProducto'] ?? null);

@@ -111,11 +111,11 @@
 
             //busco la cedula del usuario segun el username recibido
             $query_busqueda_usuario = "SELECT ci FROM Usuario WHERE username = '$username'";
-            $usuario = mysqli_query($this->db_conn, $query_busqueda_usuario);
-            $ci_usuario = mysqli_fetch_object($usuario);
+            $resultado_query_usuario = mysqli_query($this->db_conn, $query_busqueda_usuario);
+            $usuario = mysqli_fetch_object($resultado_query_usuario);
 
             //si el usuario no existe
-            if (!$ci_usuario) {
+            if (!$usuario) {
                 return CustomResponseBuilder::build(
                         false, "Error al insertar la reseña", $username, 404, 
                         "Error: no se encontró ningún usuario con el nombre de usuario enviado"
@@ -124,7 +124,7 @@
 
             //verifico que el usuario este habilitado para dejar una reseña
             //verifico que haya comprado el producto que esta intentando calificar
-            if (!$this->usuarioComproProducto($idProducto, $ci_usuario->ci)) {
+            if (!$this->usuarioComproProducto($idProducto, $usuario->ci)) {
                 return CustomResponseBuilder::build(
                         false, "Error al insertar la reseña", $username, 400, 
                         "Error: el usuario no ha comprado el producto"
@@ -133,7 +133,7 @@
 
             //verifico si ya dejo una reseña de ese producto
             // sujeto a cambios en la estructura de tablas de la base de datos
-            if ($this->usuarioCalificoProducto($idProducto, $ci_usuario)) {
+            if ($this->usuarioCalificoProducto($idProducto, $usuario->ci)) {
                 return CustomResponseBuilder::build(
                         false, "Error al insertar la reseña", $username, 400, 
                         "Error: el usuario ya tiene una reseña del producto"
@@ -141,7 +141,7 @@
             }
 
             $query_review = "INSERT INTO Resena (mensaje, puntaje, idProducto, ciComprador) 
-                VALUES ('$mensaje','$puntaje','$idProducto','$ci_usuario->ci')";
+                VALUES ('$mensaje','$puntaje','$idProducto','$usuario->ci')";
             //transaccion del insert de la reseña
             mysqli_begin_transaction($this->db_conn);
             try {
@@ -181,18 +181,18 @@
 
             //busco el usuario a partir de su username y extraigo su cedula
             $query_busqueda_usuario = "SELECT ci FROM Usuario WHERE username = '$username'";
-            $usuario = mysqli_query($this->db_conn, $query_busqueda_usuario);
-            $ci_usuario = mysqli_fetch_object($usuario);
+            $resultado_query_usuario = mysqli_query($this->db_conn, $query_busqueda_usuario);
+            $usuario = mysqli_fetch_object($resultado_query_usuario);
 
             //si el usuario no existe
-            if (!$ci_usuario) {
+            if (!$usuario) {
                 return CustomResponseBuilder::build(
                         false, "Error al eliminar la reseña", $username, 404, 
                         "Error: no se encontró ningún usuario con el nombre de usuario enviado"
                     );
             }
 
-            $query_delete = "DELETE FROM Resena WHERE idProducto = '$idProducto' AND ciComprador = '$ci_usuario->ci'";
+            $query_delete = "DELETE FROM Resena WHERE idProducto = '$idProducto' AND ciComprador = '$usuario->ci'";
             //transaccion del delete de la reseña
             mysqli_begin_transaction($this->db_conn);
             try {
@@ -223,6 +223,8 @@
         }
 
         public function getPuntajeProducto($idProducto) {
+            //format para evitar sql injection
+            $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
 
             //verifico que el producto exista
             $query_producto = "SELECT id FROM Productos WHERE id='$idProducto'";
@@ -255,22 +257,73 @@
             return $puntajePromedio;
         }
 
+        public function usuarioHabilitadoParaReview($idProducto, $username) {
+            //verifico que los parametros no sean nulos
+            foreach ([$idProducto, $username] as $param) {
+                if (is_null($param) || empty($param)) {
+                    return CustomResponseBuilder::build(
+                        false, "Error procesar la solicitud", null, 400, 
+                        "Error: no se puede procesar la solicitud con un parámetro faltante."
+                    );
+                }
+            }
+
+            //format para evitar sql injection
+            $username = mysqli_real_escape_string($this->db_conn, $username);
+
+            //busco el usuario a partir de su username y extraigo su cedula
+            $query_busqueda_usuario = "SELECT ci FROM Usuario WHERE username = '$username'";
+            $resultado_query_usuario = mysqli_query($this->db_conn, $query_busqueda_usuario);
+            $usuario = mysqli_fetch_object($resultado_query_usuario);
+
+            //si el usuario no existe
+            if (!$usuario) {
+                return CustomResponseBuilder::build(
+                        false, "Error procesar la solicitud", $username, 404, 
+                        "Error: no se encontró ningún usuario con el nombre de usuario enviado"
+                    );
+            }
+
+            //format para evitar sql injection
+            $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
+
+             //busco el producto a partir de su id
+            $query_busqueda_producto = "SELECT id FROM Productos WHERE id = '$idProducto'";
+            $resultado_query_producto = mysqli_query($this->db_conn, $query_busqueda_producto);
+            $producto = mysqli_fetch_object($resultado_query_producto);
+
+            if (!$producto) {
+                return CustomResponseBuilder::build(
+                    false, "Error al procesar la solicitud", $idProducto, 404,
+                    "Error: no se encontró el producto"
+                );
+            }
+
+            $habilitado = !$this->usuarioCalificoProducto($producto->id, $usuario->ci) 
+                        && $this->usuarioComproProducto($producto->id, $usuario->ci);
+
+            return CustomResponseBuilder::build(
+                true, "Solicitud procesada correctamente", null, 200, 
+                null, null, ['habilitado' => $habilitado]
+            );
+
+        }
+
         private function usuarioComproProducto($idProducto, $ciUsuario) {
 
-            //sujeto a cambio en estructura de tablas: idProducto no deberia estar en Compra
-
             //verifico que el usuario haya comprado el producto
-            // $query_compra = "SELECT IDcompra 
-            //     FROM (Compra JOIN Comprador ON Compra.ci = Comprador.ci) 
-            //     WHERE Compra.idProducto = '$idProducto' 
-            //     AND Compra.ci = '$ciUsuario'";
-            // $resultado_query_compra = mysqli_query($this->db_conn, $query_compra);
-            // $compra = mysqli_fetch_object($resultado_query_compra);
+            $query_compra = "SELECT Compra.IDcompra 
+                FROM (Compra JOIN Comprador ON Compra.ci = Comprador.ci) 
+                    JOIN Compra_Producto ON Compra.IDcompra = Compra_Producto.idCompra  
+                WHERE Compra_Producto.idProducto = '$idProducto' 
+                AND Compra.ci = '$ciUsuario'";
+            $resultado_query_compra = mysqli_query($this->db_conn, $query_compra);
+            $compra = mysqli_fetch_object($resultado_query_compra);
 
             //si no ha comprado, entonces no esta habilitado para dejar una reseña
-            // if (!$compra) {
-            //     return false;
-            // }
+            if (!$compra) {
+                return false;
+            }
 
             return true;
         }
@@ -286,10 +339,10 @@
 
             //si ya dejo una reseña, entonces no esta habilitado para dejar otra
             if ($review) {
-                return false;
+                return true;
             }
             
-            return true;
+            return false;
         }
     }
 ?>
