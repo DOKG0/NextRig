@@ -154,11 +154,11 @@ INSERT INTO Componentes (id, categoria) VALUES
 ('LOGIGPX', 'MOUSE'), ('RAZERV2', 'MOUSE'), ('SSAEROX9', 'MOUSE'),
 ('CORDARKC', 'MOUSE');
 
--- 5. Insertar usuarios compradores
+-- 5. Insertar usuarios compradores -- password: 1234
 INSERT INTO Usuario (ci, nombre, username, apellido, fechanac, correo, password) VALUES 
-('COMP001', 'Juan Pérez', 'juanperez', 'Pérez', '1990-05-15', 'juan@email.com', '123'),
-('COMP002', 'María Gómez', 'mariag', 'Gómez', '1988-08-22', 'maria@email.com', '123'),
-('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '123');
+('COMP001', 'Juan Pérez', 'juanperez', 'Pérez', '1990-05-15', 'juan@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm'),
+('COMP002', 'María Gómez', 'mariag', 'Gómez', '1988-08-22', 'maria@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm'),
+('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm');
 
 INSERT INTO Comprador (ci, cel) VALUES 
 ('COMP001', '0991234567'),

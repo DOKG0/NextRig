@@ -14,12 +14,25 @@
             //verifico que haya recibido el id del producto
             if (is_null($idProducto) || empty($idProducto)) {
                 return CustomResponseBuilder::build(
-                    false, "Id de producto faltante", null, 400
+                    false, "Error al obtener las reseñas del producto", null, 400,
+                    "Error: Id de producto faltante"
                 );
             }
 
             //format para evitar sql injection
             $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
+
+             //busco el producto a partir de su id
+            $query_busqueda_producto = "SELECT id FROM Productos WHERE id = '$idProducto'";
+            $producto = mysqli_query($this->db_conn, $query_busqueda_producto);
+            $id = mysqli_fetch_object($producto);
+
+            if (!$id) {
+                return CustomResponseBuilder::build(
+                    false, "Error al obtener los reviews del producto", $id, 404,
+                    "Error: no se encontró el producto"
+                );
+            }
 
             //selecciono las reseñas de un producto dado su id e incluyo el nombre de usuario que la dejo
             $query = "SELECT r.id, r.mensaje, r.puntaje, r.idProducto, u.username 
@@ -35,6 +48,47 @@
 
             return CustomResponseBuilder::build(
                 true, "Reseñas encontradas para el producto '$idProducto'", $idProducto, 200, null, null, $reviews
+            );
+        }
+
+        public function getReviewsDeUsuario($username) {
+            //verifico que haya recibido el username
+            if (is_null($username) || empty($username)) {
+                return CustomResponseBuilder::build(
+                    false, "Error al obtener los reviews del usuario", null, 400,
+                    "Error: nombre de usuario faltante"
+                );
+            }
+
+            //format para evitar sql injection
+            $username = mysqli_real_escape_string($this->db_conn, $username);
+
+             //busco el usuario a partir de su username y extraigo su cedula
+            $query_busqueda_usuario = "SELECT ci FROM Usuario WHERE username = '$username'";
+            $usuario = mysqli_query($this->db_conn, $query_busqueda_usuario);
+            $ci_usuario = mysqli_fetch_object($usuario);
+
+            if (!$ci_usuario) {
+                return CustomResponseBuilder::build(
+                    false, "Error al obtener los reviews del usuario", $username, 404,
+                    "Error: no se encontró el usuario"
+                );
+            }
+
+            //selecciono las reseñas de un usuario dado su username
+            $query = "SELECT r.id, r.mensaje, r.puntaje, r.idProducto, u.username 
+                FROM (Resena r JOIN Usuario u ON r.ciComprador = u.ci)
+                WHERE u.username='$username'";
+
+            $result = mysqli_query($this->db_conn, $query);
+
+            $reviews = [];
+            while ($row = mysqli_fetch_object($result)) {
+                $reviews[] = $row;
+            }
+
+            return CustomResponseBuilder::build(
+                true, "Reseñas encontradas para el usuario '$username'", $username, 200, null, null, $reviews
             );
         }
 

@@ -180,7 +180,7 @@ function handleGetRequest($request)
         }
         return;
     }
-    
+
     if ($request[0] == 'marcas') {
         $marcasService = new MarcaService();
 
@@ -214,9 +214,19 @@ function handleGetRequest($request)
         return;
     }
 
+    if ($request[0] == 'usuario' && $request[1] == 'misReseñas') {
+        $reviewService = new ReviewService();
+        //recibo el nombre de usuario por query param
+        $resultado = $reviewService->getReviewsDeUsuario($_GET['username'] ?? null);
+        http_response_code($resultado['httpCode']);
+        echo json_encode($resultado);
+        return;
+    }
+
     if ($request[0] == 'puntaje') {
         $reviewService = new ReviewService();
-        $resultado = $reviewService->getPuntajeProducto($_GET['idProducto'] ?? null);//se recibe el id por query param
+        //se recibe el id del producto por query param
+        $resultado = $reviewService->getPuntajeProducto($_GET['idProducto'] ?? null);
         http_response_code($resultado['httpCode']);
         echo json_encode($resultado);
         return;
@@ -264,10 +274,12 @@ function handleDeleteRequest($request)
     if ($request[0] == 'admin' && $request[1] == 'eliminarProducto') {
         $adminService = new AdminService();
         echo json_encode($adminService->eliminarProducto($data->producto_id));
+        return;
     }
     if ($request[0] == 'usuario' && $request[1] == 'eliminarProductoCarrito') {
         $carritoService = new CarritoService();
         echo json_encode($carritoService->deleteProductoCarrito($data->username, $data->idProducto));
+        return;
     }
 
     if($request[0] == 'reseña') {
@@ -278,7 +290,11 @@ function handleDeleteRequest($request)
         );
         http_response_code($result['httpCode']);
         echo json_encode($result);
+        return;
     }
+
+    http_response_code(404);
+    echo json_encode(['error' => 'Recurso no encontrado']);
 }
 
 function handleUsuarioRequest($usuarioService, $action, $data)
@@ -312,8 +328,7 @@ function handleUsuarioRequest($usuarioService, $action, $data)
             echo json_encode($result);
             break;
 
-            case 'cantidad':
-            
+        case 'cantidad':
             $carritoService = new CarritoService();
             echo json_encode($carritoService->postCantidadProductoCarrito(
                 $data['username'],
