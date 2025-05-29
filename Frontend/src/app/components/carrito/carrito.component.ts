@@ -81,4 +81,17 @@ verProducto(id : string) {
 });
   }
 }
+
+eliminarTodos(){
+  for (let i = 0; i < this.carrito.length; i++) {
+    
+    this.usuarioService.eliminarProductoCarrito(this.user, this.carrito[i].id).subscribe({
+      next: () => {
+        this.carrito.length = 0;
+        this.hayProductos = false;
+        this.total = 0;
+      },
+    });
+  }
+}
 }
