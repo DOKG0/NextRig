@@ -4,6 +4,7 @@ include_once 'adminService.php';
 include_once 'productoService.php';
 include_once 'marcaService.php';
 include_once 'contactoService.php';
+include_once 'getCarrito.php';
 
 setHeaders();
 
@@ -279,6 +280,11 @@ function handleUsuarioRequest($usuarioService, $action, $data)
         case 'comprarCarrito':
             $carritoService = new CarritoService();
             echo json_encode($carritoService->comprarCarrito($data['username'],$data['idProducto'],$data['costoCarrito'], $data['cantidad']));
+            break;
+
+            case 'crearCompra':
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->crearCompra($data['username'],$data['costoCarrito']));
             break;
 
         default:
