@@ -48,7 +48,6 @@ CREATE TABLE `Carrito` (
   CONSTRAINT `fk_carrito_comprador` FOREIGN KEY (`ci`) REFERENCES `Comprador` (`ci`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `Marca` (
   `NombreMarca` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`NombreMarca`)
@@ -70,6 +69,7 @@ CREATE TABLE `Productos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
 CREATE TABLE `Componentes` (
   `id` VARCHAR(50) NOT NULL,
   `categoria` ENUM(
@@ -87,7 +87,6 @@ CREATE TABLE `Componentes` (
   CONSTRAINT `fk_componentes_productos` FOREIGN KEY (`id`) REFERENCES `Productos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `Carrito_Productos` (
   `idCarrito` INT NOT NULL,
   `idProducto` VARCHAR(50) NOT NULL,
@@ -95,7 +94,6 @@ CREATE TABLE `Carrito_Productos` (
   CONSTRAINT `fk_carrito_productos_carrito` FOREIGN KEY (`idCarrito`) REFERENCES `Carrito` (`idCarrito`) ON DELETE CASCADE,
   CONSTRAINT `fk_carrito_productos_productos` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 CREATE TABLE `Resena` (
   `id` INT AUTO_INCREMENT UNIQUE,
@@ -108,9 +106,8 @@ CREATE TABLE `Resena` (
   CONSTRAINT `fk_resena_comprador` FOREIGN KEY (`ciComprador`) REFERENCES `Comprador` (`ci`)  ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `Compra_Producto` (
-  `idCompra` INT,
+  `idCompra` INT,Add commentMore actions
   `idProducto` VARCHAR(50),
   `cantidad` INT NOT NULL,
   `precioUnitario` DECIMAL(10,2) NOT NULL,
