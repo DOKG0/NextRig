@@ -105,3 +105,13 @@ CREATE TABLE `Resena` (
   CONSTRAINT `fk_resena_producto` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`)  ON DELETE CASCADE,
   CONSTRAINT `fk_resena_comprador` FOREIGN KEY (`ciComprador`) REFERENCES `Comprador` (`ci`)  ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `Compra_Producto` (
+  `idCompra` INT,Add commentMore actions
+  `idProducto` VARCHAR(50),
+  `cantidad` INT NOT NULL,
+  `precioUnitario` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`IDcompra`, `idProducto`),
+  CONSTRAINT `fk_id_compra` FOREIGN KEY (`idCompra`) REFERENCES `Compra` (`IDcompra`) ON DELETE CASCADE,
+  CONSTRAINT `fk_id_producto` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

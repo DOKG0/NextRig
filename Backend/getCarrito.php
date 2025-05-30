@@ -93,10 +93,16 @@ class CarritoService{
                     )";
         $resultado = mysqli_query($this->db_conn, $query);
 
-        $query2 = "INSERT INTO compra (fechaCompra, costoCarrito, depto,direccion,ci,cantidad,idProducto)
-                    SELECT CURDATE(),'$costoCarrito','Maldonado','Las Malvinas', u.ci, $cantidad, '$idProducto'
-                    FROM usuario u
-                    WHERE u.username = '$username'";
+        $query2 = "INSERT INTO compra_producto (idCompra,idProducto,precioUnitario,cantidad)
+                    SELECT c.IDcompra,'$idProducto',$costoCarrito, $cantidad
+                    FROM (SELECT IDcompra
+                                FROM compra,usuario
+                                WHERE usuario.username = '$username'
+                                AND compra.ci = usuario.ci
+                                
+                                ORDER BY IDcompra DESC
+                                LIMIT 1) as c";
+
 
         $resultado2 = mysqli_query($this->db_conn, $query2);
 
@@ -122,7 +128,7 @@ exit;
 
 
 public function getHistorialCompras($username){
-        $query = "SELECT productos.id,productos.stock,productos.precio,productos.imagen,productos.nombre,productos.descripcion,productos.marca_nombre,compra.fechaCompra,compra.costoCarrito,compra.depto,compra.direccion,compra.ci,compra.cantidad,compra.idProducto from compra,usuario,productos where compra.ci = usuario.ci and usuario.username = '$username'and productos.id = compra.idProducto";
+        $query = "SELECT compra_producto.precioUnitario,productos.id,productos.stock,productos.precio,productos.imagen,productos.nombre,productos.descripcion,productos.marca_nombre,compra.fechaCompra,compra.costoCarrito,compra.depto,compra.direccion,compra.ci,compra_producto.cantidad,compra_producto.idProducto from compra,usuario,productos,compra_producto where compra.ci = usuario.ci and usuario.username = '$username'and productos.id = compra_producto.idProducto and compra_producto.idCompra = compra.IDcompra ORDER BY compra.fechaCompra DESC";
 
         $resultado = mysqli_query($this->db_conn, $query);
         if (!$resultado) {
@@ -138,5 +144,17 @@ public function getHistorialCompras($username){
         return $productos;
     }
 
-
+    public function crearCompra($username,$costoCarrito){
+        
+        $query = "INSERT INTO compra (fechaCompra, costoCarrito, depto,direccion,ci)
+                    SELECT CURDATE(),'$costoCarrito','Maldonado','Las Malvinas', u.ci
+                    FROM usuario u
+                    WHERE u.username = '$username'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(["error" => mysqli_error($this->db_conn)]);
+            exit;
+        }
+    }
 }
