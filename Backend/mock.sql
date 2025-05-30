@@ -154,11 +154,11 @@ INSERT INTO Componentes (id, categoria) VALUES
 ('LOGIGPX', 'MOUSE'), ('RAZERV2', 'MOUSE'), ('SSAEROX9', 'MOUSE'),
 ('CORDARKC', 'MOUSE');
 
--- 5. Insertar usuarios compradores
+-- 5. Insertar usuarios compradores -- password: 1234
 INSERT INTO Usuario (ci, nombre, username, apellido, fechanac, correo, password) VALUES 
-('COMP001', 'Juan Pérez', 'juanperez', 'Pérez', '1990-05-15', 'juan@email.com', '123'),
-('COMP002', 'María Gómez', 'mariag', 'Gómez', '1988-08-22', 'maria@email.com', '123'),
-('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '123');
+('COMP001', 'Juan Pérez', 'juanperez', 'Pérez', '1990-05-15', 'juan@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm'),
+('COMP002', 'María Gómez', 'mariag', 'Gómez', '1988-08-22', 'maria@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm'),
+('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm');
 
 INSERT INTO Comprador (ci, cel) VALUES 
 ('COMP001', '0991234567'),
@@ -198,13 +198,24 @@ INSERT INTO Compra (fechaCompra, costoCarrito, depto, direccion, ci) VALUES
 ('2023-06-20', 1349.98, 'Canelones', 'Ruta 101 km 25', 'COMP002'),
 ('2023-06-25', 1279.97, 'Maldonado', 'Piriapolis 567', 'COMP003');
 
--- 9. Añadir reseñas de productos
+-- 9. Compras de ejemplo - Productos contenidos en las compras
+INSERT INTO Compra_Producto (idCompra, idProducto, cantidad, precioUnitario) VALUES 
+(1, 'I913900K', 1, 589.99),
+(1, 'RX7900XTX', 1, 999.99),
+(1, 'LLO11DYN', 1, 179.99),
+(2, 'DELLAW34', 1, 1299.99),
+(2, '32GD5GSK', 1, 229.99),
+(3, 'RX7900XTX', 1, 999.99),
+(3, '2TBSAM990', 1, 179.99),
+(3, 'LOGIG915', 1, 229.99);
+
+-- 10. Añadir reseñas de productos
 INSERT INTO Resena (mensaje, puntaje, idProducto, ciComprador) VALUES
 ('Excelente rendimiento para gaming', 5, 'I913900K', 'COMP001'),       
-('La mejor relación calidad-precio', 4, 'RX7900XTX', 'COMP001'),      
+('La mejor relación calidad-precio', 4, 'RX7900XTX', 'COMP001'),
+('El gabinete perfecto para mi build', 5, 'LLO11DYN', 'COMP001'),
+('Memoria RAM de alto rendimiento', 5, '32GD5GSK', 'COMP002'),      
+('Pantalla increíble con colores vibrantes', 5, 'DELLAW34', 'COMP002'),  
 ('Matias lo rompió 🤬', 1, 'RX7900XTX', 'COMP003'),                       
 ('Muy rápida y silenciosa', 5, '2TBSAM990', 'COMP003'),                  
-('Pantalla increíble con colores vibrantes', 5, 'DELLAW34', 'COMP002'),  
-('Teclado cómodo para largas sesiones', 4, 'LOGIG915', 'COMP003'),     
-('El gabinete perfecto para mi build', 5, 'LLO11DYN', 'COMP001'),      
-('Memoria RAM de alto rendimiento', 5, '32GD5GSK', 'COMP002');           
+('Teclado cómodo para largas sesiones', 4, 'LOGIG915', 'COMP003');  

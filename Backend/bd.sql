@@ -96,12 +96,12 @@ CREATE TABLE `Carrito_Productos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Resena` (
-  `id` INT AUTO_INCREMENT,
+  `id` INT AUTO_INCREMENT UNIQUE,
   `mensaje` VARCHAR(250),
   `puntaje` INT NOT NULL CHECK (`puntaje` BETWEEN 1 AND 5),
   `idProducto` VARCHAR(50) NOT NULL,
   `ciComprador` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`idProducto`, `ciComprador`),
   CONSTRAINT `fk_resena_producto` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`)  ON DELETE CASCADE,
   CONSTRAINT `fk_resena_comprador` FOREIGN KEY (`ciComprador`) REFERENCES `Comprador` (`ci`)  ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

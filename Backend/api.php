@@ -4,6 +4,7 @@ include_once 'adminService.php';
 include_once 'productoService.php';
 include_once 'marcaService.php';
 include_once 'contactoService.php';
+include_once 'reviewService.php';
 include_once 'getCarrito.php';
 
 setHeaders();
@@ -97,6 +98,16 @@ function handlePostRequest($request)
             $adminService = new AdminService();
             handleAdminRequest($adminService, $request[1] ?? '', $data);
             break;
+        case 'reseña':
+            $reviewService = new ReviewService();
+            $result = $reviewService->publicarReview(
+                $data['mensaje']    ?? null,
+                $data['puntaje']    ?? null,
+                $data['idProducto'] ?? null,
+                $data['username']   ?? null);
+            http_response_code($result['httpCode']);
+            echo json_encode($result);
+            break;
         default:
             http_response_code(404);
             echo json_encode(['error' => 'Recurso no encontrado']);
@@ -168,7 +179,9 @@ function handleGetRequest($request)
                 echo json_encode($productos);
                 break;
         }
+        return;
     }
+
     if ($request[0] == 'marcas') {
         $marcasService = new MarcaService();
 
@@ -178,18 +191,61 @@ function handleGetRequest($request)
             $result = $marcasService->listarMarcas();
         }
         echo json_encode($result);
+        return;
     }
 
     if($request[0] == 'carrito') {
         $carritoService = new CarritoService();
         $productos = $carritoService->getProductosCarrito($request[1]);
         echo json_encode($productos);
+        return;
     }
 
     if( $request[0] == 'historial'){
-            $carritoService = new CarritoService();
-            echo json_encode($carritoService->getHistorialCompras($request[1]));
+        $carritoService = new CarritoService();
+        echo json_encode($carritoService->getHistorialCompras($request[1]));
+        return;
     }
+
+    if ($request[0] == 'reseñas') {
+        $reviewService = new ReviewService();
+        $resultado = $reviewService->getReviewsDeProducto($request[1]);
+        http_response_code($resultado['httpCode']);
+        echo json_encode($resultado);
+        return;
+    }
+
+    if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'misReseñas') {
+        $reviewService = new ReviewService();
+        //recibo el nombre de usuario por query param
+        $resultado = $reviewService->getReviewsDeUsuario($_GET['username'] ?? null);
+        http_response_code($resultado['httpCode']);
+        echo json_encode($resultado);
+        return;
+    }
+
+    if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'habilitado-para-reseña') {
+        $reviewService = new ReviewService();
+        //recibo el nombre de usuario por query param
+        $resultado = $reviewService->usuarioHabilitadoParaReview(
+            $_GET['idProducto'] ?? null,
+            $_GET['username'] ?? null);
+        http_response_code($resultado['httpCode']);
+        echo json_encode($resultado);
+        return;
+    }
+
+    if ($request[0] == 'producto' && sizeof($request) > 1 && $request[1] == 'puntaje') {
+        $reviewService = new ReviewService();
+        //se recibe el id del producto por query param
+        $resultado = $reviewService->getPuntajeProducto($_GET['idProducto'] ?? null);
+        http_response_code($resultado['httpCode']);
+        echo json_encode($resultado);
+        return;
+    }
+
+    http_response_code(404);
+    echo json_encode(['error' => 'Recurso no especificado']);    
 }
 
 function handlePutRequest($request)
@@ -226,14 +282,31 @@ function handleDeleteRequest($request)
     }
 
     $data = json_decode(file_get_contents("php://input"));
+
     if ($request[0] == 'admin' && $request[1] == 'eliminarProducto') {
         $adminService = new AdminService();
         echo json_encode($adminService->eliminarProducto($data->producto_id));
+        return;
     }
     if ($request[0] == 'usuario' && $request[1] == 'eliminarProductoCarrito') {
         $carritoService = new CarritoService();
         echo json_encode($carritoService->deleteProductoCarrito($data->username, $data->idProducto));
+        return;
     }
+
+    if($request[0] == 'reseña') {
+        $reviewService = new ReviewService();
+        $result = $reviewService->eliminarReview(
+            $_GET['idProducto'] ?? null,
+            $_GET['username'] ?? null
+        );
+        http_response_code($result['httpCode']);
+        echo json_encode($result);
+        return;
+    }
+
+    http_response_code(404);
+    echo json_encode(['error' => 'Recurso no encontrado']);
 }
 
 function handleUsuarioRequest($usuarioService, $action, $data)
@@ -267,8 +340,7 @@ function handleUsuarioRequest($usuarioService, $action, $data)
             echo json_encode($result);
             break;
 
-            case 'cantidad':
-            
+        case 'cantidad':
             $carritoService = new CarritoService();
             echo json_encode($carritoService->postCantidadProductoCarrito(
                 $data['username'],
@@ -299,53 +371,39 @@ function handleAdminRequest($adminService, $action, $data)
     switch ($action) {
         case 'addProduct':
 
-            $marca = array_key_exists('marca_nombre', $data) ? $data['marca_nombre'] : null;
+            $marca = $data['marca_nombre'] ?? null;
             $result_addProduct = $adminService->addProducto(
-                $data['id'],
-                $data['nombre'],
-                $data['precio'],
-                $data['stock'],
-                $data['descripcion'],
-                $data['imagen'],
-                $data['categoria'],
-                $data['admin_ci'],
+                $data['id'] ?? null,
+                $data['nombre'] ?? null,
+                $data['precio'] ?? null,
+                $data['stock'] ?? null,
+                $data['descripcion'] ?? null,
+                $data['imagen'] ?? null,
+                $data['categoria'] ?? null,
+                $data['admin_ci'] ?? null,
                 $marca
             );
-            if (!$result_addProduct['success']) {
-                http_response_code(500);
-            } 
+            http_response_code($result_addProduct['httpCode']);
             echo json_encode($result_addProduct);
             break;
         case 'updateProduct':
-            $marca = array_key_exists('marca_nombre', $data) ? $data['marca_nombre'] : null;
             $result_updateProduct = $adminService->updateProducto(
-                $data['id'],
-                $data['nombre'],
-                $data['precio'],
-                $data['stock'],
-                $data['descripcion'],
-                $data['imagen'],
-                $data['categoria'],
-                $data['admin_ci'],
-                $marca
+                $data['id'] ?? null,
+                $data['nombre'] ?? null,
+                $data['precio'] ?? null,
+                $data['stock'] ?? null,
+                $data['descripcion'] ?? null,
+                $data['imagen'] ?? null,
+                $data['categoria'] ?? null,
+                $data['admin_ci'] ?? null,
+                $data['marca_nombre'] ?? null
             );
-            if (!$result_updateProduct['success']) {
-                http_response_code(500);
-            } 
+            http_response_code($result_updateProduct['httpCode']);
             echo json_encode($result_updateProduct);
             break;
         case 'addMarca':
-            if (!requiredFieldsExist($data, ['marca_nombre'])) {
-                http_response_code(400);
-                echo json_encode(['error' => 'Datos incompletos']);
-                return;
-            }
-
-            $result_addMarca = $adminService->addMarca($data['marca_nombre']);
-
-            if (!$result_addMarca['success']) {
-                http_response_code(500);
-            } 
+            $result_addMarca = $adminService->addMarca($data['marca_nombre'] ?? null);
+            http_response_code($result_addMarca['httpCode']);
             echo json_encode($result_addMarca);
             break;
     }

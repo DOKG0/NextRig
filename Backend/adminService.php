@@ -1,5 +1,7 @@
 <?php
 require_once('config.php');
+require_once('utils/ResponseBuilder.php');
+
 class AdminService
 {
     private $db_conn;
@@ -11,6 +13,14 @@ class AdminService
 
     public function addMarca($nombreMarca) 
     {   
+
+        if (is_null($nombreMarca) || empty($nombreMarca)) {
+            return CustomResponseBuilder::build(
+                false, "Existe al menos un parámetro faltante", null, 400, 
+                "Error: no se puede procesar la solicitud con un parámetro faltante."
+            );
+        }
+
         //formateando los datos para evitar sql injection
         $nombreMarca = mysqli_real_escape_string($this->db_conn, $nombreMarca);
 
@@ -18,16 +28,26 @@ class AdminService
 
         try {
             mysqli_query($this->db_conn, $query);
-            return $this->responseBuilder(true, "Marca agregada exitosamente", $nombreMarca);
+            return CustomResponseBuilder::build(true, "Marca agregada exitosamente", $nombreMarca, 201);
         } catch (mysqli_sql_exception $e) {
-            return $this->responseBuilder(
-                false, "Error al insertar la nueva marca", $nombreMarca, 
+            return CustomResponseBuilder::build(
+                false, "Error al insertar la nueva marca", $nombreMarca, 500, 
                 $e->getMessage(), $e->getCode());
         }
     }
 
-    public function addProducto($id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre)
-    {
+    public function addProducto(
+        $id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre) {
+        
+        foreach ([$id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci] as $param) {
+            if (is_null($param) || empty($param)) {
+                return CustomResponseBuilder::build(
+                    false, "Existe al menos un parámetro faltante", null, 400, 
+                    "Error: no se puede procesar la solicitud con un parámetro faltante."
+                );
+            }
+        }
+        
         //formateando los datos para evitar sql injection
         $id = mysqli_real_escape_string($this->db_conn, $id);
         $nombre = mysqli_real_escape_string($this->db_conn, $nombre);
@@ -57,27 +77,25 @@ class AdminService
             mysqli_query($this->db_conn, $query_insert_producto);
         } catch (mysqli_sql_exception $err) {
             mysqli_rollback($this->db_conn);
-            return $this->responseBuilder(
-                false, "Error al insertar el producto", $id, 
+            return CustomResponseBuilder::build(
+                false, "Error al insertar el producto", $id, 500,
                 $err->getMessage(), $err->getCode());
         }
 
-        $query_insert_componente = "INSERT INTO Componentes 
-            (id,categoria) 
-            VALUES 
-            ('$id', '$categoria')";
+        $query_insert_componente = "INSERT INTO Componentes (id,categoria) 
+            VALUES ('$id', '$categoria')";
 
         try {
             mysqli_query($this->db_conn, $query_insert_componente);
             mysqli_commit($this->db_conn);
 
-            return $this->responseBuilder(true, "Producto creado exitosamente", $id);
+            return CustomResponseBuilder::build(true, "Producto creado exitosamente", $id, 201);
         } catch (mysqli_sql_exception $err) {
 
             mysqli_rollback($this->db_conn);
 
-            return $this->responseBuilder(
-                false, "Error al insertar el producto", $id,
+            return CustomResponseBuilder::build(
+                false, "Error al insertar el producto", $id, 500,
                 $err->getMessage(), $err->getCode()
             );
         }        
@@ -103,8 +121,7 @@ class AdminService
     }
 
     public function updateProducto(
-        $id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre) 
-        {
+        $id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre) {
         //formateando los datos para evitar sql injection
         $id = mysqli_real_escape_string($this->db_conn, $id);
         $nombre = mysqli_real_escape_string($this->db_conn, $nombre);
@@ -120,7 +137,9 @@ class AdminService
         $producto = mysqli_query($this->db_conn, $existeProductoQuery);
 
         if (mysqli_num_rows($producto) == 0) {
-            return $this->responseBuilder(false, "No se encontró el producto", $id, "El producto no existe");
+            return CustomResponseBuilder::build(
+                false, "Error al actualizar el producto", $id, 404, "Error: El producto no existe"
+            );
         }
 
         mysqli_begin_transaction($this->db_conn);
@@ -154,34 +173,13 @@ class AdminService
             
             mysqli_commit($this->db_conn);//commit si nada fallo
 
-            return $this->responseBuilder(true, "Actualización exitosa", $id);
+            return CustomResponseBuilder::build(true, "Actualización de producto exitosa", $id, 200);
         } catch (mysqli_sql_exception $err) {
             mysqli_rollback($this->db_conn);//rollback si hubo un fallo en alguna de las operaciones
 
-            return $this->responseBuilder(
-                false, "Error al actualizar el producto", $id, 
+            return CustomResponseBuilder::build(
+                false, "Error al actualizar el producto", $id, 500,
                 $err->getMessage(), $err->getCode());
         }
-    }
-
-    private function responseBuilder(
-        $resultado, 
-        $mensaje, 
-        $identificador, 
-        $error = null, 
-        $errCode = null) {
-
-        $response = [
-            "success" => $resultado,
-            "mensaje" => $mensaje,
-            "id" => $identificador
-        ];
-
-        if (!is_null($error)) {
-            $response["error"] = $error;
-            $response["errCode"] = $errCode;
-        }
-
-        return $response;
     }
 }
