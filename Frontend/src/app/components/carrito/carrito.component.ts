@@ -65,20 +65,36 @@ verProducto(id : string) {
 
 
   comprar() {
+    this.usuarioService.crearCompra(this.user,this.total).subscribe({
+      
+    });
+
     for (let i = 0; i < this.carrito.length; i++) {
-      console.log(this.carrito[i].id);
-      console.log(this.carrito[i].precio);
-      console.log(this.user);
+      
     this.usuarioService.comprarCarrito(this.user, this.carrito[i].id,this.carrito[i].precio,this.carrito[i].cantidad).subscribe({
-        next: () => {
-      this.carrito.length = 0;
+        
+});
+
+  }
+  this.eliminarTodos();
+this.carrito.length = 0;
 
 
       if(this.carrito.length === 0) {
       this.hayProductos = false;
       }
-    },
-});
+}
+
+eliminarTodos(){
+  for (let i = 0; i < this.carrito.length; i++) {
+    
+    this.usuarioService.eliminarProductoCarrito(this.user, this.carrito[i].id).subscribe({
+      next: () => {
+        this.carrito.length = 0;
+        this.hayProductos = false;
+        this.total = 0;
+      },
+    });
   }
 }
 }
