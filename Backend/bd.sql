@@ -107,7 +107,7 @@ CREATE TABLE `Resena` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Compra_Producto` (
-  `idCompra` INT,Add commentMore actions
+  `idCompra` INT,
   `idProducto` VARCHAR(50),
   `cantidad` INT NOT NULL,
   `precioUnitario` DECIMAL(10,2) NOT NULL,
