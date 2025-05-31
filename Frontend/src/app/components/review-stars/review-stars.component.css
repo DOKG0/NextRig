@@ -1,0 +1,12 @@
+
+.resena-container{
+  color: var(--color-text-secondary);
+}
+
+.resena-container span {
+  margin-right: 0.5rem;
+}
+
+.rating {
+  margin-left: 0.5rem;
+}

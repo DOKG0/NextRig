@@ -57,6 +57,7 @@
   border-radius: 12px;
   min-width: 0;
   box-shadow: -2px 0 5px var(--shadow-border);
+  
 }
 
 .info-section h1 {
@@ -98,7 +99,6 @@ h1, .category, .stock, .description  {
 .stock.out {
   color: #c62828;
 }
-
 
 /* Icons */
 

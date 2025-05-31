@@ -15,6 +15,7 @@
         <div class="info-section">
           <h1>{{ p.nombre }}</h1>
           <p class="price">{{ p.precio | currency:'USD' }}</p>
+          <app-review-stars [producto]="producto"></app-review-stars>
           <p class="description">{{ p.descripcion }}</p>
           <p class="category">Categoría: {{ p.categoria }}</p>
           <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">

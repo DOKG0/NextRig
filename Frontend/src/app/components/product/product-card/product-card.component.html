@@ -18,6 +18,7 @@
         <div class="card-body">
           <h5 class="card-title" style="cursor: pointer;" [routerLink]="['/products', producto.id]" routerLinkActive="router-link-active">{{producto.nombre}}</h5>
           <p class="card-price" style="color: rgb(226, 94, 94);">{{producto.precio | currency}}</p>
+          <div class="resena-container"><app-review-stars [producto]="producto"></app-review-stars></div>
         </div>
       </div>
     </div>

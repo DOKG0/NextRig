@@ -4,11 +4,12 @@ import { RouterOutlet, RouterLink, Router, NavigationEnd, ActivatedRoute, Router
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product'
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { ReviewStarsComponent } from '../../review-stars/review-stars.component';
 import { UsuarioService } from '../../../services/usuarios.service';
 
 @Component({
   selector: 'app-product-details',
-  imports: [CommonModule, RouterModule, ProductCardComponent],
+  imports: [CommonModule, RouterModule, ProductCardComponent, ReviewStarsComponent],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
@@ -22,6 +23,7 @@ export class ProductDetailsComponent implements OnInit {
 
   @ViewChild('topOfDetails') topOfDetails!: ElementRef;
   @ViewChild('generalInfo') generalInfo!: ElementRef;
+  rating = 2;
   constructor(
     private route: ActivatedRoute,
     private _productService: ProductService,
@@ -91,23 +93,32 @@ export class ProductDetailsComponent implements OnInit {
     }, 0);
   }
 
+  get fullStars(): number[] {
+    return Array(this.rating).fill(0);
+  }
+
+  get emptyStars(): number[] {
+    return Array(5 - this.rating).fill(0);
+  }
+
   agregarAlCarrito(quantity : number) {
 
-  if(quantity === 0){
-    quantity = 1;
+    if(quantity === 0){
+      quantity = 1;
+    }
+    let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
+      if (!this.producto || this.producto.id === undefined) {
+      console.error('Producto no definido o sin ID');
+      return;
+    }else{
+      let idProducto = this.producto.id as string;
+      console.log('ID del producto:', idProducto);
+      console.log('Nombre de usuario:', nombreUsuario);
+      console.log('Cantidad:', quantity);
+    this.usuarioService.agregarCarrito(nombreUsuario,idProducto,quantity).subscribe((data: any) => {
+        }
+      );
+    }
   }
-  let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
-    if (!this.producto || this.producto.id === undefined) {
-    console.error('Producto no definido o sin ID');
-    return;
-  }else{
-    let idProducto = this.producto.id as string;
-    console.log('ID del producto:', idProducto);
-    console.log('Nombre de usuario:', nombreUsuario);
-    console.log('Cantidad:', quantity);
-  this.usuarioService.agregarCarrito(nombreUsuario,idProducto,quantity).subscribe((data: any) => {
-      }
-    );
-}
-}
+
 }

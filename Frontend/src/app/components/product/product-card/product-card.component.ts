@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { ViewportScroller } from '@angular/common';
 import { filter } from 'rxjs';
 import { UsuarioService } from '../../../services/usuarios.service';
+import { ReviewStarsComponent } from '../../review-stars/review-stars.component';
 
 
 declare var bootstrap: any;
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReviewStarsComponent],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })

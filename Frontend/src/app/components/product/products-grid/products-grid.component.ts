@@ -141,8 +141,8 @@ export class ProductsGridComponent implements OnInit {
 
    handleSortItems(option: string) {
     switch (option) {
-      case '7':
-        this.quantityItemsPerPage = 7;
+      case '8':
+        this.quantityItemsPerPage = 8;
         break;
       case '12':
         this.quantityItemsPerPage = 12;
