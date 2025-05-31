@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -58,5 +58,13 @@ getHistorial(username: string): Observable<any> {
 
 crearCompra(username: string, costoCarrito: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/usuario/crearCompra`, { username, costoCarrito });
+}
+
+getUsuario(username: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/perfil/${username}`);
+}
+
+actualizarUsuario(username: string,campo: string, valor: string): Observable<HttpResponse<any>> {
+    return this.http.put<HttpResponse<any>>(`${this.apiUrl}/actualizar`, {username, campo, valor },{observe: 'response'});
 }
 }

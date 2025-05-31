@@ -157,4 +157,42 @@ public function getHistorialCompras($username){
             exit;
         }
     }
+
+     public function getUsuario($username){
+
+        $query = "SELECT  u.username, u.nombre, u.apellido, u.correo
+                    FROM usuario u
+                    WHERE u.username = '$username'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error en la consulta a la base de datos."]);
+            exit;
+        }
+        $usuario = mysqli_fetch_object($resultado);
+        return $usuario;
+    }
+
+    public function actualizarUsuario($username,$campo, $valor){
+        if($campo == 'username' || $campo == 'correo'){
+        $query = "SELECT * FROM usuario WHERE $campo = '$valor'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if(mysqli_num_rows($resultado) > 0){
+            http_response_code(400);
+            echo json_encode(["error" => "El $campo ya está en uso."]);
+            exit;
+        }
+        }
+        $query2 = "UPDATE usuario SET $campo = '$valor' WHERE username = '$username'";
+        $resultado2 = mysqli_query($this->db_conn, $query);
+        if (!$resultado2) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error en la consulta a la base de datos."]);
+            exit;
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => "Usuario actualizado correctamente."]);
+            exit;
+        }
+    }
 }

@@ -207,6 +207,11 @@ function handleGetRequest($request)
         return;
     }
 
+    if( $request[0] == 'perfil'){
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->getUsuario($request[1]));
+    }
+
     if ($request[0] == 'reseñas') {
         $reviewService = new ReviewService();
         $resultado = $reviewService->getReviewsDeProducto($request[1]);
@@ -265,7 +270,14 @@ function handlePutRequest($request)
     }
 
     switch ($request[0]) {
-
+        case 'actualizar':
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->actualizarUsuario(
+                $data['username'] ?? null,
+                $data['campo'] ?? null,
+                $data['valor'] ?? null
+            ));
+            break;
         default:
             http_response_code(404);
             echo json_encode(['error' => 'Recurso no encontrado']);
