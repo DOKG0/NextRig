@@ -8,7 +8,7 @@ class CarritoService{
         }
 
         public function getProductosCarrito($username){
-            $query = "select id,precio,stock,descripcion,imagen,nombre,marca_nombre,cantidad from (select idProducto,cantidad from (select idCarrito from (select ci from usuario where username = '$username') as consulta1,carrito where carrito.ci = consulta1.ci) as consulta2,carrito_productos where carrito_productos.idCarrito = consulta2.idCarrito) as consulta3,productos where productos.id = consulta3.idProducto";
+            $query = "select id,precio,stock,descripcion,imagen,nombre,marca_nombre,cantidad from (select idProducto,cantidad from (select idCarrito from (select ci from Usuario where username = '$username') as consulta1,Carrito where Carrito.ci = consulta1.ci) as consulta2,Carrito_Productos where Carrito_Productos.idCarrito = consulta2.idCarrito) as consulta3,Productos where Productos.id = consulta3.idProducto";
             
             $resultado = mysqli_query($this->db_conn, $query);
             if (!$resultado) {
@@ -27,8 +27,8 @@ class CarritoService{
         public function postCantidadProductoCarrito($username, $idProducto, $cantidad){
           $queryCarrito = "
         SELECT c.idCarrito
-        FROM carrito c
-        JOIN usuario u ON c.ci = u.ci
+        FROM Carrito c
+        JOIN Usuario u ON c.ci = u.ci
         WHERE u.username = '$username'";
         $resultCarrito = mysqli_query($this->db_conn, $queryCarrito);
 
@@ -43,7 +43,7 @@ class CarritoService{
 
     // 2. Insertar o actualizar producto
     $query = "
-        INSERT INTO carrito_productos (idCarrito, idProducto, cantidad)
+        INSERT INTO Carrito_Productos (idCarrito, idProducto, cantidad)
         VALUES ('$idCarrito', '$idProducto', '$cantidad')
         ON DUPLICATE KEY UPDATE cantidad = cantidad + VALUES(cantidad)";
 
@@ -64,9 +64,9 @@ class CarritoService{
 
         public function deleteProductoCarrito($username, $idProducto){
             $query = "DELETE cp
-                        FROM carrito_productos cp
-                        JOIN carrito c ON cp.idCarrito = c.idCarrito
-                        JOIN usuario u ON c.ci = u.ci
+                        FROM Carrito_Productos cp
+                        JOIN Carrito c ON cp.idCarrito = c.idCarrito
+                        JOIN Usuario u ON c.ci = u.ci
                         WHERE u.username = '$username' AND cp.idProducto = '$idProducto'";
 
             $resultCarrito = mysqli_query($this->db_conn, $query);
@@ -84,21 +84,21 @@ class CarritoService{
     }
 
     public function comprarCarrito($username,$idProducto,$costoCarrito, $cantidad){
-        $query = "INSERT INTO comprador (ci, cel)
+        $query = "INSERT INTO Comprador (ci, cel)
                     SELECT u.ci, '098898888'
-                    FROM usuario u
+                    FROM Usuario u
                     WHERE u.username = '$username'
                     AND NOT EXISTS (
-                    SELECT 1 FROM comprador c WHERE c.ci = u.ci
+                    SELECT 1 FROM Comprador c WHERE c.ci = u.ci
                     )";
         $resultado = mysqli_query($this->db_conn, $query);
 
-        $query2 = "INSERT INTO compra_producto (idCompra,idProducto,precioUnitario,cantidad)
+        $query2 = "INSERT INTO Compra_Producto (idCompra,idProducto,precioUnitario,cantidad)
                     SELECT c.IDcompra,'$idProducto',$costoCarrito, $cantidad
                     FROM (SELECT IDcompra
-                                FROM compra,usuario
-                                WHERE usuario.username = '$username'
-                                AND compra.ci = usuario.ci
+                                FROM Compra,Usuario
+                                WHERE Usuario.username = '$username'
+                                AND Compra.ci = Usuario.ci
                                 
                                 ORDER BY IDcompra DESC
                                 LIMIT 1) as c";
@@ -106,7 +106,7 @@ class CarritoService{
 
         $resultado2 = mysqli_query($this->db_conn, $query2);
 
-        $query3 = "UPDATE productos
+        $query3 = "UPDATE Productos
                     SET stock = stock - $cantidad
                     WHERE id = '$idProducto'";
 
@@ -128,7 +128,7 @@ exit;
 
 
 public function getHistorialCompras($username){
-        $query = "SELECT compra_producto.precioUnitario,productos.id,productos.stock,productos.precio,productos.imagen,productos.nombre,productos.descripcion,productos.marca_nombre,compra.fechaCompra,compra.costoCarrito,compra.depto,compra.direccion,compra.ci,compra_producto.cantidad,compra_producto.idProducto from compra,usuario,productos,compra_producto where compra.ci = usuario.ci and usuario.username = '$username'and productos.id = compra_producto.idProducto and compra_producto.idCompra = compra.IDcompra ORDER BY compra.fechaCompra DESC";
+        $query = "SELECT Compra_Producto.precioUnitario,Productos.id,Productos.stock,Productos.precio,Productos.imagen,Productos.nombre,Productos.descripcion,Productos.marca_nombre,Compra.fechaCompra,Compra.costoCarrito,Compra.depto,Compra.direccion,Compra.ci,Compra_Producto.cantidad,Compra_Producto.idProducto from Compra,Usuario,Productos,Compra_Producto where Compra.ci = Usuario.ci and Usuario.username = '$username'and Productos.id = Compra_Producto.idProducto and Compra_Producto.idCompra = Compra.IDcompra ORDER BY Compra.fechaCompra DESC";
 
         $resultado = mysqli_query($this->db_conn, $query);
         if (!$resultado) {
@@ -146,9 +146,9 @@ public function getHistorialCompras($username){
 
     public function crearCompra($username,$costoCarrito){
         
-        $query = "INSERT INTO compra (fechaCompra, costoCarrito, depto,direccion,ci)
+        $query = "INSERT INTO Compra (fechaCompra, costoCarrito, depto,direccion,ci)
                     SELECT CURDATE(),'$costoCarrito','Maldonado','Las Malvinas', u.ci
-                    FROM usuario u
+                    FROM Usuario u
                     WHERE u.username = '$username'";
         $resultado = mysqli_query($this->db_conn, $query);
         if (!$resultado) {
@@ -161,7 +161,7 @@ public function getHistorialCompras($username){
      public function getUsuario($username){
 
         $query = "SELECT  u.username, u.nombre, u.apellido, u.correo
-                    FROM usuario u
+                    FROM Usuario u
                     WHERE u.username = '$username'";
         $resultado = mysqli_query($this->db_conn, $query);
         if (!$resultado) {
@@ -175,7 +175,7 @@ public function getHistorialCompras($username){
 
     public function actualizarUsuario($username,$campo, $valor){
         if($campo == 'username' || $campo == 'correo'){
-        $query = "SELECT * FROM usuario WHERE $campo = '$valor'";
+        $query = "SELECT * FROM Usuario WHERE $campo = '$valor'";
         $resultado = mysqli_query($this->db_conn, $query);
         if(mysqli_num_rows($resultado) > 0){
             http_response_code(400);
@@ -183,7 +183,7 @@ public function getHistorialCompras($username){
             exit;
         }
         }
-        $query2 = "UPDATE usuario SET $campo = '$valor' WHERE username = '$username'";
+        $query2 = "UPDATE Usuario SET $campo = '$valor' WHERE username = '$username'";
         $resultado2 = mysqli_query($this->db_conn, $query);
         if (!$resultado2) {
             http_response_code(500);
