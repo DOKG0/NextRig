@@ -90,6 +90,7 @@ CREATE TABLE `Componentes` (
 CREATE TABLE `Carrito_Productos` (
   `idCarrito` INT NOT NULL,
   `idProducto` VARCHAR(50) NOT NULL,
+  `cantidad` INT DEFAULT 0,
   PRIMARY KEY (`idCarrito`, `idProducto`),
   CONSTRAINT `fk_carrito_productos_carrito` FOREIGN KEY (`idCarrito`) REFERENCES `Carrito` (`idCarrito`) ON DELETE CASCADE,
   CONSTRAINT `fk_carrito_productos_productos` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`) ON DELETE CASCADE
