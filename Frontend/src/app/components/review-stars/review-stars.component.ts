@@ -31,7 +31,6 @@ export class ReviewStarsComponent implements OnInit{
       this._reviewService.getReviewsDeProducto(this.producto.id).subscribe({
         next: (item) => {
           this.reviewsCount = item.data.length ?? 0;
-          console.log("item: ",item);
         }
       });
       

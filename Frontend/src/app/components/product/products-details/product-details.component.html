@@ -18,8 +18,8 @@
           <app-review-stars [producto]="producto"></app-review-stars>
           <p class="description">{{ p.descripcion }}</p>
           <p class="category">Categoría: {{ p.categoria }}</p>
-          <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">
-            {{ p.stock > 0 ? 'Stock disponible' : 'Sin stock' }}
+          <p class="stock" [ngClass]="{ 'out': p.stock === 0 || quantity > p.stock }">
+            {{ p.stock > 0 && quantity <= p.stock ? 'Stock disponible' : 'Sin stock' }}
           </p>
 
           <div class="buttons-container">
@@ -28,7 +28,7 @@
               <span class="number icono">{{quantity}}</span>
               <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
             </div>
-            <button [disabled]="p.stock === 0" (click)="agregarAlCarrito(quantity)">Agregar al carrito</button>
+            <button [disabled]="p.stock === 0 || quantity > p.stock" (click)="agregarAlCarrito(quantity)">Agregar al carrito</button>
           </div>
           
         </div>

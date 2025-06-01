@@ -34,7 +34,9 @@ export class ProductCardComponent implements AfterViewInit {
   }
 
   plusQuantity() {
-    this.quantity++;
+    if (this.quantity < this.producto.stock) {
+      this.quantity++;
+    }
   }
 
   resetQuantity() {
@@ -57,7 +59,7 @@ export class ProductCardComponent implements AfterViewInit {
     if(quantity === 0){
         quantity = 1;
     }
-    let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
+    let nombreUsuario = this.user.username;
         if (!this.producto || this.producto.id === undefined) {
         console.error('Producto no definido o sin ID');
         return;
@@ -66,7 +68,8 @@ export class ProductCardComponent implements AfterViewInit {
         console.log('ID del producto:', idProducto);
         console.log('Nombre de usuario:', nombreUsuario);
         console.log('Cantidad:', quantity);
-        this.alertProductoCarritoToast(this.producto.name);
+        this.resetQuantity();
+        this.alertProductoCarritoToast(this.producto.nombre);
     this.usuarioService.agregarCarrito(nombreUsuario,idProducto,quantity).subscribe((data: any) => {
         }
         );
@@ -105,7 +108,7 @@ export class ProductCardComponent implements AfterViewInit {
         toast: true,
         position: 'bottom-end',
         icon: 'success',
-        title: "Producto '${data}' agragado al carrito correctamente",
+        title: `Producto '${data}' agragado al carrito correctamente`,
         showConfirmButton: false,
         timerProgressBar: true,
         timer: 5000,

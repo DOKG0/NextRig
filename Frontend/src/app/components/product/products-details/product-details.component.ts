@@ -6,6 +6,7 @@ import { Product } from '../../../interfaces/product'
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ReviewStarsComponent } from '../../review-stars/review-stars.component';
 import { UsuarioService } from '../../../services/usuarios.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product-details',
@@ -115,10 +116,24 @@ export class ProductDetailsComponent implements OnInit {
       console.log('ID del producto:', idProducto);
       console.log('Nombre de usuario:', nombreUsuario);
       console.log('Cantidad:', quantity);
+      this.resetQuantity();
+      this.alertProductoCarritoToast(this.producto.nombre);
     this.usuarioService.agregarCarrito(nombreUsuario,idProducto,quantity).subscribe((data: any) => {
         }
       );
     }
   }
+
+  alertProductoCarritoToast(data: string): void {
+        Swal.fire({
+          toast: true,
+          position: 'bottom-end',
+          icon: 'success',
+          title: `Producto '${data}' agragado al carrito correctamente`,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000,
+        });
+      }
 
 }
