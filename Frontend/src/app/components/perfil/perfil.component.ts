@@ -52,11 +52,11 @@ editandoCampo: { [key: string]: boolean }= {
 
 editarCampo(campo: string) {
   this.editandoCampo[campo] = true;
-  this.controlExistencia[campo] = false; // Reseteamos el estado de usuario existente al editar
+  this.controlExistencia[campo] = false;
 }
 
 guardarCampo(campo: string) {
-  
+ 
   this.usuarioService.actualizarUsuario(this.user,campo, this.usuario[campo]).subscribe(response => {
     
     if( campo === 'username'){
