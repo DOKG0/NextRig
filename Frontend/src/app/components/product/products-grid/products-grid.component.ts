@@ -38,9 +38,11 @@ export class ProductsGridComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    //Toma la categoria de la URL
     const category = this.route.snapshot.paramMap.get('category');
 
     if (category) {
+      //Si la categoria existe, guarda los objetos de esa categoria en una variable cache
       const cached = this._productService.getProductsSortedByCat(category);
       if (cached.length > 0){
         this.productsSorted = [...cached];
@@ -51,6 +53,7 @@ export class ProductsGridComponent implements OnInit {
             this.productsSorted = productos;
             this._productService.setProductsSortedByCat(this.productsSorted);
 
+            //Setea variables de paginacion segun los objetos obtenidos del sort de categoria
             this.quantityItems = this.productsSorted.length;
             this.quantityPages = Math.ceil(this.quantityItems / this.quantityItemsPerPage);
             this.updatePaginatedProductos();
@@ -91,6 +94,7 @@ export class ProductsGridComponent implements OnInit {
   }
 
   updatePaginatedProductos() {
+    this.quantityPages = Math.ceil(this.quantityItems / this.quantityItemsPerPage);
     const startIndex = (this.currentPage - 1) * this.quantityItemsPerPage;
     const endIndex = startIndex + this.quantityItemsPerPage;
     this.productsSortedPagination = this.productsSorted.slice(startIndex, endIndex);

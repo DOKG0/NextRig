@@ -105,6 +105,11 @@
     background-color: rgba(149, 150, 218, 0.7);
 }
 
+.card:hover .icon-container{
+    opacity: 1;
+    background-color: rgba(149, 150, 218, 0.7);
+}
+
 .card:hover .img-footer:hover {
     background-color: rgba(149, 150, 218, 1);
     z-index: 10;
@@ -144,6 +149,37 @@
     z-index: 2;
 }
 
+.icon-container {
+    color: white;
+    position: absolute;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    cursor: pointer;
+    margin: 0.3rem;
+    z-index: 2;
+    padding: 0.2rem;
+    opacity: 0;
+    transition: 0.4s;
+}
+
+.brush {
+    right: 0;
+}
+
+.icon-container i {
+    padding: 0.1rem;
+}
+
+.icon-container-border {
+    border-radius: 999px;
+    border: 1px solid white;
+    display: flex;
+    align-items: center;
+    padding: 0.1rem;
+}
+
 .sum-icons-container {
     border-radius: 999px;
     border: 1px solid white;
@@ -171,6 +207,8 @@
     color: white;
     cursor: pointer;
 }
+
+
 
 .resena-container {
     position: absolute;

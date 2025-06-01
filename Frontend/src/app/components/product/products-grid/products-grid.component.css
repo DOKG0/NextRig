@@ -28,6 +28,13 @@
     padding-right: 2rem;
   }
 
+  select {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface);
+    border: 1px solid var(--shadow-border);
+    padding: 0.2rem 0.4rem;
+}
+
   .grid-header-buttons span {
     color: var(--color-text-primary);
     margin-left: 1rem;
