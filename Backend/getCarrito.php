@@ -184,7 +184,7 @@ public function getHistorialCompras($username){
         }
         }
         $query2 = "UPDATE Usuario SET $campo = '$valor' WHERE username = '$username'";
-        $resultado2 = mysqli_query($this->db_conn, $query);
+        $resultado2 = mysqli_query($this->db_conn, $query2);
         if (!$resultado2) {
             http_response_code(500);
             echo json_encode(["error" => "Error en la consulta a la base de datos."]);

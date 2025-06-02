@@ -11,7 +11,7 @@
       </div>
       
       <div *ngIf="editandoCampo['nombre']" class="d-flex gap-2">
-        <input type="text" [(ngModel)]="usuario['nombre']" class="form-control">
+        <input type="text" [(ngModel)]="usuario['nombre']" class="form-control" #inputNombre>
         <button *ngIf="usuario['nombre'] != usuarioCopia['nombre'] && usuario['nombre'] != '' " class="btn btn-success btn-sm" (click)="guardarCampo('nombre')">Guardar</button>
       </div>
     </div>
@@ -24,7 +24,7 @@
         {{ usuario['apellido'] }}
       </div>
       <div *ngIf="editandoCampo['apellido']" class="d-flex gap-2">
-        <input type="text" [(ngModel)]="usuario['apellido']" class="form-control">
+        <input type="text" [(ngModel)]="usuario['apellido']" class="form-control" #inputApellido>
         <button *ngIf="usuario['apellido'] != usuarioCopia['apellido'] && usuario['apellido'] != '' " class="btn btn-success btn-sm" (click)="guardarCampo('apellido')">Guardar</button>
       </div>
     </div>
@@ -38,7 +38,7 @@
       </div>
       <label *ngIf="controlExistencia['username']" class="text-danger">¡El nombre de usuario ya existe! Ingrese otro</label>
       <div *ngIf="editandoCampo['username']" class="d-flex gap-2">
-        <input type="text" [(ngModel)]="usuario['username']" class="form-control">
+        <input type="text" [(ngModel)]="usuario['username']" class="form-control" #inputUsername>
         <button *ngIf="usuario['username'] != usuarioCopia['username'] && usuario['username'] != '' " class="btn btn-success btn-sm" (click)="guardarCampo('username')">Guardar</button>
       </div>
     </div>
@@ -47,13 +47,13 @@
     <!-- Correo -->
     <div class="mb-3">
       <label class="form-label fw-bold">Correo</label>
-      <div *ngIf="!editandoCampo['correo']" (click)="editarCampo('correo')" class="form-control ">
+      <div *ngIf="!editandoCampo['correo']" (click)="editarCampo('correo')" class="form-control  bg-light">
         {{ usuario['correo'] }}
       </div>
       <label *ngIf="controlExistencia['correo']" class="text-danger">¡El correo ya existe! Ingrese otro</label>
       
       <div *ngIf="editandoCampo['correo']" class="d-flex gap-2">
-        <input type="email" [(ngModel)]="usuario['correo']" class="form-control">
+        <input type="email" [(ngModel)]="usuario['correo']" class="form-control" #inputCorreo>
         <button *ngIf="usuario['correo'] != usuarioCopia['correo'] && usuario['correo'] != '' " class="btn btn-success btn-sm" (click)="guardarCampo('correo')">Guardar</button>
       </div>
     </div>

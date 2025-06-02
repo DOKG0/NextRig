@@ -210,6 +210,7 @@ function handleGetRequest($request)
     if( $request[0] == 'perfil'){
             $carritoService = new CarritoService();
             echo json_encode($carritoService->getUsuario($request[1]));
+            return;
     }
 
     if ($request[0] == 'reseñas') {

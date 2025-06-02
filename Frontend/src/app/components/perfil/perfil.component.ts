@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuarios.service';
 
@@ -10,6 +10,10 @@ import { UsuarioService } from '../../services/usuarios.service';
   styleUrl: './perfil.component.css'
 })
 export class PerfilComponent {
+  @ViewChild('inputNombre') inputNombre!: ElementRef;
+  @ViewChild('inputApellido') inputApellido!: ElementRef;
+  @ViewChild('inputUsername') inputUsername!: ElementRef;
+  @ViewChild('inputCorreo') inputCorreo!: ElementRef;
 
 user: string = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
 
@@ -53,6 +57,33 @@ editandoCampo: { [key: string]: boolean }= {
 editarCampo(campo: string) {
   this.editandoCampo[campo] = true;
   this.controlExistencia[campo] = false;
+  switch (campo) {
+    case 'nombre':     
+          setTimeout(() => {
+                this.inputNombre.nativeElement.focus();
+              }, 0);
+      break;
+    case 'apellido':
+          setTimeout(() => {
+                this.inputApellido.nativeElement.focus();
+              }, 0);
+      break;
+
+    case 'username':
+          setTimeout(() => {
+                this.inputUsername.nativeElement.focus();
+              }, 0);
+      break;
+
+    case 'correo':
+          setTimeout(() => {
+                this.inputCorreo.nativeElement.focus();
+              }, 0);
+      break;
+    default:
+      console.error('Campo no reconocido:', campo);
+
+}
 }
 
 guardarCampo(campo: string) {
