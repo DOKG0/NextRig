@@ -27,6 +27,7 @@ CREATE TABLE `Compra` (
   `depto` VARCHAR(100) NOT NULL,
   `direccion` VARCHAR(255) NOT NULL,
   `ci` VARCHAR(50) NOT NULL,
+  `telefono` INT,
   PRIMARY KEY (`IDcompra`),
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
