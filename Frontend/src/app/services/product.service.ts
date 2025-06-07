@@ -23,8 +23,9 @@ export class ProductService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
-    }    
+      }),
+      withCredentials: true
+    };
     return this.http.post(`${this.apiAdminUrl}/addProduct`, product, httpOptions);
   }
 
@@ -32,8 +33,9 @@ export class ProductService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
-    }
+      }),
+      withCredentials: true
+    };
     return this.http.post(`${this.apiAdminUrl}/updateProduct`, product, httpOptions);
   }
 
