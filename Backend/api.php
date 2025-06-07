@@ -47,6 +47,16 @@ function setHeaders()
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+    header("Access-Control-Allow-Credentials: true");
+}
+
+function requireAdminSession() {
+    session_start();
+    if (!isset($_SESSION['usuario']) || empty($_SESSION['usuario']['isAdmin']) || !$_SESSION['usuario']['isAdmin']) {
+        http_response_code(401);
+        echo json_encode(['error' => 'No autorizado']);
+        exit;
+    }
 }
 
 function requiredFieldsExist($data, $fields)
@@ -368,6 +378,8 @@ function handleUsuarioRequest($usuarioService, $action, $data)
 
 function handleAdminRequest($adminService, $action, $data)
 {
+    requireAdminSession();
+
     switch ($action) {
         case 'addProduct':
 
