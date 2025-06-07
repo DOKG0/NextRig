@@ -19,13 +19,6 @@ CREATE TABLE `Administrador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `Comprador` (
-  `ci` VARCHAR(50) NOT NULL,
-  `cel` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`ci`),
-  CONSTRAINT `fk_comprador_usuario` FOREIGN KEY (`ci`) REFERENCES `Usuario` (`ci`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 CREATE TABLE `Compra` (
   `IDcompra` INT AUTO_INCREMENT,
@@ -34,9 +27,9 @@ CREATE TABLE `Compra` (
   `depto` VARCHAR(100) NOT NULL,
   `direccion` VARCHAR(255) NOT NULL,
   `ci` VARCHAR(50) NOT NULL,
+  `telefono` INT,
   PRIMARY KEY (`IDcompra`),
-  CONSTRAINT `fk_compra_comprador` FOREIGN KEY (`ci`) REFERENCES `Comprador` (`ci`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE `Carrito` (
@@ -45,7 +38,6 @@ CREATE TABLE `Carrito` (
   `cupon` DECIMAL(10, 2) DEFAULT NULL,
   `ci` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`idCarrito`),
-  CONSTRAINT `fk_carrito_comprador` FOREIGN KEY (`ci`) REFERENCES `Comprador` (`ci`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Marca` (
@@ -101,10 +93,10 @@ CREATE TABLE `Resena` (
   `mensaje` VARCHAR(250),
   `puntaje` INT NOT NULL CHECK (`puntaje` BETWEEN 1 AND 5),
   `idProducto` VARCHAR(50) NOT NULL,
-  `ciComprador` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`idProducto`, `ciComprador`),
+  `ciUsuario` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`idProducto`, `ciUsuario`),
   CONSTRAINT `fk_resena_producto` FOREIGN KEY (`idProducto`) REFERENCES `Productos` (`id`)  ON DELETE CASCADE,
-  CONSTRAINT `fk_resena_comprador` FOREIGN KEY (`ciComprador`) REFERENCES `Comprador` (`ci`)  ON DELETE CASCADE
+  CONSTRAINT `fk_resena_usuario` FOREIGN KEY (`ciUsuario`) REFERENCES `Usuario` (`ci`)  ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Compra_Producto` (

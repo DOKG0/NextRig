@@ -128,7 +128,7 @@ exit;
 
 
 public function getHistorialCompras($username){
-        $query = "SELECT Compra_Producto.precioUnitario,Productos.id,Productos.stock,Productos.precio,Productos.imagen,Productos.nombre,Productos.descripcion,Productos.marca_nombre,Compra.fechaCompra,Compra.costoCarrito,Compra.depto,Compra.direccion,Compra.ci,Compra_Producto.cantidad,Compra_Producto.idProducto from Compra,Usuario,Productos,Compra_Producto where Compra.ci = Usuario.ci and Usuario.username = '$username'and Productos.id = Compra_Producto.idProducto and Compra_producto.idCompra = Compra.IDcompra ORDER BY Compra.fechaCompra DESC";
+        $query = "SELECT Compra_Producto.precioUnitario,Productos.id,Productos.stock,Productos.precio,Productos.imagen,Productos.nombre,Productos.descripcion,Productos.marca_nombre,Compra.fechaCompra,Compra.costoCarrito,Compra.depto,Compra.direccion,Compra.ci,Compra_Producto.cantidad,Compra_Producto.idProducto from Compra,Usuario,Productos,Compra_Producto where Compra.ci = Usuario.ci and Usuario.username = '$username'and Productos.id = Compra_Producto.idProducto and Compra_Producto.idCompra = Compra.IDcompra ORDER BY Compra.fechaCompra DESC";
 
         $resultado = mysqli_query($this->db_conn, $query);
         if (!$resultado) {
@@ -148,12 +148,50 @@ public function getHistorialCompras($username){
         
         $query = "INSERT INTO Compra (fechaCompra, costoCarrito, depto,direccion,ci)
                     SELECT CURDATE(),'$costoCarrito','Maldonado','Las Malvinas', u.ci
-                    FROM usuario u
+                    FROM Usuario u
                     WHERE u.username = '$username'";
         $resultado = mysqli_query($this->db_conn, $query);
         if (!$resultado) {
             http_response_code(500);
             echo json_encode(["error" => mysqli_error($this->db_conn)]);
+            exit;
+        }
+    }
+
+     public function getUsuario($username){
+
+        $query = "SELECT  u.username, u.nombre, u.apellido, u.correo
+                    FROM Usuario u
+                    WHERE u.username = '$username'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error en la consulta a la base de datos."]);
+            exit;
+        }
+        $usuario = mysqli_fetch_object($resultado);
+        return $usuario;
+    }
+
+    public function actualizarUsuario($username,$campo, $valor){
+        if($campo == 'username' || $campo == 'correo'){
+        $query = "SELECT * FROM Usuario WHERE $campo = '$valor'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if(mysqli_num_rows($resultado) > 0){
+            http_response_code(400);
+            echo json_encode(["error" => "El $campo ya está en uso."]);
+            exit;
+        }
+        }
+        $query2 = "UPDATE Usuario SET $campo = '$valor' WHERE username = '$username'";
+        $resultado2 = mysqli_query($this->db_conn, $query2);
+        if (!$resultado2) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error en la consulta a la base de datos."]);
+            exit;
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => "Usuario actualizado correctamente."]);
             exit;
         }
     }
