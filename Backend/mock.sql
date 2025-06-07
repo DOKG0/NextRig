@@ -15,7 +15,7 @@ INSERT INTO Usuario (ci, nombre, username, apellido, fechanac, correo, password)
 ('ADM001', 'Admin', 'admin', 'Sistema', '1985-01-15', 'admin@techstore.com', '$2y$10$Dqf.jUXINvpPXGozwyyPkOwduP.uPs8gOTE4QlYsG4r078Y0XGP5S'),
 ('ADM002', 'Admin2', 'admin2', 'Sistema', '2025-01-15', 'admin', '$2y$10$Dqf.jUXINvpPXGozwyyPkOwduP.uPs8gOTE4QlYsG4r078Y0XGP5S');
 
-INSERT INTO Administrador (ci) VALUES ('ADM001');
+INSERT INTO Administrador (ci) VALUES ('ADM001'), ('ADM002');
 -- 3. Insertar 50 productos electrónicos reales con IDs personalizados
 INSERT INTO Productos (id, nombre, descripcion, precio, stock, imagen, admin_ci, marca_nombre) VALUES
 -- CPUs (6 productos)
@@ -158,12 +158,8 @@ INSERT INTO Componentes (id, categoria) VALUES
 INSERT INTO Usuario (ci, nombre, username, apellido, fechanac, correo, password) VALUES 
 ('COMP001', 'Juan Pérez', 'juanperez', 'Pérez', '1990-05-15', 'juan@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm'),
 ('COMP002', 'María Gómez', 'mariag', 'Gómez', '1988-08-22', 'maria@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm'),
-('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm');
-
-INSERT INTO Comprador (ci, cel) VALUES 
-('COMP001', '0991234567'),
-('COMP002', '0987654321'),
-('COMP003', '0978912345');
+('COMP003', 'Carlos Rodríguez', 'carlosr', 'Rodríguez', '1995-03-10', 'carlos@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm'),
+('COMP004', 'Armando', 'armandop', 'Paredes', '1980-02-10', 'armandop@email.com', '$2y$10$n9vY/yqT5g9K17Sq8bOOOOSgvOAqTpjUcwIZ/7jC1OxEJ/HRHS5gm');
 
 -- 6. Crear carritos para los compradores
 INSERT INTO Carrito (costoCarrito, ci) VALUES 
@@ -196,7 +192,8 @@ UPDATE Carrito SET costoCarrito = (
 INSERT INTO Compra (fechaCompra, costoCarrito, depto, direccion, ci) VALUES
 ('2023-06-15', 1899.98, 'Montevideo', 'Av. 18 de Julio 1234', 'COMP001'),
 ('2023-06-20', 1349.98, 'Canelones', 'Ruta 101 km 25', 'COMP002'),
-('2023-06-25', 1279.97, 'Maldonado', 'Piriapolis 567', 'COMP003');
+('2023-06-25', 1279.97, 'Maldonado', 'Piriapolis 567', 'COMP003'),
+('2024-05-05', 229.99, 'Maldonado', 'San Carlos 123', 'COMP004');
 
 -- 9. Compras de ejemplo - Productos contenidos en las compras
 INSERT INTO Compra_Producto (idCompra, idProducto, cantidad, precioUnitario) VALUES 
@@ -207,10 +204,12 @@ INSERT INTO Compra_Producto (idCompra, idProducto, cantidad, precioUnitario) VAL
 (2, '32GD5GSK', 1, 229.99),
 (3, 'RX7900XTX', 1, 999.99),
 (3, '2TBSAM990', 1, 179.99),
-(3, 'LOGIG915', 1, 229.99);
+(3, 'LOGIG915', 1, 229.99),
+(4, 'LOGIG915', 1, 229.99);
+
 
 -- 10. Añadir reseñas de productos
-INSERT INTO Resena (mensaje, puntaje, idProducto, ciComprador) VALUES
+INSERT INTO Resena (mensaje, puntaje, idProducto, ciUsuario) VALUES
 ('Excelente rendimiento para gaming', 5, 'I913900K', 'COMP001'),       
 ('La mejor relación calidad-precio', 4, 'RX7900XTX', 'COMP001'),
 ('El gabinete perfecto para mi build', 5, 'LLO11DYN', 'COMP001'),

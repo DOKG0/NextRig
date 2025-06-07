@@ -28,8 +28,8 @@ CREATE TABLE `Compra` (
   `direccion` VARCHAR(255) NOT NULL,
   `ci` VARCHAR(50) NOT NULL,
   `telefono` INT,
-  PRIMARY KEY (`IDcompra`),
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`IDcompra`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE `Carrito` (
@@ -37,7 +37,7 @@ CREATE TABLE `Carrito` (
   `costoCarrito` DECIMAL(10, 2) NOT NULL,
   `cupon` DECIMAL(10, 2) DEFAULT NULL,
   `ci` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`idCarrito`),
+  PRIMARY KEY (`idCarrito`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Marca` (
