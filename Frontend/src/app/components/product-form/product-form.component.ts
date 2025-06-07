@@ -111,6 +111,13 @@ export class ProductFormComponent {
 		}
 
 		this.createFormInstance();
+		
+		if (!productId) {
+			const usuario = JSON.parse(localStorage.getItem('currentUser') || '{}');
+			if (usuario && usuario.ci) {
+				this.productFormGroup.get('admin_ci').setValue(usuario.ci);
+			}
+		}
 	}
 
 	addValidatorsToFormControl(formControl: FormControl, validators: any): void {
