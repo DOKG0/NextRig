@@ -102,3 +102,49 @@ sudo chmod -R 775 /opt/lampp/htdocs
 	1.2 - Push a la rama creada
 
 **comando:** git push -u origin feature/nombre-tarea
+
+---
+
+### Documentacion de proyecto
+
+#### Tecnologias utilizadas
+
+FrontEnd
+* Angular
+* Typscript
+* CSS5
+* HTML
+* Bootrap
+* SweetAlert2
+
+Backend
+* PHP
+* MYSQL
+* PHPMailer
+* Composer
+* RESTful API
+
+#### Caracteristicas destacadas
+
+Autenticacion y autirizacion
+* Sistema de sesiones PHP con cookies seguras
+* Autenticacion basada en roles (Usuario/Administrador)
+
+Seguridad
+* Contraseñas hasheadas
+* Sanitizacion de datos
+
+Funcionalidad del Sistema
+* Crud Completo de productos para administradores
+* Sistema de categorias dinamico (CPU, GPU, Motherboards, etc)
+* Carrito de compras persistente por usuario
+* Sistema de reseñas y calificaciones
+* Historial de compras detallado
+* Contacto por email con PHPMailer
+
+Arquitectura
+* Separacion entre frontend y backend
+* Servicios modulares en Angular
+* API RESTful con manejo de errores
+* Patron MVC en el backend PHP
+* Componentes reutilizables en Angular
