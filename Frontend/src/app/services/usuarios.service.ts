@@ -13,7 +13,7 @@ export class UsuarioService {
     login(correo: string, password: string): Observable<any> {
         //ruta login de a api /usuario/login
         //http://localhost/Backend/api.php/usuario/login
-        return this.http.post(`${this.apiUrl}/usuario/login`, { correo, password });
+        return this.http.post(`${this.apiUrl}/usuario/login`, { correo, password }, { withCredentials: true });
     }
     
     registro(nombre: string, apellido: string, username: string, correo: string,ci: string, password: string, fechaNac: string): Observable<any> {
@@ -27,7 +27,7 @@ export class UsuarioService {
             ci, 
             password,
             fechaNac
-        });
+        }, { withCredentials: true });
     }
 
     getCarrito(username : string): Observable<any> {

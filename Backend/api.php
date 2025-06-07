@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 include_once 'usuarioService.php';
 include_once 'adminService.php';
 include_once 'productoService.php';
@@ -42,7 +45,7 @@ switch ($method) {
 function setHeaders()
 {
     error_log("setHeaders ejecutado");
-    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Origin: http://localhost:4200");
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
     header("Access-Control-Max-Age: 3600");
@@ -51,7 +54,10 @@ function setHeaders()
 }
 
 function requireAdminSession() {
-    session_start();
+
+    error_log("SESSION DEBUG: " . print_r($_SESSION, true));
+    error_log("Cookies recibidas: " . print_r($_COOKIE, true));
+
     if (!isset($_SESSION['usuario']) || empty($_SESSION['usuario']['isAdmin']) || !$_SESSION['usuario']['isAdmin']) {
         http_response_code(401);
         echo json_encode(['error' => 'No autorizado']);
