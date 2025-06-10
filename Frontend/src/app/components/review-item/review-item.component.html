@@ -1,1 +1,13 @@
-<p>review-item works!</p>
+<div class="review-card">
+    <p class="username">{{review.username}}</p>
+    <p class="message">{{review.mensaje}}</p>
+    <p class="score">{{review.puntaje}}</p>
+    <p 
+        class="delete-review" 
+        *ngIf="this.reviewBelongsToCurrentUser"
+        >
+        <span (click)="onClickDeleteReview()">
+            Eliminar reseña
+        </span>
+    </p>
+</div>

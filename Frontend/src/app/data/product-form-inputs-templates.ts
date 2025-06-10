@@ -139,5 +139,4 @@ conditionals: [
         config: { disabled: true }
     }
 ]
-
 };
