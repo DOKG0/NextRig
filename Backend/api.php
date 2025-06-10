@@ -266,6 +266,13 @@ function handleGetRequest($request)
         return;
     }
 
+    if ($request[0] == 'search') {
+        $productosService = new ProductoService();
+        $productos = $productosService->buscarProductos($_GET['query'] ?? null);
+        echo json_encode($productos);
+        return;
+    }
+
     http_response_code(404);
     echo json_encode(['error' => 'Recurso no especificado']);    
 }
