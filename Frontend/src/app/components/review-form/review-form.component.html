@@ -1,1 +1,31 @@
-<p>review-form works!</p>
+<h3>¿Qué te pareció el producto?</h3>
+<form [formGroup]="reviewFormGroup">
+    <div class="input-container">
+        <div class="label-container">
+            <label for="mensaje" >
+                Cuéntanos que te pareció el producto
+            </label>
+        </div>
+        <textarea
+            formControlName="mensaje"
+            name="mensaje" 
+            class="form-control {{getInputValidationClass('mensaje')}}"
+            >
+        </textarea>
+        
+        <app-review-stars-radio
+            [reviewFormGroup]="this.reviewFormGroup">
+        </app-review-stars-radio>
+
+        <div class="btn-container">
+            <button 
+                class="btn-custom"
+                type="submit"
+                (click)="onFormSubmit()">
+                Enviar
+            </button>
+        </div>
+    </div>
+    
+</form>
+
