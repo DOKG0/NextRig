@@ -79,5 +79,22 @@ require_once('config.php');
             }
             return $productos;
         }
+
+        public function buscarProductos($search) {
+            //para evitar devolver todos los productos existentes si no se ingresa nada o se envian espacios en blanco
+            if (is_null($search) || empty($search)) {
+                return [];
+            }
+
+            $query_busqueda = "SELECT * FROM Productos WHERE nombre LIKE '%$search%'";
+            $resultado = mysqli_query($this->db_conn, $query_busqueda);
+
+            $productos = [];
+            while ($fila = mysqli_fetch_object($resultado)) {
+                $productos[] = $fila;
+            }
+
+            return $productos;
+        }
     }
 ?>
