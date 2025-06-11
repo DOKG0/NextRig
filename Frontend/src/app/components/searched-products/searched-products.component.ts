@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../../services/product.service';
-import { ActivatedRoute, NavigationEnd, Router, Event, NavigationStart } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, Event } from '@angular/router';
 import { Product } from '../../interfaces/product';
 import { ProductCardComponent } from "../product/product-card/product-card.component";
 import { CommonModule } from '@angular/common';
