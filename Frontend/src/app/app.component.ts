@@ -239,4 +239,12 @@ export class AppComponent implements AfterViewInit {
     // Redirige al login o a la pagina principal
     window.location.href = '/login';
   }
+
+  onSearch(event: Event): void {
+    event.preventDefault();
+    const searchInput = document.querySelector("#searchInput") as HTMLInputElement;
+    const value = searchInput.value;    
+    
+    this.router.navigate([`/products/search/${value}`]);
+  }
 }

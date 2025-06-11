@@ -78,4 +78,8 @@ export class ProductService {
   getTopRatedProducts(): Observable<Product[]> {
     return this.http.get<Product[]>('http://localhost/NextRig/Backend/api.php/productos/top-rated');
   }
+
+  searchProducts(queryValue: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`http://localhost/NextRig/Backend/api.php/search?query=${queryValue}`);
+  }
 }

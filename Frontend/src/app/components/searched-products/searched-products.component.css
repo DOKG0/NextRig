@@ -1,0 +1,86 @@
+.content-wrapper {
+	position: flex;
+	width: 100%;
+	height: 100%;
+	min-height: 100vh;
+	overflow-y: auto;
+	padding: 0.5rem;
+	overflow-x: hidden;
+	flex: 1;
+	background-color: var(--color-surface);
+	box-sizing: border-box;
+}
+
+.grid-container {
+	width: 100%;
+}
+
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill,minmax(250px, 1fr));
+	gap: 2rem;
+	padding: 1rem;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 2rem;
+}
+
+.grid-header {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	width: 100%;
+}
+
+.grid-header-buttons span {
+	color: var(--color-text-primary);
+	margin-left: 1rem;
+	padding-right: 0.5rem;
+}
+
+.grid-header-buttons {
+	margin: 1rem;
+}
+
+.grid-header-buttons label {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+	font-size: 1.2em;
+	padding: .5em .75em;
+}
+
+.grid-header-buttons select {
+	border-radius: 5px;
+	padding: .25em .5em;
+	color: var(--color-text-primary);
+    background-color: var(--color-bg);
+	min-width: 100px;
+}
+
+.pagination-controls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.pagination-controls button {
+	padding: 0.5rem 1rem;
+	border: none;
+	background-color: var(--shadow-border);
+	color: var(--color-text-primary);
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+.pagination-controls button.active {
+	background-color: var(--color-surface);
+}
+
+h3 {
+	color: var(--color-text-primary);
+	text-align: center;
+	margin: 2rem;
+	padding: 1rem 2rem;
+}
