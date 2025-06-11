@@ -243,7 +243,7 @@ export class AppComponent implements AfterViewInit {
   onSearch(event: Event): void {
     event.preventDefault();
     const searchInput = document.querySelector("#searchInput") as HTMLInputElement;
-    const value = searchInput.value;    
+    const value = searchInput.value.toString();    
     
     this.router.navigate([`/products/search/${value}`]);
   }
