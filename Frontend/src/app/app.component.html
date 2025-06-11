@@ -25,10 +25,11 @@
           </div>
         </div>
         <div class="menu-container">
-          <div class="search">
-            <i class="bx bx-search"></i>
-            <input type="search" placeholder="Search..." />
-          </div>
+          <form class="search" (submit)="onSearch($event)">
+            <i class="bx bx-search" (click)="onSearch($event)"></i>
+            <input type="search" id="searchInput" placeholder="Search..."/>
+          </form>
+
           <ul class="menu">
             <li class="menu-item menu-item-static active">
               <a routerLink="/" class="menu-link">
