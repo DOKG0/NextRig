@@ -56,8 +56,8 @@ getHistorial(username: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/historial/${username}`);
 }
 
-crearCompra(username: string, costoCarrito: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuario/crearCompra`, { username, costoCarrito });
+crearCompra(username: string, costoCarrito: number,telefono: number,direccion: string,departamento: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/usuario/crearCompra`, { username, costoCarrito, telefono, direccion, departamento });
 }
 
 getUsuario(username: string): Observable<any> {
