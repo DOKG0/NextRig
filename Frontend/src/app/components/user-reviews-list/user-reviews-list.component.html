@@ -2,7 +2,7 @@
     <h3>Mis reseñas</h3>
 
     <div *ngIf="reviews.length === 0; else withReviews">
-        <p>No se encontraron reseñas</p>
+        <p>{{this.message}}</p>
     </div>
 
     <ng-template #withReviews>

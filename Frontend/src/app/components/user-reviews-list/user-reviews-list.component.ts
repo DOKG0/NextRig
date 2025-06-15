@@ -17,6 +17,7 @@ export class UserReviewsListComponent implements OnInit {
 	private router: Router = inject(Router);
 	private currentUsername!: string;
 	public reviews: Review[] = [];
+	public message!: string;
 	
 	ngOnInit(): void {
 		this.currentUsername = this.getLoggedUsername();
@@ -24,6 +25,7 @@ export class UserReviewsListComponent implements OnInit {
 		if (!this.currentUsername) {
 			this.router.navigate(['/login']);
 		} else {
+			this.message = "Buscando las reseñas..."
 			this.fetchReviews()
 		}
 	}
@@ -38,7 +40,10 @@ export class UserReviewsListComponent implements OnInit {
 	fetchReviews(): void {
 		this.reviewHttpService.getReviewsDeUsuario(this.currentUsername).subscribe({
 			next: (response: ResponseReviews) => {
-				this.reviews = response.data as Review[];	
+				this.reviews = response.data as Review[];
+				if (this.reviews.length === 0) {
+					this.message = "No se encontraron reseñas";
+				}
 			},
 			error: (err) => {
 				const errorObj: ResponseReviews = err.error;
