@@ -14,10 +14,12 @@ import { ReviewItemComponent } from "../review-item/review-item.component";
 })
 export class ReviewListComponent implements OnInit {
 	private reviewHttpService: ReviewService = inject(ReviewService);
+	public message!: string;
 	public reviews: Review[] = [];
 	@Input() public product!: Product;
 
 	ngOnInit(): void {
+		this.message = "Buscando las reseñas...";
 		if (this.product) {
 			this.fetchReviews();
 		} else {
@@ -28,7 +30,10 @@ export class ReviewListComponent implements OnInit {
 	fetchReviews(): void {
 		this.reviewHttpService.getReviewsDeProducto(this.product.id as string).subscribe({
 			next: (response: ResponseReviews) => {
-				this.reviews = response.data as Review[];					
+				this.reviews = response.data as Review[];
+				if (this.reviews.length === 0) {
+					this.message = `No se encontraron reseñas de este producto`;
+				}			
 			},
 			error: (err) => {
 				const errorObj: ResponseReviews = err.error;

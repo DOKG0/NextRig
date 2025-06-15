@@ -106,6 +106,7 @@ body.dark-mode{
     padding-left: 0.455rem;
     margin-bottom: 1.8rem;
     overflow: hidden;
+    text-decoration: none;
 }
 
 .brand img{

@@ -120,6 +120,8 @@ export class ProductFormComponent {
 			const formControlAdmin = this.productFormGroup.get('admin_ci');			
 			formControlAdmin.setValue(user.ci);
 			formControlAdmin.disable();
+		} else {
+			this.router.navigate(['/login']);
 		}
 	}
 
