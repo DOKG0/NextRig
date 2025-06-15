@@ -105,7 +105,7 @@
                 <span>Carrito</span>
               </a>
             </li>
-            <li class="menu-item menu-item-static" *ngIf="isLoggedIn">
+            <li class="menu-item menu-item-static" *ngIf="isLoggedIn && !isAdmin">
                 <a [routerLink]="['/my-reviews']" class="menu-link">
                   <i class="bx bx-star"></i>
                   <span>Mis reseñas</span>
