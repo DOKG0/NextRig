@@ -69,7 +69,9 @@
 <ng-template #sinProductos>
   <h1 class="text-center content-mode">No hay productos en el carrito</h1>
  
-  <img style="display: block; margin: 0 auto;" width="200"  src="../../../assets/img/empty-cart.png" alt="Cargando..." />
+  
+
+  <img class="icono-color" [ngStyle]="{'mask-image': 'url(../../../assets/img/empty-cart.png)'}" style="display: block; margin: 0 auto;" />
 
   
 </ng-template>

@@ -21,3 +21,16 @@ h1,h2,h3,h4,h5,h6,div,p,li,ul,ol,a{
 }
 
 
+
+.icono-color {
+  width: 200px;
+  height: 200px;
+  background-color: var(--color-text-primary); /* cambia dinámicamente */
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+}
+
+
+

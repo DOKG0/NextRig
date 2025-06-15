@@ -57,9 +57,7 @@ export class ProductCardComponent implements AfterViewInit {
     return;
   }else{
     let idProducto = this.producto.id as string;
-    console.log('ID del producto:', idProducto);
-    console.log('Nombre de usuario:', nombreUsuario);
-    console.log('Cantidad:', quantity);
+    
   this.usuarioService.agregarCarrito(nombreUsuario,idProducto,quantity).subscribe((data: any) => {
       }
     );
