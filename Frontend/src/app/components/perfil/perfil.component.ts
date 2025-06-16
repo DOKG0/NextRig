@@ -134,14 +134,14 @@ editarCampo(campo: string) {
       }
     });
 
-
-
-    
-
-
     this.editandoCampo[campo] = false;
 
   }
+
+  reset(campo: string){
+      this.usuario[campo] = this.usuarioCopia[campo];
+  }
+
 
 
 }
