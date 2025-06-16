@@ -189,11 +189,11 @@ UPDATE Carrito SET costoCarrito = (
 );
 
 -- 8. Crear compras de ejemplo
-INSERT INTO Compra (fechaCompra, costoCarrito, depto, direccion, ci) VALUES
-('2023-06-15', 1899.98, 'Montevideo', 'Av. 18 de Julio 1234', 'COMP001'),
-('2023-06-20', 1349.98, 'Canelones', 'Ruta 101 km 25', 'COMP002'),
-('2023-06-25', 1279.97, 'Maldonado', 'Piriapolis 567', 'COMP003'),
-('2024-05-05', 229.99, 'Maldonado', 'San Carlos 123', 'COMP004');
+INSERT INTO Compra (fechaCompra, costoCarrito, depto, direccion, ci, telefono) VALUES
+('2023-06-15', 1899.98, 'Montevideo', 'Av. 18 de Julio 1234', 'COMP001', '091123123'),
+('2023-06-20', 1349.98, 'Canelones', 'Ruta 101 km 25', 'COMP002', '091123124'),
+('2023-06-25', 1279.97, 'Maldonado', 'Piriapolis 567', 'COMP003', '091123125'),
+('2024-05-05', 229.99, 'Maldonado', 'San Carlos 123', 'COMP004', '091123126');
 
 -- 9. Compras de ejemplo - Productos contenidos en las compras
 INSERT INTO Compra_Producto (idCompra, idProducto, cantidad, precioUnitario) VALUES 
