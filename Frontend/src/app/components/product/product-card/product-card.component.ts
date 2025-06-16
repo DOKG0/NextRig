@@ -127,3 +127,4 @@ export class ProductCardComponent implements AfterViewInit {
       });
     }
 }
+ 

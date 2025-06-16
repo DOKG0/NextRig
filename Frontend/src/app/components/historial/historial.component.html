@@ -11,12 +11,10 @@
   <div class="d-flex align-items-center mb-3 gap-3">
     <input type="text" class="form-control w-50" placeholder="Buscar..." [(ngModel)]="searchText">
     
-    <span class="content-mode">{{ productos.length }} compras</span>
+    <span class="content-mode">{{ productosFiltrados().length }} compras</span>
   </div>
 
-    
-
-    <div *ngFor="let compra of productos" class="card border-0 border-bottom px-3 py-3 d-flex flex-md-row align-items-center justify-content-between content-mode">
+    <div *ngFor="let compra of productosFiltrados()" class="card border-0 border-bottom px-3 py-3 d-flex flex-md-row align-items-center justify-content-between content-mode">
       
       <div class="d-flex align-items-center gap-3">
         <img [src]="compra.imagen" class="img-thumbnail" style="width: 64px; height: 64px; object-fit: cover;">
@@ -38,13 +36,6 @@
       </div>
     </div>
 </div>
-
-
-
-
-
-
-
 
 </ng-template>
   
@@ -83,17 +74,13 @@
           </ul>
         </div>
       </div>
-
       <div class="container mt-4">
   <button class="btn btn-outline-secondary mb-3" (click)="volverAtras()">
     ← Volver
   </button>
-  
-  
 </div>
     </div>
-
-  
 </div>
-
 </ng-template>
+
+ 

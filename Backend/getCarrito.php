@@ -33,22 +33,26 @@ class CarritoService{
         $resultCarrito = mysqli_query($this->db_conn, $queryCarrito);
 
             if (!$resultCarrito || mysqli_num_rows($resultCarrito) === 0) {
-                http_response_code(404);
-                echo json_encode(["error" => "Carrito no encontrado para el usuario."]);
-                exit;
+                 $agregarIDcarrito = "INSERT INTO Carrito(costoCarrito,ci) SELECT 0,ci FROM Usuario u 
+                WHERE u.username = '$username'";
+                $resultagregar = mysqli_query($this->db_conn,$agregarIDcarrito);
             }
+               
 
-    $row = mysqli_fetch_assoc($resultCarrito);
+            $queryCarrito4 = "
+        SELECT c.idCarrito
+        FROM Carrito c
+        JOIN Usuario u ON c.ci = u.ci
+        WHERE u.username = '$username'";
+        $resultCarrito4 = mysqli_query($this->db_conn, $queryCarrito4);
+
+    $row = mysqli_fetch_assoc($resultCarrito4);
     $idCarrito = $row['idCarrito'];
-
-    // 2. Insertar o actualizar producto
     $query = "
         INSERT INTO Carrito_Productos (idCarrito, idProducto, cantidad)
         VALUES ('$idCarrito', '$idProducto', '$cantidad')
         ON DUPLICATE KEY UPDATE cantidad = cantidad + VALUES(cantidad)";
-
         $resultado = mysqli_query($this->db_conn, $query);
-
         if (!$resultado) {
             http_response_code(500);
             echo json_encode(["error" => "Error en la consulta a la base de datos."]);
@@ -57,8 +61,7 @@ class CarritoService{
             http_response_code(200);
             echo json_encode(["success" => "Cantidad actualizada correctamente."]);
             exit;
-        }
-                
+        } 
             }
 
 
@@ -84,14 +87,7 @@ class CarritoService{
     }
 
     public function comprarCarrito($username,$idProducto,$costoCarrito, $cantidad){
-        $query = "INSERT INTO Comprador (ci, cel)
-                    SELECT u.ci, '098898888'
-                    FROM Usuario u
-                    WHERE u.username = '$username'
-                    AND NOT EXISTS (
-                    SELECT 1 FROM Comprador c WHERE c.ci = u.ci
-                    )";
-        $resultado = mysqli_query($this->db_conn, $query);
+       
 
         $query2 = "INSERT INTO Compra_Producto (idCompra,idProducto,precioUnitario,cantidad)
                     SELECT c.IDcompra,'$idProducto',$costoCarrito, $cantidad
@@ -144,10 +140,10 @@ public function getHistorialCompras($username){
         return $productos;
     }
 
-    public function crearCompra($username,$costoCarrito){
+    public function crearCompra($username,$costoCarrito,$telefono,$direccion,$departamento){
         
-        $query = "INSERT INTO Compra (fechaCompra, costoCarrito, depto,direccion,ci)
-                    SELECT CURDATE(),'$costoCarrito','Maldonado','Las Malvinas', u.ci
+        $query = "INSERT INTO Compra (fechaCompra, costoCarrito, depto,direccion,ci,telefono)
+                    SELECT CURDATE(),'$costoCarrito','$departamento','$direccion', u.ci, '$telefono'
                     FROM Usuario u
                     WHERE u.username = '$username'";
         $resultado = mysqli_query($this->db_conn, $query);

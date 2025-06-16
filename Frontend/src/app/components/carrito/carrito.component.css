@@ -1,4 +1,36 @@
-.content-mode{
+h1,h2,h3,h4,h5,h6,div,p,li,ul,ol,a{
     background-color: var(--color-surface);
     color: var(--color-text-primary);
 }
+
+
+
+
+
+@keyframes rebote {
+  0%   { transform: scale(0); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translate(-50%, -60%); }
+  10%  { opacity: 1; transform: translate(-50%, -50%); }
+  90%  { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(-50%, -40%); }
+}
+
+
+
+.icono-color {
+  width: 200px;
+  height: 200px;
+  background-color: var(--color-text-primary); /* cambia dinámicamente */
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+}
+
+
+

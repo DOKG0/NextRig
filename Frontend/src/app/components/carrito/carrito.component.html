@@ -1,4 +1,6 @@
-<ng-container *ngIf="hayProductos; then conProductos; else sinProductos"></ng-container>
+<ng-container *ngIf="hayProductos && quiereComprar;then ResolucionDeCompra"></ng-container>
+<ng-container *ngIf="hayProductos && !quiereComprar; then conProductos"></ng-container>
+<ng-container *ngIf="!hayProductos; then sinProductos"></ng-container>
 
 
 
@@ -9,8 +11,6 @@
       <button (click)="eliminarTodos()" class="btn btn-outline-danger mt-auto">Eliminar Carrito</button>
     </div>
   </div>
-
-
   <div class="content-mode">
     <div class="container mt-4">
 
@@ -61,8 +61,89 @@
       </div>
     </div>
   </div>
+
+    
+
 </ng-template>
 
 <ng-template #sinProductos>
   <h1 class="text-center content-mode">No hay productos en el carrito</h1>
+ 
+  
+
+  <img class="icono-color" [ngStyle]="{'mask-image': 'url(../../../assets/img/empty-cart.png)'}" style="display: block; margin: 0 auto;" />
+
+  
+</ng-template>
+
+
+<ng-template #ResolucionDeCompra>
+<h1>Ultimos Pasos</h1>
+<div class="container mt-4">
+  <div class="row">
+  <div class="col-5">
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  
+      
+      <div class="mb-3">
+        <label for="telefono" class="form-label">Ingrese telefono de contacto.</label>
+        <input type="text" id="telefono" formControlName="telefono" class="form-control">
+        <div *ngIf="submitted && f['telefono'].errors" class="text-danger">
+          Ingrese un número de telefono válido.
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="departamento" class="form-label">Ingrese Departamento.</label>
+        <input type="text" id="departamento" formControlName="departamento" class="form-control">
+        <div *ngIf="submitted && f['departamento'].errors" class="text-danger">
+          El campo Departamento es obligatorio.
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="direccion" class="form-label">Ingrese direccion.</label>
+        <input type="text" id="direccion" formControlName="direccion" class="form-control">
+        <div *ngIf="submitted && f['direccion'].errors" class="text-danger">
+          El campo direccion es obligatorio.
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Confirmar compra</button>
+  
+      <div *ngIf="responseMessage" class="alert alert-info mt-3">
+        {{ responseMessage }}
+      </div>
+  
+    </form>  
+    </div>
+     <div class="col-7 ">
+          <div class="card sticky-top shadow content-mode" style="top: 20px;">
+            <div class="card-body">
+              <h5 class="card-title">Resumen de compra</h5><br>
+              <div *ngFor="let producto of carrito">
+              <p class="card-text">
+                {{producto.nombre}} x {{producto.cantidad}} =<strong> ${{producto.precio * producto.cantidad | number:'1.2-2'}}</strong>
+              </p>
+             
+              
+                </div>
+                <br>
+                 <p class="card-text">
+                Total: <strong>${{total}}</strong>
+              </p>
+              <p class="card-text">
+                Cupon: <strong>-$200</strong>
+              </p>
+              <p class="card-text">
+                Precio Final: <strong >${{ total -200 | number:'1.2-2'}}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
+     
+
+  </div>
+
 </ng-template>
