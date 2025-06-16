@@ -86,7 +86,7 @@ require_once('config.php');
                 return [];
             }
 
-            $query_busqueda = "SELECT * FROM Productos WHERE nombre LIKE '%$search%'";
+            $query_busqueda = "SELECT * FROM Productos WHERE nombre LIKE '%$search%' OR marca_nombre LIKE '%$search%'";
             $resultado = mysqli_query($this->db_conn, $query_busqueda);
 
             $productos = [];
