@@ -106,15 +106,10 @@ class AdminService
 
         $producto_id = mysqli_real_escape_string($this->db_conn, $producto_id);
 
-        $query = "DELETE FROM Componentes WHERE id = '$producto_id'";
-        mysqli_query($this->db_conn, $query);
+        $query = "UPDATE Productos SET habilitado = 0 WHERE id = '$producto_id'";
+        $resultado = mysqli_query($this->db_conn, $query);
 
-        $query = "DELETE FROM Productos WHERE id = ?";
-        $stmt = mysqli_prepare($this->db_conn, $query);
-
-        mysqli_stmt_bind_param($stmt, "s", $producto_id);
-
-        if (mysqli_stmt_execute($stmt)) {
+        if ($resultado) {
             return true;
         }
         return false;

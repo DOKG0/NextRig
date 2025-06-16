@@ -44,13 +44,11 @@ export class ProductService {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     }),
+    withCredentials: true,
     body: {
       producto_id: id
     }
   };
-
-  console.log("Eliminando producto con ID:", id);
-
   return this.http.delete(`${this.apiAdminUrl}/eliminarProducto`, httpOptions);
 }
 
@@ -96,5 +94,9 @@ export class ProductService {
 
   searchProducts(queryValue: string): Observable<Product[]> {
     return this.http.get<Product[]>(`http://localhost/NextRig/Backend/api.php/search?query=${queryValue}`);
+  }
+
+  getProductosMasBaratos(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/mas-baratos`);
   }
 }

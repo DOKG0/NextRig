@@ -141,6 +141,13 @@ function handleGetRequest($request)
 
     if ($request[0] == 'productos') {
         $productosService = new ProductoService();
+
+        if (sizeof($request) < 2) {
+            $productos = $productosService->listarProductos();
+            echo json_encode($productosService->listarProductos());
+            return;
+        }
+
         switch ($request[1]) {
             case 'cpu':
                 echo json_encode($productosService->getComponentsByCategory('CPU'));
@@ -188,6 +195,10 @@ function handleGetRequest($request)
 
             case 'top-rated':
                 echo json_encode($productosService->getTopRatedProducts(5));
+                break;
+
+            case 'mas-baratos':
+                echo json_encode($productosService->getProductosMasBaratos(10));
                 break;
 
             default:

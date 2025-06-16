@@ -16,15 +16,13 @@ export class HomeComponent implements OnInit{
   
   constructor(private productService: ProductService) {}
 
-  ngOnInit() {
-    this.productService.getTopRatedProducts().subscribe(productos => {
+  ngOnInit() {    
+    this.productService.getTopRatedProducts().subscribe(productos => {      
       this.destacados = productos;
     });
 
-    this.productService.getProductos().subscribe(productos => {
-      this.baratos = productos
-        .sort((a, b) => a.precio - b.precio)
-        .slice(0, 10);
+    this.productService.getProductosMasBaratos().subscribe(productos => {      
+      this.baratos = productos;
     });
   }
 }
