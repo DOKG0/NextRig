@@ -46,7 +46,24 @@ require_once('config.php');
         }
 
         public function listarProductos() {
-            $query = "SELECT * FROM Productos";
+            $query = "SELECT * FROM Productos WHERE habilitado = '1'";
+            $resultado = mysqli_query($this->db_conn, $query);
+            if (!$resultado) {
+                http_response_code(500);
+                echo json_encode(["error" => "Error en la consulta a la base de datos."]);
+                exit;
+            }
+    
+            $productos = [];
+            while ($fila = mysqli_fetch_object($resultado)) {
+                $productos[] = $fila;
+            }
+
+            return $productos;
+        }
+
+        public function getProductosMasBaratos($limit) {
+            $query = "SELECT * FROM Productos WHERE habilitado = '1' ORDER BY precio ASC LIMIT $limit";
             $resultado = mysqli_query($this->db_conn, $query);
             if (!$resultado) {
                 http_response_code(500);
@@ -90,7 +107,7 @@ require_once('config.php');
 
             $query_busqueda = "SELECT * FROM Productos 
                 WHERE (nombre LIKE '%$search%' 
-                OR marca_nombre LIKE '%$search%') 
+                OR marca_nombre = '$search') 
                 AND habilitado = '1'";
             $resultado = mysqli_query($this->db_conn, $query_busqueda);
 

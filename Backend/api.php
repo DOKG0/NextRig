@@ -147,7 +147,7 @@ function handleGetRequest($request)
             echo json_encode($productosService->listarProductos());
             return;
         }
-        
+
         switch ($request[1]) {
             case 'cpu':
                 echo json_encode($productosService->getComponentsByCategory('CPU'));
@@ -195,6 +195,10 @@ function handleGetRequest($request)
 
             case 'top-rated':
                 echo json_encode($productosService->getTopRatedProducts(5));
+                break;
+
+            case 'mas-baratos':
+                echo json_encode($productosService->getProductosMasBaratos(10));
                 break;
 
             default:
