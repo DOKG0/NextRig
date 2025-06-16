@@ -39,6 +39,21 @@ export class ProductService {
     return this.http.post(`${this.apiAdminUrl}/updateProduct`, product, httpOptions);
   }
 
+  deleteProduct(id: string): Observable<any> {
+  const httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    }),
+    body: {
+      producto_id: id
+    }
+  };
+
+  console.log("Eliminando producto con ID:", id);
+
+  return this.http.delete(`${this.apiAdminUrl}/eliminarProducto`, httpOptions);
+}
+
   getProductos(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }

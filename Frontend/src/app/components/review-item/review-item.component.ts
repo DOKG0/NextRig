@@ -3,10 +3,12 @@ import { Review } from '../../interfaces/review';
 import { ReviewService } from '../../services/review.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { ReviewStarsComponent } from '../review-stars/review-stars.component';
+
 
 @Component({
 	selector: 'app-review-item',
-	imports: [ CommonModule ],
+	imports: [ CommonModule, ReviewStarsComponent],
 	templateUrl: './review-item.component.html',
 	styleUrl: './review-item.component.css'
 })
@@ -15,12 +17,14 @@ export class ReviewItemComponent implements OnInit {
 	private reviewService: ReviewService = inject(ReviewService);
 	@Input() public review!: Review;
 	public reviewBelongsToCurrentUser: boolean = false;
+	flagStatus : boolean = false;
 
 	ngOnInit(): void {
 		this.currentUsername = this.getLoggedUsername();
 		if (this.review.username === this.currentUsername) {
 			this.reviewBelongsToCurrentUser = true;
 		}
+		this.flagStatus = true;
 	}
 
 	getLoggedUsername(): string {

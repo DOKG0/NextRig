@@ -15,19 +15,20 @@
         <div class="info-section">
           <h1>{{ p.nombre }}</h1>
           <p class="price">{{ p.precio | currency:'USD' }}</p>
+          <app-review-stars [producto]="producto"></app-review-stars>
           <p class="description">{{ p.descripcion }}</p>
           <p class="category">Categoría: {{ p.categoria }}</p>
-          <p class="stock" [ngClass]="{ 'out': p.stock === 0 }">
-            {{ p.stock > 0 ? 'Stock disponible' : 'Sin stock' }}
+          <p class="stock" [ngClass]="{ 'out': p.stock === 0 || quantity > p.stock }">
+            {{ p.stock > 0 && quantity <= p.stock ? 'Stock disponible' : 'Sin stock' }}
           </p>
 
           <div *ngIf="producto.stock > 0" class="buttons-container">
             <div class="sum-icons-container">
               <i class='bx bx-minus icono' (click)="minusQuantity()"></i>
               <span class="number icono">{{quantity}}</span>
-              <i *ngIf="producto.stock != quantity" class='bx bx-plus icono' (click)="plusQuantity()"></i>
+              <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
             </div>
-            <button [disabled]="p.stock === 0" (click)="agregarAlCarrito(quantity)">Agregar al carrito</button>
+            <button [disabled]="p.stock === 0 || quantity > p.stock" (click)="agregarAlCarrito(quantity)">Agregar al carrito</button>
           </div>
           
         </div>

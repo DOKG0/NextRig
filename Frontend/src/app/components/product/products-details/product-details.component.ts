@@ -4,14 +4,15 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product'
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { ReviewStarsComponent } from '../../review-stars/review-stars.component';
 import { UsuarioService } from '../../../services/usuarios.service';
 import { ReviewListComponent } from "../../review-list/review-list.component";
 import { ReviewService } from '../../../services/review.service';
 import { ReviewFormComponent } from "../../review-form/review-form.component";
-
+import Swal from 'sweetalert2';
 @Component({
 	selector: 'app-product-details',
-	imports: [CommonModule, RouterModule, ProductCardComponent, ReviewListComponent, ReviewFormComponent],
+	imports: [CommonModule, RouterModule, ProductCardComponent, ReviewListComponent, ReviewFormComponent, ReviewStarsComponent],
 	templateUrl: './product-details.component.html',
 	styleUrl: './product-details.component.css'
 })
@@ -86,6 +87,7 @@ export class ProductDetailsComponent implements OnInit {
 		}
 	}
 
+
 	plusQuantity() {
 		this.quantity++;
 	}
@@ -133,9 +135,21 @@ export class ProductDetailsComponent implements OnInit {
 			console.log('ID del producto:', idProducto);
 			console.log('Nombre de usuario:', nombreUsuario);
 			console.log('Cantidad:', quantity);
+			this.alertProductoCarritoToast(this.producto.nombre);
 			this.usuarioService.agregarCarrito(nombreUsuario, idProducto, quantity).subscribe((data: any) => {
-			}
-			);
+			});
 		}
 	}
+
+	alertProductoCarritoToast(data: string): void {
+        Swal.fire({
+          toast: true,
+          position: 'bottom-end',
+          icon: 'success',
+          title: `Producto '${data}' agragado al carrito correctamente`,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000,
+        });
+      }
 }

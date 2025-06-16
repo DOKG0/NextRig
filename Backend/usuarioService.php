@@ -78,13 +78,31 @@ class UsuarioService
             ];
         }
 
-        // hashear la contraseña
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+       // Iniciar transacción
+        mysqli_begin_transaction($this->db_conn);
 
-        $query = "INSERT INTO Usuario (ci, nombre, apellido, username, correo, password, fechanac) 
-                      VALUES ('$ci', '$nombre', '$apellido', '$username', '$correo', '$hashedPassword', '$fechaNac')";
+        try {
+            // Hashear la contraseña
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        if (mysqli_query($this->db_conn, $query)) {
+            // Insertar en Usuario
+            $queryUsuario = "INSERT INTO Usuario (ci, nombre, apellido, username, correo, password, fechanac) 
+                            VALUES ('$ci', '$nombre', '$apellido', '$username', '$correo', '$hashedPassword', '$fechaNac')";
+            if (!mysqli_query($this->db_conn, $queryUsuario)) {
+                throw new Exception("Error al registrar el usuario: " . mysqli_error($this->db_conn));
+            }
+
+            // Insertar en Carrito 
+            $queryCarrito = "INSERT INTO Carrito (costoCarrito, ci) VALUES (0.00, '$ci')";
+            if (!mysqli_query($this->db_conn, $queryCarrito)) {
+                throw new Exception("Error al crear el carrito: " . mysqli_error($this->db_conn));
+            }
+
+            // Confirmar transacción
+            mysqli_commit($this->db_conn);
+
+
+        
             return [
                 "success" => true,
                 "mensaje" => "Usuario registrado exitosamente",
@@ -96,11 +114,14 @@ class UsuarioService
                     "correo" => $correo
                 ]
             ];
-        } else {
+
+        } catch (Exception $e) {
+            // Algo falló: deshacer todos los cambios
+            mysqli_rollback($this->db_conn);
             http_response_code(500);
             return [
                 "success" => false,
-                "mensaje" => "Error al registrar el usuario: " . mysqli_error($this->db_conn)
+                "mensaje" => $e->getMessage()
             ];
         }
     }

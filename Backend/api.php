@@ -324,6 +324,7 @@ function handleDeleteRequest($request)
         echo json_encode($adminService->eliminarProducto($data->producto_id));
         return;
     }
+    
     if ($request[0] == 'usuario' && $request[1] == 'eliminarProductoCarrito') {
         $carritoService = new CarritoService();
         echo json_encode($carritoService->deleteProductoCarrito($data->username, $data->idProducto));

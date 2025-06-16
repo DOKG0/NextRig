@@ -1,7 +1,7 @@
 <div class="review-card">
     <p class="username">{{review.username}}</p>
     <p class="message">{{review.mensaje}}</p>
-    <p class="score">{{review.puntaje}}</p>
+    <app-review-stars [rating]="review.puntaje" [flagStatus]="flagStatus"></app-review-stars>
     <p 
         class="delete-review" 
         *ngIf="this.reviewBelongsToCurrentUser"
