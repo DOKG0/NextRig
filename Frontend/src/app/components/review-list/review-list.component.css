@@ -1,6 +1,6 @@
 .list-container {
     max-height: 400px;
-    overflow-x: scroll;
+    overflow-y: scroll;
 }
 
 h1, h2, h3, h4, h5 {
