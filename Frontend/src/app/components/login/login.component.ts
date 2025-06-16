@@ -158,6 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               name: response.nombre || response.usuario?.nombre || 'Usuario',
               username: response.usuario?.username || '',
               email: this.loginData.email,
+              ci: response.usuario?.ci || '',
               isAdmin: response.usuario?.isAdmin || false
             };
             localStorage.setItem('currentUser', JSON.stringify(user));

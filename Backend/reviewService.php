@@ -36,7 +36,7 @@
 
             //selecciono las reseñas de un producto dado su id e incluyo el nombre de usuario que la dejo
             $query = "SELECT r.id, r.mensaje, r.puntaje, r.idProducto, u.username 
-                FROM (Resena r JOIN Usuario u ON r.ciComprador = u.ci)
+                FROM (Resena r JOIN Usuario u ON r.ciUsuario = u.ci)
                 WHERE r.idProducto = '$idProducto'";
 
             $result = mysqli_query($this->db_conn, $query);
@@ -77,7 +77,7 @@
 
             //selecciono las reseñas de un usuario dado su username
             $query = "SELECT r.id, r.mensaje, r.puntaje, r.idProducto, u.username 
-                FROM (Resena r JOIN Usuario u ON r.ciComprador = u.ci)
+                FROM (Resena r JOIN Usuario u ON r.ciUsuario = u.ci)
                 WHERE u.username='$username'";
 
             $result = mysqli_query($this->db_conn, $query);
@@ -140,7 +140,7 @@
                     );
             }
 
-            $query_review = "INSERT INTO Resena (mensaje, puntaje, idProducto, ciComprador) 
+            $query_review = "INSERT INTO Resena (mensaje, puntaje, idProducto, ciUsuario) 
                 VALUES ('$mensaje','$puntaje','$idProducto','$usuario->ci')";
             //transaccion del insert de la reseña
             mysqli_begin_transaction($this->db_conn);
@@ -192,7 +192,7 @@
                     );
             }
 
-            $query_delete = "DELETE FROM Resena WHERE idProducto = '$idProducto' AND ciComprador = '$usuario->ci'";
+            $query_delete = "DELETE FROM Resena WHERE idProducto = '$idProducto' AND ciUsuario = '$usuario->ci'";
             //transaccion del delete de la reseña
             mysqli_begin_transaction($this->db_conn);
             try {
@@ -313,7 +313,7 @@
 
             //verifico que el usuario haya comprado el producto
             $query_compra = "SELECT Compra.IDcompra 
-                FROM (Compra JOIN Comprador ON Compra.ci = Comprador.ci) 
+                FROM (Compra JOIN Usuario ON Compra.ci = Usuario.ci) 
                     JOIN Compra_Producto ON Compra.IDcompra = Compra_Producto.idCompra  
                 WHERE Compra_Producto.idProducto = '$idProducto' 
                 AND Compra.ci = '$ciUsuario'";
@@ -333,7 +333,7 @@
             $query_review = "SELECT id 
                 FROM Resena 
                 WHERE idProducto = '$idProducto' 
-                AND ciComprador = '$ciUsuario'";
+                AND ciUsuario = '$ciUsuario'";
             $resultado_query_review = mysqli_query($this->db_conn, $query_review);
             $review = mysqli_fetch_object($resultado_query_review);
 

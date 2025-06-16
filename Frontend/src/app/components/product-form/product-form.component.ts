@@ -113,6 +113,18 @@ export class ProductFormComponent {
 		this.createFormInstance();
 	}
 
+	//setea la cedula del administrador que esta logueado en el campo admin_ci del formulario
+	setCurrentAdminCI(): void {
+		const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+		if (user && user.ci) {
+			const formControlAdmin = this.productFormGroup.get('admin_ci');			
+			formControlAdmin.setValue(user.ci);
+			formControlAdmin.disable();
+		} else {
+			this.router.navigate(['/login']);
+		}
+	}
+
 	addValidatorsToFormControl(formControl: FormControl, validators: any): void {
 		validators?.forEach((v: any) => {
 			//cada form control puede tener varios validators, agrego aquellos definidos en los templates de inputs
@@ -163,6 +175,7 @@ export class ProductFormComponent {
 	createFormInstance(): void {
 		const group = this.createFormGroup();
 		this.productFormGroup = this.formBuilder.group(group);
+		this.setCurrentAdminCI();
 	}
 
 	fetchProductData(id: string): void {
@@ -229,6 +242,7 @@ export class ProductFormComponent {
 			}
 		}
 		this.productFormGroup.get('id').disable();
+		this.setCurrentAdminCI();
 	}
 
 	async postForm(formData: any, createNew: boolean): Promise<void> {

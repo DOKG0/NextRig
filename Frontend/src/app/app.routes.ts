@@ -10,6 +10,8 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { ProductFormComponent } from './components/product-form/product-form.component';
 import { AuthGuardAdmin } from './guards/auth.guard.admin';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { SearchedProductsComponent } from './components/searched-products/searched-products.component';
+import { UserReviewsListComponent } from './components/user-reviews-list/user-reviews-list.component';
 
 
 export const routes: Routes = [
@@ -23,11 +25,13 @@ export const routes: Routes = [
       { path: 'products', component: ProductsGridComponent },
       { path: 'products/category/:category', component: ProductsGridComponent },
       { path: 'products/:id', component: ProductDetailsComponent },
+      { path: 'products/search/:searchValue', component: SearchedProductsComponent },
       { path: 'product-form', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
       { path: 'product-form/update/:id', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
-      { path: 'cart', component: CarritoComponent},
-      { path: 'profile', component: PerfilComponent},
-      { path: 'orders',component: HistorialComponent},
+      { path: 'cart', component: CarritoComponent },
+      { path: 'profile', component: PerfilComponent },
+      { path: 'orders', component: HistorialComponent },
+      { path: 'my-reviews', component: UserReviewsListComponent },
       { path: '404', component: NotFoundComponent }
     ]
   },

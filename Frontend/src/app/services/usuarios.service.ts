@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class UsuarioService {
     login(correo: string, password: string): Observable<any> {
         //ruta login de a api /usuario/login
         //http://localhost/Backend/api.php/usuario/login
-        return this.http.post(`${this.apiUrl}/usuario/login`, { correo, password });
+        return this.http.post(`${this.apiUrl}/usuario/login`, { correo, password }, { withCredentials: true });
     }
     
     registro(nombre: string, apellido: string, username: string, correo: string,ci: string, password: string, fechaNac: string): Observable<any> {
@@ -27,7 +27,7 @@ export class UsuarioService {
             ci, 
             password,
             fechaNac
-        });
+        }, { withCredentials: true });
     }
 
     getCarrito(username : string): Observable<any> {
@@ -58,5 +58,13 @@ getHistorial(username: string): Observable<any> {
 
 crearCompra(username: string, costoCarrito: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/usuario/crearCompra`, { username, costoCarrito });
+}
+
+getUsuario(username: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/perfil/${username}`);
+}
+
+actualizarUsuario(username: string,campo: string, valor: string): Observable<HttpResponse<any>> {
+    return this.http.put<HttpResponse<any>>(`${this.apiUrl}/actualizar`, {username, campo, valor },{observe: 'response'});
 }
 }

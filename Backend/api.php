@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 include_once 'usuarioService.php';
 include_once 'adminService.php';
 include_once 'productoService.php';
@@ -42,11 +45,24 @@ switch ($method) {
 function setHeaders()
 {
     error_log("setHeaders ejecutado");
-    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Origin: http://localhost:4200");
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+    header("Access-Control-Allow-Credentials: true");
+}
+
+function requireAdminSession() {
+
+    error_log("SESSION DEBUG: " . print_r($_SESSION, true));
+    error_log("Cookies recibidas: " . print_r($_COOKIE, true));
+
+    if (!isset($_SESSION['usuario']) || empty($_SESSION['usuario']['isAdmin']) || !$_SESSION['usuario']['isAdmin']) {
+        http_response_code(401);
+        echo json_encode(['error' => 'No autorizado']);
+        exit;
+    }
 }
 
 function requiredFieldsExist($data, $fields)
@@ -207,6 +223,12 @@ function handleGetRequest($request)
         return;
     }
 
+    if( $request[0] == 'perfil'){
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->getUsuario($request[1]));
+            return;
+    }
+
     if ($request[0] == 'reseñas') {
         $reviewService = new ReviewService();
         $resultado = $reviewService->getReviewsDeProducto($request[1]);
@@ -244,6 +266,13 @@ function handleGetRequest($request)
         return;
     }
 
+    if ($request[0] == 'search') {
+        $productosService = new ProductoService();
+        $productos = $productosService->buscarProductos($_GET['query'] ?? null);
+        echo json_encode($productos);
+        return;
+    }
+
     http_response_code(404);
     echo json_encode(['error' => 'Recurso no especificado']);    
 }
@@ -265,7 +294,14 @@ function handlePutRequest($request)
     }
 
     switch ($request[0]) {
-
+        case 'actualizar':
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->actualizarUsuario(
+                $data['username'] ?? null,
+                $data['campo'] ?? null,
+                $data['valor'] ?? null
+            ));
+            break;
         default:
             http_response_code(404);
             echo json_encode(['error' => 'Recurso no encontrado']);
@@ -369,6 +405,8 @@ function handleUsuarioRequest($usuarioService, $action, $data)
 
 function handleAdminRequest($adminService, $action, $data)
 {
+    requireAdminSession();
+
     switch ($action) {
         case 'addProduct':
 

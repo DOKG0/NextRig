@@ -18,17 +18,18 @@
           <div class="menu-btn" id="menu-btn">
             <i class="bx bx-chevron-left"></i>
           </div>
-          <div class="brand">
+          <a class="brand" routerLink="/">
             <img src="../assets/img/LogoD.png" alt="logo" class="logoD" />
             <img src="../assets/img/LogoL.png" alt="logo" class="logoL" />
             <span>NextRig</span>
-          </div>
+          </a>
         </div>
         <div class="menu-container">
-          <div class="search">
-            <i class="bx bx-search"></i>
-            <input type="search" placeholder="Search..." />
-          </div>
+          <form class="search" (submit)="onSearch($event)">
+            <i class="bx bx-search" (click)="onSearch($event)"></i>
+            <input type="search" id="searchInput" placeholder="Search..."/>
+          </form>
+
           <ul class="menu">
             <li class="menu-item menu-item-static active">
               <a routerLink="/" class="menu-link">
@@ -104,6 +105,12 @@
                 <span>Carrito</span>
               </a>
             </li>
+            <li class="menu-item menu-item-static" *ngIf="isLoggedIn && !isAdmin">
+                <a [routerLink]="['/my-reviews']" class="menu-link">
+                  <i class="bx bx-star"></i>
+                  <span>Mis reseñas</span>
+                </a>
+            </li>
             <!-- dropdown menu usuario -->
             <li class="menu-item menu-item-dropdown" *ngIf="isLoggedIn && !isAdmin">
               <a class="menu-link">
@@ -113,14 +120,14 @@
               </a>
               <ul class="sub-menu">
                 <li>
-                  <a [routerLink]="['/profile']" class="sub-menu-link"
-                    >Perfil</a
-                  >
+                  <a [routerLink]="['/profile']" class="sub-menu-link">
+                    Perfil
+                  </a>
                 </li>
                 <li>
-                  <a [routerLink]="['/orders']" class="sub-menu-link"
-                    >Mis pedidos</a
-                  >
+                  <a [routerLink]="['/orders']" class="sub-menu-link">
+                    Mis pedidos
+                  </a>
                 </li>
               </ul>
             </li>

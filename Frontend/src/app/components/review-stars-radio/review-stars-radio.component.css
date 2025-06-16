@@ -1,0 +1,37 @@
+.rating-stars-wrapper {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: center;
+	width: fit-content;
+}
+
+input[type="radio"] {
+	display: none;
+}
+
+label {
+	cursor: pointer;
+	font-size: 40px;
+	color: rgb(236, 213, 9);
+}
+
+label:before {
+	content: "\2606";
+	position: relative;
+}
+
+input[type="radio"]:checked~label:before {
+	content: "\2605";
+	opacity: 0.7;
+}
+
+.rating-stars-wrapper label:hover:before,
+.rating-stars-wrapper label:hover~label:before {
+	content: "\2605";
+	opacity: 0.7;
+}
+
+.rating-stars-wrapper:not(:hover) input[type="radio"]:checked~label:before,
+.rating-stars-wrapper:hover input[type="radio"]:hover~label:before {
+	opacity: 1;
+}

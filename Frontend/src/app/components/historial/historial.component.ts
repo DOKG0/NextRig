@@ -28,7 +28,7 @@ contextoActual: any = {};
 
 verCompra(compra: any[]) {
    this.templateActual = this.templateDetalle;
-  this.contextoActual = { $implicit: compra }; // $implicit = variable "datos" en el template
+  this.contextoActual = { $implicit: compra }; 
 }
 
 

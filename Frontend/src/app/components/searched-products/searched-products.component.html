@@ -1,0 +1,65 @@
+<div class="content-wrapper">
+    <div *ngIf="this.products.length > 0; else noProducts" class="grid-container">
+        <div class="grid-header" #topOfGrid>
+             <div class="grid-header-buttons">
+                <label for="product-filter">Selecciona una opción:</label>
+                <select 
+                    name="product-filter"
+                    (change)="handleSort($event)"
+                >
+                    <option value="priceAsc">Precio: Menor a mayor</option>
+                    <option value="priceDesc">Precio: Mayor a menor</option>
+                    <option value="nameAsc" [selected]="true">Nombre: A-Z</option>
+                    <option value="nameDesc">Nombre: Z-A</option>
+                  </select>
+            </div>
+            <div class="grid-header-buttons">
+                <label for="items-per-page">Mostrar:</label>
+                <select 
+                    name="items-per-page"
+                    [(ngModel)]="quantityItemsPerPage" 
+                    (ngModelChange)="handleSortItems($event)"
+                >
+                    <option value="6">6</option>
+                    <option value="12">12</option>
+                    <option value="18">18</option>
+                  </select>
+            </div>
+        </div>
+
+        <div class="product-grid">
+            <div *ngFor="let product of this.sortedProducts">
+                <app-product-card [producto]="product"></app-product-card>
+            </div>
+        </div>
+
+        <div class="pagination-controls">
+            <button 
+                (click)="goToPage(currentPage - 1)" 
+                [disabled]="currentPage === 1"
+                >
+                <i class="bx bx-chevron-left"></i>
+            </button>
+
+            <button 
+                *ngFor="let page of [].constructor(quantityPages); let i = index" 
+                (click)="goToPage(i + 1)" 
+                [class.active]="currentPage === i + 1"
+                >
+                {{ i + 1 }}
+            </button>
+
+            <button 
+                (click)="goToPage(currentPage + 1)" 
+                [disabled]="currentPage === quantityPages"
+                >
+                <i class="bx bx-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <ng-template #noProducts>
+        <h3>{{message}}</h3>
+    </ng-template>
+</div>
+

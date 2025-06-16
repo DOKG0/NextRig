@@ -1,1 +1,14 @@
-<p>review-list works!</p>
+<h3>Reseñas</h3>
+
+<div *ngIf="reviews.length === 0; else withReviews">
+    <p>{{this.message}}</p>
+</div>
+
+<ng-template #withReviews>
+    <div class="list-container">
+        <app-review-item 
+            *ngFor="let reviewItem of reviews" 
+            [review]="reviewItem">
+        </app-review-item>
+    </div>
+</ng-template>

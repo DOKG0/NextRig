@@ -23,8 +23,9 @@ export class ProductService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
-    }    
+      }),
+      withCredentials: true
+    };
     return this.http.post(`${this.apiAdminUrl}/addProduct`, product, httpOptions);
   }
 
@@ -32,8 +33,9 @@ export class ProductService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
-    }
+      }),
+      withCredentials: true
+    };
     return this.http.post(`${this.apiAdminUrl}/updateProduct`, product, httpOptions);
   }
 
@@ -92,5 +94,7 @@ export class ProductService {
     return this.http.get<Product[]>('http://localhost/NextRig/Backend/api.php/productos/top-rated');
   }
 
-  
+  searchProducts(queryValue: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`http://localhost/NextRig/Backend/api.php/search?query=${queryValue}`);
+  }
 }

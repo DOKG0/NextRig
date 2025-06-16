@@ -1,0 +1,75 @@
+h1, h2, h3, h4, h5 {
+    color: var(--color-text-primary);
+    font-size: 1.2em;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+p {
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.label-container {
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    justify-content: start;
+}
+
+label {
+    font-weight: 500;
+    color: var(--color-text-secondary);   
+}
+
+textarea {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg);
+    width: 100%;
+    max-width: 800px;
+}
+
+textarea:focus {
+    outline: 2px solid var(--color-btn-submit-hover);
+}
+
+.form-error {
+    color: red;
+    font-size: .75em;
+    margin-top: .5em;
+} 
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.btn-custom {
+    font-weight: bold;
+    padding: .75rem 1rem;
+    border-radius: 15px;
+    max-width: 25em;
+    margin: 2em 0;
+    color: var(--color-text-primary);
+    background-color: var(--color-btn-submit);
+    border: 1px solid #e7eaed;
+    outline: none;
+}
+
+.btn-custom:focus {
+    outline: 3px solid #7e7f80;
+}
+
+.btn-custom:hover {
+    background-color: var(--color-btn-submit-hover);
+    color: var(--color-tooltip-text);
+}

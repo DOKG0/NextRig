@@ -1,61 +1,68 @@
-
 <ng-container *ngIf="hayProductos; then conProductos; else sinProductos"></ng-container>
 
 
 
 <ng-template #conProductos>
- 
-<h1 class="content-mode" (click)="eliminarTodos()">Carrito <button class="btn btn-outline-danger mt-auto">Eliminar Carrito</button></h1>
+  <div style="display: flex;">
+    <h1 class="content-mode">Carrito </h1>
+    <div style="margin-left: 2rem; margin-top: 0.5rem;">
+      <button (click)="eliminarTodos()" class="btn btn-outline-danger mt-auto">Eliminar Carrito</button>
+    </div>
+  </div>
 
-<div class="content-mode">
-<div class="container mt-4">
-    
-  <div class="row">
-    <!-- Productos -->
-    <div class="col-lg-8">
-      <div class="row row-cols-1 row-cols-md-2 g-4">
-        <div class="col" *ngFor="let producto of carrito">
-          <div class="card h-100 shadow-sm content-mode">
-            <div class="card-body d-flex flex-column">
-              <img (click)="verProducto(producto.id)" [src]="producto.imagen" class="card-img-top img-clickable" alt="{{ producto.nombre }}" style="max-height: 200px; object-fit: cover;">
-                <h5 class="card-title">{{ producto.nombre }}</h5>
-             
-              <p class="card-text flex-grow-1">{{ producto.descripcion }}</p>
-              <p class="mb-1"><strong>Precio:</strong> ${{ producto.precio }}</p>
-              <p class="mb-1"><strong>Stock:</strong> {{ producto.stock }}</p>
-              <p calss="mb-1"><strong>Cantidad a comprar:</strong> {{ producto.cantidad }}</p>
 
-              <button class="btn btn-outline-danger mt-auto" (click)="eliminarProducto(producto)">
-                Eliminar
-              </button>
+  <div class="content-mode">
+    <div class="container mt-4">
+
+      <div class="row">
+        <!-- Productos -->
+        <div class="col-lg-8">
+          <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col" *ngFor="let producto of carrito">
+              <div class="card h-100 shadow-sm content-mode">
+                <div class="card-body d-flex flex-column">
+                  <img (click)="verProducto(producto.id)" [src]="producto.imagen" class="card-img-top img-clickable"
+                    alt="{{ producto.nombre }}" style="max-height: 200px; object-fit: cover;">
+                  <h5 class="card-title">{{ producto.nombre }}</h5>
+
+                  <p class="card-text flex-grow-1">{{ producto.descripcion }}</p>
+                  <p class="mb-1"><strong>Precio:</strong> ${{ producto.precio }}</p>
+                  <p class="mb-1"><strong>Stock:</strong> {{ producto.stock }}</p>
+                  <p calss="mb-1"><strong>Cantidad a comprar:</strong> {{ producto.cantidad }}</p>
+
+                  <button class="btn btn-outline-danger mt-auto" (click)="eliminarProducto(producto)">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta de resumen -->
+        <div class="col-lg-4 ">
+          <div class="card sticky-top shadow content-mode" style="top: 20px;">
+            <div class="card-body">
+              <h5 class="card-title">Resumen del Carrito</h5><br>
+              <p class="card-text">
+                Total: <strong>${{ total | number:'1.2-2' }}</strong>
+              </p>
+              <p class="card-text">
+                Cupon: <strong>-$200</strong>
+              </p>
+              <p class="card-text">
+                Precio Final: <strong>${{ total -200 | number:'1.2-2'}}</strong>
+              </p>
+              <button class="btn btn-success w-100" (click)="comprar()">Comprar(${{total -200 |
+                number:'1.2-2'}})</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Tarjeta de resumen -->
-    <div class="col-lg-4 ">
-      <div class="card sticky-top shadow content-mode" style="top: 20px;">
-        <div class="card-body">
-          <h5 class="card-title">Resumen del Carrito</h5><br>
-          <p class="card-text">
-            Total: <strong>${{ total | number:'1.2-2' }}</strong>
-          </p>
-          <p class="card-text">
-            Cupon: <strong>-$200</strong>
-          </p><p class="card-text">
-            Precio Final: <strong>${{ total -200 | number:'1.2-2'}}</strong>
-          </p>
-          <button class="btn btn-success w-100" (click)="comprar()">Comprar(${{total -200 | number:'1.2-2'}})</button>
-        </div>
-      </div>
-    </div>
   </div>
-</div>
-</div>
 </ng-template>
 
 <ng-template #sinProductos>
   <h1 class="text-center content-mode">No hay productos en el carrito</h1>
- </ng-template>
+</ng-template>
