@@ -203,7 +203,7 @@ function handleGetRequest($request)
 
             default:
                 $productos = $productosService->listarProductos();
-                echo json_encode($productosService->listarProductos());
+                echo json_encode($productos);
                 break;
         }
         return;
