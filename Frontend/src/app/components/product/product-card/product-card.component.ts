@@ -18,7 +18,7 @@ declare var bootstrap: any;
 export class ProductCardComponent implements AfterViewInit {
   quantity : number = 0;
   user = JSON.parse(localStorage.getItem('currentUser') || '{}');
-
+  contadorQuantity : number = 0;
   @Input() producto: any;
   @Output() ejecutarTopPadre = new EventEmitter<void>();
 
@@ -55,10 +55,18 @@ export class ProductCardComponent implements AfterViewInit {
   }
 
   agregarAlCarrito(quantity : number) {
-
+   
     if(quantity === 0){
         quantity = 1;
     }
+    this.contadorQuantity = this.contadorQuantity + quantity;
+    if(this.contadorQuantity > this.producto.stock){
+      //Falta implementar la logica para cuando se supera la cantidad de stock cuando agrega productos al carrito
+          return;
+        
+    
+    } 
+
     let nombreUsuario = this.user.username;
         if (!this.producto || this.producto.id === undefined) {
         console.error('Producto no definido o sin ID');
@@ -108,12 +116,14 @@ export class ProductCardComponent implements AfterViewInit {
         toast: true,
         position: 'bottom-end',
         icon: 'success',
-        title: `Producto '${data}' agragado al carrito correctamente`,
+        title: `Producto '${data}' agregado al carrito correctamente`,
         showConfirmButton: false,
         timerProgressBar: true,
         timer: 5000,
       });
     }
+
+    
 
     alertCancelToast(): void {
       Swal.fire({

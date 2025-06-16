@@ -25,6 +25,7 @@ export class ProductDetailsComponent implements OnInit {
 	activeTab: 'general' | 'additional' = 'general';
 	reviewHabilitado: boolean = false;
 	currentUsername: string = "";
+	contadorQuantity: number = 0;
 
 	@ViewChild('topOfDetails') topOfDetails!: ElementRef;
 	@ViewChild('generalInfo') generalInfo!: ElementRef;
@@ -126,6 +127,21 @@ export class ProductDetailsComponent implements OnInit {
 		if (quantity === 0) {
 			quantity = 1;
 		}
+		this.contadorQuantity = this.contadorQuantity + quantity;
+		if (!this.producto || this.producto.id === undefined) {
+			        console.error('Producto no definido o sin ID');
+
+		}else{
+    if(this.contadorQuantity > this.producto.stock){
+      //Falta implementar la logica para cuando se supera la cantidad de stock cuando agrega productos al carrito
+	  console.log("hola");
+          return;
+        
+    
+    }
+}
+ 
+
 		let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
 		if (!this.producto || this.producto.id === undefined) {
 			console.error('Producto no definido o sin ID');
