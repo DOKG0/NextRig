@@ -63,9 +63,10 @@ verCompra(compra: any[]) {
   this.router.navigate(['/products', id]);
 }
 
-filtrarGrupo(productos: any) {
-  return productos.filter((productos: any) =>
-    productos.nombre.toLowerCase().includes(this.searchText.toLowerCase())
+productosFiltrados() {
+  return this.productos.filter(p =>
+    p.nombre.toLowerCase().includes(this.searchText.toLowerCase())
   );
 }
+
 }

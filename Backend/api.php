@@ -392,7 +392,7 @@ function handleUsuarioRequest($usuarioService, $action, $data)
 
             case 'crearCompra':
             $carritoService = new CarritoService();
-            echo json_encode($carritoService->crearCompra($data['username'],$data['costoCarrito']));
+            echo json_encode($carritoService->crearCompra($data['username'],$data['costoCarrito'],$data['telefono'],$data['direccion'],$data['departamento']));
             break;
 
         default:

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuarios.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-perfil',
@@ -86,38 +87,61 @@ editarCampo(campo: string) {
 }
 }
 
-guardarCampo(campo: string) {
- 
-  this.usuarioService.actualizarUsuario(this.user,campo, this.usuario[campo]).subscribe(response => {
-    
-    if( campo === 'username'){
-          
-    let user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  guardarCampo(campo: string) {
+    let campoElegido = campo;
+    if(campoElegido == "username") campoElegido = "nombre de usuario";
+    Swal.fire({
+      title: `Seguro/a que quieres cambiar tu ${campoElegido}?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No"
+    }).then((result) => {
 
-    user.username = this.usuario[campo];
+      if (result.isConfirmed) {
+       
+            this.usuarioService.actualizarUsuario(this.user, campo, this.usuario[campo]).subscribe(response => {
 
-    localStorage.setItem('currentUser', JSON.stringify(user));
+          if (campo == 'username') {
 
-      this.user = this.usuario[campo];
-    }else if (campo === 'correo') {
-      let user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            let user = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
-    user.email = this.usuario[campo];
+            user.username = this.usuario[campo];
 
-    localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('currentUser', JSON.stringify(user));
+
+            this.user = this.usuario[campo];
+
+              } else if (campo == 'correo') {
+                let user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+                user.email = this.usuario[campo];
+
+                localStorage.setItem('currentUser', JSON.stringify(user));
+              }
+      this.usuarioCopia[campo] = this.usuario[campo];
+       Swal.fire(`Tu ${campoElegido} a sido modificado.`, "", "success");
+    }, error => {
+
+      this.controlExistencia[campo] = true;
+      this.usuario[campo] = this.usuarioCopia[campo];
+    }
+    );
+
+      } else if (result.isDismissed) {
+        this.usuario[campo] = this.usuarioCopia[campo];
+        
       }
-      this.usuarioCopia = { ...this.usuario};
-
-  }, error => {
-   
-    this.controlExistencia[campo] = true;
-  } 
-  );
+    });
 
 
-  this.editandoCampo[campo] = false;
 
-}
+    
+
+
+    this.editandoCampo[campo] = false;
+
+  }
 
 
 }
