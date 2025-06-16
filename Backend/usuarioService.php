@@ -92,12 +92,6 @@ class UsuarioService
                 throw new Exception("Error al registrar el usuario: " . mysqli_error($this->db_conn));
             }
 
-            // Insertar en Comprador
-            $queryComprador = "INSERT INTO Comprador (ci, cel) VALUES ('$ci', '111')";
-            if (!mysqli_query($this->db_conn, $queryComprador)) {
-                throw new Exception("Error al registrar como comprador: " . mysqli_error($this->db_conn));
-            }
-
             // Insertar en Carrito 
             $queryCarrito = "INSERT INTO Carrito (costoCarrito, ci) VALUES (0.00, '$ci')";
             if (!mysqli_query($this->db_conn, $queryCarrito)) {

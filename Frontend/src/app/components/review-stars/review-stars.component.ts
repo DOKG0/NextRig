@@ -11,9 +11,9 @@ import { ReviewService } from '../../services/review.service';
 export class ReviewStarsComponent implements OnInit{
 
   @Input() producto: any;
-  rating = 4;
+  @Input() rating = 4;
   reviewsCount = 0;
-  flagStatus : boolean = false;
+  @Input() flagStatus : boolean = false;
 
   constructor(
     private _reviewService: ReviewService
@@ -21,6 +21,7 @@ export class ReviewStarsComponent implements OnInit{
 
 
   ngOnInit(): void {
+    if (this.producto !== undefined && this.producto.id !== undefined) {
       this._reviewService.getPromedioPuntajeDeProducto(this.producto.id).subscribe({
         next: (item) => {
           this.rating = item.data.puntajePromedio ?? 0;
@@ -33,7 +34,7 @@ export class ReviewStarsComponent implements OnInit{
           this.reviewsCount = item.data.length ?? 0;
         }
       });
-      
+    }
   }
 
   get fullStars(): number[] {

@@ -1,9 +1,11 @@
 <div class="resena-container" >
     <ng-container *ngIf="flagStatus">
-    <span>{{rating}}</span>
-    <i class='bx bxs-star' style="color:rgb(185, 185, 10);"  *ngFor="let star of fullStars"></i>
-    <i class='bx bxs-star-half' style="color:rgb(185, 185, 10);" *ngFor="let star of halfStars" ></i>  
-    <i class='bx bx-star' *ngFor="let star of emptyStars"></i>
-    <span class="rating">{{reviewsCount}}</span>
+        <span>{{rating}}</span>
+        <i class='bx bxs-star' style="color:rgb(185, 185, 10);"  *ngFor="let star of fullStars"></i>
+        <i class='bx bxs-star-half' style="color:rgb(185, 185, 10);" *ngFor="let star of halfStars" ></i>  
+        <i class='bx bx-star' *ngFor="let star of emptyStars"></i>
+        <ng-container *ngIf="reviewsCount != 0">
+            <span class="rating">{{reviewsCount}}</span>
+        </ng-container>
     </ng-container>
 </div>

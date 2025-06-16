@@ -88,18 +88,6 @@ export class ProductDetailsComponent implements OnInit {
 	}
 
 
-  	alertProductoCarritoToast(data: string): void {
-        Swal.fire({
-          toast: true,
-          position: 'bottom-end',
-          icon: 'success',
-          title: `Producto '${data}' agragado al carrito correctamente`,
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 5000,
-        });
-      }
-
 	plusQuantity() {
 		this.quantity++;
 	}
@@ -147,9 +135,21 @@ export class ProductDetailsComponent implements OnInit {
 			console.log('ID del producto:', idProducto);
 			console.log('Nombre de usuario:', nombreUsuario);
 			console.log('Cantidad:', quantity);
+			this.alertProductoCarritoToast(this.producto.nombre);
 			this.usuarioService.agregarCarrito(nombreUsuario, idProducto, quantity).subscribe((data: any) => {
-			}
-			);
+			});
 		}
 	}
+
+	alertProductoCarritoToast(data: string): void {
+        Swal.fire({
+          toast: true,
+          position: 'bottom-end',
+          icon: 'success',
+          title: `Producto '${data}' agragado al carrito correctamente`,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000,
+        });
+      }
 }
