@@ -26,7 +26,7 @@
             <div class="sum-icons-container">
               <i class='bx bx-minus icono' (click)="minusQuantity()"></i>
               <span class="number icono">{{quantity}}</span>
-              <i *ngIf="producto.stock != quantity" class='bx bx-plus icono' (click)="plusQuantity()"></i>
+              <i class='bx bx-plus icono' (click)="plusQuantity()"></i>
             </div>
             <button [disabled]="p.stock === 0 || quantity > p.stock" (click)="agregarAlCarrito(quantity)">Agregar al carrito</button>
           </div>
