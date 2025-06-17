@@ -10,6 +10,7 @@ import { ReviewListComponent } from "../../review-list/review-list.component";
 import { ReviewService } from '../../../services/review.service';
 import { ReviewFormComponent } from "../../review-form/review-form.component";
 import Swal from 'sweetalert2';
+import { lastValueFrom } from 'rxjs';
 @Component({
 	selector: 'app-product-details',
 	imports: [CommonModule, RouterModule, ProductCardComponent, ReviewListComponent, ReviewFormComponent, ReviewStarsComponent],
@@ -122,40 +123,44 @@ export class ProductDetailsComponent implements OnInit {
 		}, 0);
 	}
 
-	agregarAlCarrito(quantity: number) {
+	async agregarAlCarrito(quantity : number) {
 
 		if (quantity === 0) {
-			quantity = 1;
+		  quantity = 1;
 		}
-		this.contadorQuantity = this.contadorQuantity + quantity;
-		if (!this.producto || this.producto.id === undefined) {
-			        console.error('Producto no definido o sin ID');
-
-		}else{
-    if(this.contadorQuantity > this.producto.stock){
-      //Falta implementar un aviso para cuando se supera la cantidad de stock cuando agrega productos al carrito
-	  console.log("hola");
-          return;
-        
-    
-    }
-}
- 
-
-		let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
-		if (!this.producto || this.producto.id === undefined) {
-			console.error('Producto no definido o sin ID');
-			return;
-		} else {
-			let idProducto = this.producto.id as string;
-			console.log('ID del producto:', idProducto);
-			console.log('Nombre de usuario:', nombreUsuario);
-			console.log('Cantidad:', quantity);
-			this.alertProductoCarritoToast(this.producto.nombre);
-			this.usuarioService.agregarCarrito(nombreUsuario, idProducto, quantity).subscribe((data: any) => {
-			});
+		
+		try {
+		    if(this.producto === undefined) return;
+			let cantidadEnCarrito = Number(await lastValueFrom(this.usuarioService.getCantidadproducto(this.currentUsername, this.producto.id as string)));
+			
+			
+			if ((cantidadEnCarrito + quantity) > this.producto.stock) {
+			  Swal.fire({
+				title: "Has alcanzado la cantidad maxima para este producto",
+				icon: "warning"
+			  }
+			  );
+			  return;
+			} else {
+	
+			  if (!this.producto || this.producto.id === undefined) {
+				console.error('Producto no definido o sin ID');
+				return;
+			  } else {
+				let idProducto = this.producto.id as string;
+				this.resetQuantity();
+				this.alertProductoCarritoToast(this.producto.nombre);
+				this.usuarioService.agregarCarrito(this.currentUsername, idProducto, quantity).subscribe((data: any) => {
+				}
+				);
+			  }
+	
+			}
+		} catch (error) {
+		  console.error("error en el agregado", error);
 		}
-	}
+
+		}
 
 	alertProductoCarritoToast(data: string): void {
         Swal.fire({

@@ -221,6 +221,12 @@ function handleGetRequest($request)
         return;
     }
 
+    if($request[0] ==  'controlStock'){
+        $carritoService = new CarritoService();
+        echo json_encode($carritoService->getCantidadProducto($request[1],$request[2]));
+        return;
+    }
+
     if($request[0] == 'carrito') {
         $carritoService = new CarritoService();
         $productos = $carritoService->getProductosCarrito($request[1]);

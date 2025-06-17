@@ -191,4 +191,19 @@ public function getHistorialCompras($username){
             exit;
         }
     }
+
+    public function getCantidadProducto($username,$idProducto){
+        $query = "SELECT cantidad FROM Carrito_Productos,Carrito,Usuario WHERE Usuario.username = '$username' AND Carrito.ci = Usuario.ci AND Carrito_Productos.idProducto = '$idProducto'";
+        $resultado = mysqli_query($this->db_conn,$query);
+        http_response_code(200);
+        
+        $cantidad = mysqli_fetch_object($resultado);
+        if($cantidad == null){
+            return 0;
+
+        }else{
+            return $cantidad->cantidad;
+        }
+        
+    }
 }
