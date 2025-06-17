@@ -54,13 +54,13 @@
       </div>
 
       <div *ngIf="this.reviewHabilitado" class="info-container mb-4 pb-1">
-        <app-review-form  
+        <app-review-form  id="indexReview"
           [productId]="this.producto.id.toString()"
           [username]="this.currentUsername">
         </app-review-form>
       </div>
 
-      <div class="footer">
+      <div class="footer" >
         <h2>Otros articulos que podrian interesarte:</h2>
       </div>
       

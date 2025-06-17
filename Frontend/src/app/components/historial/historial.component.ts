@@ -3,10 +3,11 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/usuarios.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-historial',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,RouterModule],
   templateUrl: './historial.component.html',
   styleUrl: './historial.component.css'
 })
@@ -68,5 +69,20 @@ productosFiltrados() {
     p.nombre.toLowerCase().includes(this.searchText.toLowerCase())
   );
 }
+
+goToSection(id: string) {
+  this.router.navigate(['/products',id]).then(() => {
+    setTimeout(() => {
+      const element = document.getElementById('indexReview');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center'
+         });
+      }
+    }, 400); // Esperar un poco a que se cargue el DOM
+  });
+}
+
+
+
 
 }
