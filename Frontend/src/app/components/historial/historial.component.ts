@@ -78,7 +78,7 @@ goToSection(id: string) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center'
          });
       }
-    }, 400); // Esperar un poco a que se cargue el DOM
+    }, 400); 
   });
 }
 

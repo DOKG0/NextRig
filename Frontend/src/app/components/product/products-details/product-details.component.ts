@@ -133,7 +133,7 @@ export class ProductDetailsComponent implements OnInit {
 
 		}else{
     if(this.contadorQuantity > this.producto.stock){
-      //Falta implementar la logica para cuando se supera la cantidad de stock cuando agrega productos al carrito
+      //Falta implementar un aviso para cuando se supera la cantidad de stock cuando agrega productos al carrito
 	  console.log("hola");
           return;
         
