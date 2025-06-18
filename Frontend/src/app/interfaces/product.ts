@@ -1,7 +1,7 @@
 export interface Product extends Record<string, any> {
-    admin_ci: string;
+    admin_ci?: string;
     categoria: string;
-    descripcion: string;
+    descripcion?: string;
     id: number | string;
     imagen: string;
     marca_nombre : string;

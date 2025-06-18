@@ -16,7 +16,8 @@ export class ReviewService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
+      }),
+      withCredentials: true
     }
     return this.httpClient.post(`${this.apiUrl}/reseña`, review, httpOptions);
   }
@@ -25,8 +26,11 @@ export class ReviewService {
     return this.httpClient.get(`${this.apiUrl}/reseñas/${idProducto}`);
   }
 
-  deleteReviewDeProducto(idProducto: string, username: string): Observable<any> {
-    return this.httpClient.delete(`${this.apiUrl}/reseña?idProducto=${idProducto}&username=${username}`);
+  deleteReview(idProducto: string, username: string): Observable<any> {
+    const httpOptions = {
+        withCredentials: true
+    }
+    return this.httpClient.delete(`${this.apiUrl}/reseña?idProducto=${idProducto}`, httpOptions);
   }
 
   getPromedioPuntajeDeProducto(idProducto: string): Observable<any> {
@@ -34,12 +38,16 @@ export class ReviewService {
   }
 
   getReviewsDeUsuario(username: string): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/usuario/misReseñas?username=${username}`);
+    const httpOptions = {
+        withCredentials: true
+    }
+    return this.httpClient.get(`${this.apiUrl}/usuario/misReseñas`, httpOptions);
   }
 
   getUsuarioHabilitadoParaReviewDeProducto(idProducto: string, username: string) {
-    return this.httpClient.get(
-      `${this.apiUrl}/usuario/habilitado-para-reseña?username=${username}&idProducto=${idProducto}`
-    );
+    const httpOptions = {
+        withCredentials: true
+    }
+    return this.httpClient.get(`${this.apiUrl}/usuario/habilitado-para-reseña?idProducto=${idProducto}`, httpOptions);
   }
 }

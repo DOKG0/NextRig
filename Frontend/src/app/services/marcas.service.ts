@@ -22,7 +22,8 @@ export class MarcasService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
-      })
+      }),
+      withCredentials: true
     }    
     return this.http.post(`${this.apiAddMarcaUrl}`, nuevaMarca, httpOptions);
   } 
