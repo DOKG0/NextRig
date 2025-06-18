@@ -50,7 +50,7 @@ export class ReviewItemComponent implements OnInit {
 
 	sendDeleteRequest(): void {
 		this.reviewService
-			.deleteReviewDeProducto(this.review.idProducto, this.currentUsername)
+			.deleteReview(this.review.idProducto, this.currentUsername)
 			.subscribe({
 				next: (response) => {
 					this.alertSuccessfulCreation();

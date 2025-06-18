@@ -109,7 +109,7 @@ function handlePostRequest($request)
                 $data['mensaje']    ?? null,
                 $data['puntaje']    ?? null,
                 $data['idProducto'] ?? null,
-                $data['username']   ?? null);
+                $_SESSION['usuario']['username'] ?? null);
             http_response_code($result['httpCode']);
             echo json_encode($result);
             break;
@@ -248,9 +248,8 @@ function handleGetRequest($request)
 
     if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'misReseñas') {
         $reviewService = new ReviewService();
-        //recibo el nombre de usuario por query param
-        error_log("SESSION usuario: " . print_r($_SESSION['usuario']));
-        $resultado = $reviewService->getReviewsDeUsuario($_GET['username'] ?? null);
+        //tomo el usuario de la sesion
+        $resultado = $reviewService->getReviewsDeUsuario($_SESSION['usuario']['username'] ?? null);
         http_response_code($resultado['httpCode']);
         echo json_encode($resultado);
         return;
@@ -258,10 +257,10 @@ function handleGetRequest($request)
 
     if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'habilitado-para-reseña') {
         $reviewService = new ReviewService();
-        //recibo el nombre de usuario por query param
+        //recibo el nombre de usuario por la sesion activa y el id del producto por query param
         $resultado = $reviewService->usuarioHabilitadoParaReview(
             $_GET['idProducto'] ?? null,
-            $_GET['username'] ?? null);
+            $_SESSION['usuario']['username'] ?? null);
         http_response_code($resultado['httpCode']);
         echo json_encode($resultado);
         return;
@@ -345,7 +344,7 @@ function handleDeleteRequest($request)
         $reviewService = new ReviewService();
         $result = $reviewService->eliminarReview(
             $_GET['idProducto'] ?? null,
-            $_GET['username'] ?? null
+            $_SESSION['usuario']['username'] ?? null
         );
         http_response_code($result['httpCode']);
         echo json_encode($result);
