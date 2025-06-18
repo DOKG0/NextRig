@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product'
 import { ProductCardComponent } from '../product-card/product-card.component';
@@ -31,6 +31,7 @@ export class ProductDetailsComponent implements OnInit {
 	@ViewChild('generalInfo') generalInfo!: ElementRef;
 	constructor(
 		private route: ActivatedRoute,
+		private router: Router,
 		private _productService: ProductService,
 		private usuarioService: UsuarioService,
 		private reviewService: ReviewService
@@ -47,8 +48,12 @@ export class ProductDetailsComponent implements OnInit {
 			if (id) {
 				this._productService.getProductoById(id).subscribe({
 					next: (producto) => {
-						this.producto = producto;
-						this.setReviewFormVisibility(username, producto.id as string);
+						if (!producto) {
+							this.router.navigate(['/404']);
+						} else {
+							this.producto = producto;
+							this.setReviewFormVisibility(username, producto.id as string);
+						}
 					},
 					error: (err) => {
 						console.error('Error al obtener el producto:', err);
@@ -68,14 +73,19 @@ export class ProductDetailsComponent implements OnInit {
 	}
 
 	setReviewFormVisibility(username: string, productId: string): void {
-		this.reviewService.getUsuarioHabilitadoParaReviewDeProducto(productId, username).subscribe({
-			next: (response: any) => {
-				this.reviewHabilitado = response.data?.habilitado || false;
-			},
-			error: (err) => {
-				console.error(err.error);
-			}
-		});
+
+		if (!username) {
+			this.reviewHabilitado = false;
+		} else {
+			this.reviewService.getUsuarioHabilitadoParaReviewDeProducto(productId, username).subscribe({
+				next: (response: any) => {
+					this.reviewHabilitado = response.data?.habilitado || false;
+				},
+				error: (err) => {
+					console.error(err.error);
+				}
+			});
+		}
 	}
 
 	getRandomInt(min: number, max: number): number {
