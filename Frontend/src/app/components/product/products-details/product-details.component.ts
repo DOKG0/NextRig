@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product'
@@ -9,6 +9,7 @@ import { UsuarioService } from '../../../services/usuarios.service';
 import { ReviewListComponent } from "../../review-list/review-list.component";
 import { ReviewService } from '../../../services/review.service';
 import { ReviewFormComponent } from "../../review-form/review-form.component";
+
 import Swal from 'sweetalert2';
 @Component({
 	selector: 'app-product-details',
@@ -33,7 +34,8 @@ export class ProductDetailsComponent implements OnInit {
 		private route: ActivatedRoute,
 		private _productService: ProductService,
 		private usuarioService: UsuarioService,
-		private reviewService: ReviewService
+		private reviewService: ReviewService,
+		private location: Location
 	) { }
 
 	ngOnInit(): void {
@@ -122,6 +124,11 @@ export class ProductDetailsComponent implements OnInit {
 		}, 0);
 	}
 
+	previousPage() {
+		this.location.back();
+	}
+
+
 	agregarAlCarrito(quantity: number) {
 
 		if (quantity === 0) {
@@ -132,14 +139,14 @@ export class ProductDetailsComponent implements OnInit {
 			        console.error('Producto no definido o sin ID');
 
 		}else{
-    if(this.contadorQuantity > this.producto.stock){
-      //Falta implementar la logica para cuando se supera la cantidad de stock cuando agrega productos al carrito
-	  console.log("hola");
-          return;
-        
-    
-    }
-}
+		if(this.contadorQuantity > this.producto.stock){
+		//Falta implementar la logica para cuando se supera la cantidad de stock cuando agrega productos al carrito
+		console.log("hola");
+			return;
+			
+		
+		}
+	}
  
 
 		let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;

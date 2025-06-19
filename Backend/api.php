@@ -139,12 +139,19 @@ function handleGetRequest($request)
         return;
     }
 
+
     if ($request[0] == 'productos') {
         $productosService = new ProductoService();
 
         if (sizeof($request) < 2) {
             $productos = $productosService->listarProductos();
             echo json_encode($productosService->listarProductos());
+            return;
+        }
+
+        if (isset($request[2]) && $request[2] == 'marca' && isset($request[3])) {
+            $productos = $productosService->getComponentsByCategoryAndMarca($request[1], $request[3]);
+            echo json_encode($productos);
             return;
         }
 

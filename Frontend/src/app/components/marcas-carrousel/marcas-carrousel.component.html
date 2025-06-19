@@ -1,7 +1,7 @@
 <div class="content-wrapper">
   <div class="marcas-container">
-    <label class="marca-card" *ngFor="let marca of marcasSorted">
-      <div class="marca-card">
+    <label class="marca-card" (click)="handleMarcaClick(marca)" *ngFor="let marca of marcasSorted">
+      <div class="marca-card" >
         <p>{{ marca }}</p>
       </div>
     </label>

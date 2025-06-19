@@ -23,6 +23,22 @@ require_once('config.php');
             return $componentes;
         }
 
+        public function getComponentsByCategoryAndMarca($categoria, $marca){
+            $query = "SELECT * FROM Componentes JOIN Productos ON Componentes.id = Productos.id WHERE Componentes.categoria = '$categoria' AND Productos.marca_nombre = '$marca' AND habilitado = '1'";
+            $resultado = mysqli_query($this->db_conn, $query);
+            if (!$resultado) {
+                http_response_code(500);
+                echo json_encode(["error" => "Error en la consulta a la base de datos."]);
+                exit;
+            }
+            $componentes = [];
+            while ($fila = mysqli_fetch_object($resultado)) {
+                $componentes[] = $fila;
+            }
+    
+            return $componentes;
+        }
+
         public function getComponentById($Id){
             $query = "SELECT * FROM Componentes JOIN Productos ON Componentes.id = Productos.id WHERE Componentes.id = ?";
             $stmt = mysqli_prepare($this->db_conn, $query);

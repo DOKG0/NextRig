@@ -64,6 +64,10 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.apiUrl}/${category.toLowerCase()}`);
   }
 
+   getProductosByCategoryAndMarca(category: string, marca: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/${category.toLowerCase()}/marca/${marca.toLowerCase()}`);
+  }
+
   //Logica de negocios
   setProductsSortedByCat(products: Product[]) {
     this.productsSortedByCat = products;
