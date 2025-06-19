@@ -24,7 +24,9 @@ require_once('config.php');
         }
 
         public function getComponentsByCategoryAndMarca($categoria, $marca){
-            $query = "SELECT * FROM Componentes JOIN Productos ON Componentes.id = Productos.id WHERE Componentes.categoria = '$categoria' AND Productos.marca_nombre = '$marca' AND habilitado = '1'";
+            $query = "SELECT p.id, p.precio, p.stock, p.descripcion, p.imagen, p.nombre, p.admin_ci, p.marca_nombre, c.categoria 
+                FROM Componentes c JOIN Productos p ON c.id = p.id WHERE c.categoria = '$categoria' 
+                AND p.marca_nombre = '$marca' AND p.habilitado = '1'";
             $resultado = mysqli_query($this->db_conn, $query);
             if (!$resultado) {
                 http_response_code(500);

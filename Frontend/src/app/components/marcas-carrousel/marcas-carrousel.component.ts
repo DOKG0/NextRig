@@ -13,17 +13,20 @@ export class MarcasCarrouselComponent {
 
 @Input() marcasSorted: string[] = [];
 @Output() marcaSelected = new EventEmitter<string>();
-  marca: string = '';
+  selectedMarca : string = '';
 
   handleMarcaClick(marca: string) {
-    if (marca !== this.marca) {
+    if (marca !== this.selectedMarca ) {
 
-      this.marca = marca;
+      this.selectedMarca  = marca;
       this.marcaSelected.emit(marca);
     }else{
-      this.marca = '';
-      this.marcaSelected.emit(this.marca);
+      this.selectedMarca  = '';
+      this.marcaSelected.emit(this.selectedMarca );
     }
   }
 
+  get esCarrouselActivo(): boolean {
+  return this.marcasSorted.length > 5;
+}
 }
