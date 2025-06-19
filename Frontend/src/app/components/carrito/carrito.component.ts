@@ -93,9 +93,9 @@ async onSubmit() {
    if (this.userForm.invalid) return;
 
     let telefonoNumber = this.userForm.get('telefono')?.value;
-    console.log(telefonoNumber);
+    this.total = this.total - (this.total * 0.15);
     try{
-    await lastValueFrom( this.usuarioService.crearCompra(this.user,this.total - 200,telefonoNumber,this.userForm.get('direccion')?.value,this.userForm.get('departamento')?.value));
+    await lastValueFrom( this.usuarioService.crearCompra(this.user,this.total,telefonoNumber,this.userForm.get('direccion')?.value,this.userForm.get('departamento')?.value));
     for (let i = 0; i < this.carrito.length; i++) {
       
     await lastValueFrom (this.usuarioService.comprarCarrito(this.user, this.carrito[i].id,this.carrito[i].precio,this.carrito[i].cantidad));

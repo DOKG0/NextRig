@@ -8,7 +8,7 @@ class CarritoService{
         }
 
         public function getProductosCarrito($username){
-            $query = "select id,precio,stock,descripcion,imagen,nombre,marca_nombre,cantidad from (select idProducto,cantidad from (select idCarrito from (select ci from Usuario where username = '$username') as consulta1,Carrito where Carrito.ci = consulta1.ci) as consulta2,Carrito_Productos where Carrito_Productos.idCarrito = consulta2.idCarrito) as consulta3,Productos where Productos.id = consulta3.idProducto";
+            $query = "select id,precio,stock,descripcion,imagen,nombre,marca_nombre,cantidad from (select idProducto,cantidad from (select idCarrito from (select ci from Usuario where username = '$username') as consulta1,Carrito where Carrito.ci = consulta1.ci) as consulta2,Carrito_Productos where Carrito_Productos.idCarrito = consulta2.idCarrito) as consulta3,Productos where Productos.id = consulta3.idProducto AND Productos.habilitado = 1";
             
             $resultado = mysqli_query($this->db_conn, $query);
             if (!$resultado) {
@@ -190,5 +190,20 @@ public function getHistorialCompras($username){
             echo json_encode(["success" => "Usuario actualizado correctamente."]);
             exit;
         }
+    }
+
+    public function getCantidadProducto($username,$idProducto){
+        $query = "SELECT cantidad FROM Carrito_Productos,Carrito,Usuario WHERE Usuario.username = '$username' AND Carrito.ci = Usuario.ci AND Carrito_Productos.idProducto = '$idProducto'";
+        $resultado = mysqli_query($this->db_conn,$query);
+        http_response_code(200);
+        
+        $cantidad = mysqli_fetch_object($resultado);
+        if($cantidad == null){
+            return 0;
+
+        }else{
+            return $cantidad->cantidad;
+        }
+        
     }
 }

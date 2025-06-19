@@ -52,10 +52,6 @@ export class ProductService {
   return this.http.delete(`${this.apiAdminUrl}/eliminarProducto`, httpOptions);
 }
 
-  getProductos(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
-  }
-
   getProductoById(id: string): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/id/${id}`);
   }

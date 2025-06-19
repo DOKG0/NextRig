@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product'
 import { ProductCardComponent } from '../product-card/product-card.component';
@@ -11,6 +11,7 @@ import { ReviewService } from '../../../services/review.service';
 import { ReviewFormComponent } from "../../review-form/review-form.component";
 
 import Swal from 'sweetalert2';
+import { lastValueFrom } from 'rxjs';
 @Component({
 	selector: 'app-product-details',
 	imports: [CommonModule, RouterModule, ProductCardComponent, ReviewListComponent, ReviewFormComponent, ReviewStarsComponent],
@@ -32,6 +33,7 @@ export class ProductDetailsComponent implements OnInit {
 	@ViewChild('generalInfo') generalInfo!: ElementRef;
 	constructor(
 		private route: ActivatedRoute,
+		private router: Router,
 		private _productService: ProductService,
 		private usuarioService: UsuarioService,
 		private reviewService: ReviewService,
@@ -49,8 +51,12 @@ export class ProductDetailsComponent implements OnInit {
 			if (id) {
 				this._productService.getProductoById(id).subscribe({
 					next: (producto) => {
-						this.producto = producto;
-						this.setReviewFormVisibility(username, producto.id as string);
+						if (!producto) {
+							this.router.navigate(['/404']);
+						} else {
+							this.producto = producto;
+							this.setReviewFormVisibility(username, producto.id as string);
+						}
 					},
 					error: (err) => {
 						console.error('Error al obtener el producto:', err);
@@ -70,14 +76,19 @@ export class ProductDetailsComponent implements OnInit {
 	}
 
 	setReviewFormVisibility(username: string, productId: string): void {
-		this.reviewService.getUsuarioHabilitadoParaReviewDeProducto(productId, username).subscribe({
-			next: (response: any) => {
-				this.reviewHabilitado = response.data?.habilitado || false;
-			},
-			error: (err) => {
-				console.error(err.error);
-			}
-		});
+
+		if (!username) {
+			this.reviewHabilitado = false;
+		} else {
+			this.reviewService.getUsuarioHabilitadoParaReviewDeProducto(productId, username).subscribe({
+				next: (response: any) => {
+					this.reviewHabilitado = response.data?.habilitado || false;
+				},
+				error: (err) => {
+					console.error(err.error);
+				}
+			});
+		}
 	}
 
 	getRandomInt(min: number, max: number): number {
@@ -129,40 +140,44 @@ export class ProductDetailsComponent implements OnInit {
 	}
 
 
-	agregarAlCarrito(quantity: number) {
+	async agregarAlCarrito(quantity : number) {
 
 		if (quantity === 0) {
-			quantity = 1;
+		  quantity = 1;
 		}
-		this.contadorQuantity = this.contadorQuantity + quantity;
-		if (!this.producto || this.producto.id === undefined) {
-			        console.error('Producto no definido o sin ID');
-
-		}else{
-		if(this.contadorQuantity > this.producto.stock){
-		//Falta implementar la logica para cuando se supera la cantidad de stock cuando agrega productos al carrito
-		console.log("hola");
-			return;
-			
 		
+		try {
+		    if(this.producto === undefined) return;
+			let cantidadEnCarrito = Number(await lastValueFrom(this.usuarioService.getCantidadproducto(this.currentUsername, this.producto.id as string)));
+			
+			
+			if ((cantidadEnCarrito + quantity) > this.producto.stock) {
+			  Swal.fire({
+				title: "Has alcanzado la cantidad maxima para este producto",
+				icon: "warning"
+			  }
+			  );
+			  return;
+			} else {
+	
+			  if (!this.producto || this.producto.id === undefined) {
+				console.error('Producto no definido o sin ID');
+				return;
+			  } else {
+				let idProducto = this.producto.id as string;
+				this.resetQuantity();
+				this.alertProductoCarritoToast(this.producto.nombre);
+				this.usuarioService.agregarCarrito(this.currentUsername, idProducto, quantity).subscribe((data: any) => {
+				}
+				);
+			  }
+	
+			}
+		} catch (error) {
+		  console.error("error en el agregado", error);
 		}
-	}
- 
 
-		let nombreUsuario = JSON.parse(localStorage.getItem('currentUser') || '{}').username;
-		if (!this.producto || this.producto.id === undefined) {
-			console.error('Producto no definido o sin ID');
-			return;
-		} else {
-			let idProducto = this.producto.id as string;
-			console.log('ID del producto:', idProducto);
-			console.log('Nombre de usuario:', nombreUsuario);
-			console.log('Cantidad:', quantity);
-			this.alertProductoCarritoToast(this.producto.nombre);
-			this.usuarioService.agregarCarrito(nombreUsuario, idProducto, quantity).subscribe((data: any) => {
-			});
 		}
-	}
 
 	alertProductoCarritoToast(data: string): void {
         Swal.fire({

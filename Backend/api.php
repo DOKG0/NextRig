@@ -79,14 +79,9 @@ function handlePostRequest($request)
 {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if ($request[0] == 'contacto') {
-        $contactoService = new ContactoService();
-        $result = $contactoService->recibirCorreo(
-            $data['nombre'],
-            $data['email'],
-            $data['mensaje']
-        );
-        echo json_encode($result);
+    if (empty($request[0])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Recurso no especificado']);
         return;
     }
 
@@ -98,12 +93,6 @@ function handlePostRequest($request)
     }
 
     error_log("Datos recibidos: " . print_r($data, true));
-
-    if (empty($request[0])) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Recurso no especificado']);
-        return;
-    }
 
     switch ($request[0]) {
         case 'usuario':
@@ -120,8 +109,17 @@ function handlePostRequest($request)
                 $data['mensaje']    ?? null,
                 $data['puntaje']    ?? null,
                 $data['idProducto'] ?? null,
-                $data['username']   ?? null);
+                $_SESSION['usuario']['username'] ?? null);
             http_response_code($result['httpCode']);
+            echo json_encode($result);
+            break;
+        case 'contacto':
+            $contactoService = new ContactoService();
+            $result = $contactoService->recibirCorreo(
+                $data['nombre'],
+                $data['email'],
+                $data['mensaje']
+            );
             echo json_encode($result);
             break;
         default:
@@ -143,9 +141,9 @@ function handleGetRequest($request)
     if ($request[0] == 'productos') {
         $productosService = new ProductoService();
 
-        if (sizeof($request) < 2) {
+        if (sizeof($request) == 1) {
             $productos = $productosService->listarProductos();
-            echo json_encode($productosService->listarProductos());
+            echo json_encode($productos);
             return;
         }
 
@@ -228,6 +226,12 @@ function handleGetRequest($request)
         return;
     }
 
+    if($request[0] ==  'controlStock'){
+        $carritoService = new CarritoService();
+        echo json_encode($carritoService->getCantidadProducto($request[1],$request[2]));
+        return;
+    }
+
     if($request[0] == 'carrito') {
         $carritoService = new CarritoService();
         $productos = $carritoService->getProductosCarrito($request[1]);
@@ -257,8 +261,8 @@ function handleGetRequest($request)
 
     if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'misReseñas') {
         $reviewService = new ReviewService();
-        //recibo el nombre de usuario por query param
-        $resultado = $reviewService->getReviewsDeUsuario($_GET['username'] ?? null);
+        //tomo el usuario de la sesion
+        $resultado = $reviewService->getReviewsDeUsuario($_SESSION['usuario']['username'] ?? null);
         http_response_code($resultado['httpCode']);
         echo json_encode($resultado);
         return;
@@ -266,10 +270,10 @@ function handleGetRequest($request)
 
     if ($request[0] == 'usuario' && sizeof($request) > 1 && $request[1] == 'habilitado-para-reseña') {
         $reviewService = new ReviewService();
-        //recibo el nombre de usuario por query param
+        //recibo el nombre de usuario por la sesion activa y el id del producto por query param
         $resultado = $reviewService->usuarioHabilitadoParaReview(
             $_GET['idProducto'] ?? null,
-            $_GET['username'] ?? null);
+            $_SESSION['usuario']['username'] ?? null);
         http_response_code($resultado['httpCode']);
         echo json_encode($resultado);
         return;
@@ -337,9 +341,9 @@ function handleDeleteRequest($request)
 
     $data = json_decode(file_get_contents("php://input"));
 
-    if ($request[0] == 'admin' && $request[1] == 'eliminarProducto') {
+    if ($request[0] == 'admin') {
         $adminService = new AdminService();
-        echo json_encode($adminService->eliminarProducto($data->producto_id));
+        handleAdminRequest($adminService, $request[1] ?? '', $data);
         return;
     }
     
@@ -353,7 +357,7 @@ function handleDeleteRequest($request)
         $reviewService = new ReviewService();
         $result = $reviewService->eliminarReview(
             $_GET['idProducto'] ?? null,
-            $_GET['username'] ?? null
+            $_SESSION['usuario']['username'] ?? null
         );
         http_response_code($result['httpCode']);
         echo json_encode($result);
@@ -462,6 +466,10 @@ function handleAdminRequest($adminService, $action, $data)
             $result_addMarca = $adminService->addMarca($data['marca_nombre'] ?? null);
             http_response_code($result_addMarca['httpCode']);
             echo json_encode($result_addMarca);
+            break;
+        case 'eliminarProducto':
+            $adminService = new AdminService();
+            echo json_encode($adminService->eliminarProducto($data->producto_id));
             break;
     }
 }

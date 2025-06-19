@@ -67,4 +67,9 @@ getUsuario(username: string): Observable<any> {
 actualizarUsuario(username: string,campo: string, valor: string): Observable<HttpResponse<any>> {
     return this.http.put<HttpResponse<any>>(`${this.apiUrl}/actualizar`, {username, campo, valor },{observe: 'response'});
 }
+
+getCantidadproducto(username: string,idProducto: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/controlStock/${username}/${idProducto}`);
+}
+
 }

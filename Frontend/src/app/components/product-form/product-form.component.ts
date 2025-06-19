@@ -1,7 +1,7 @@
 //ANGULAR
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
 	FormBuilder,
 	FormControl,
@@ -23,7 +23,6 @@ import { MarcasService } from '../../services/marcas.service';
 import { ProductService } from '../../services/product.service';
 //INTERFACES
 import { Product } from '../../interfaces/product';
-import { ResponseAddMarca } from '../../interfaces/response-add-marca';
 
 //ENUM
 enum AccionesMarca {
@@ -44,7 +43,7 @@ enum AccionesMarca {
 	templateUrl: './product-form.component.html',
 	styleUrl: './product-form.component.css',
 })
-export class ProductFormComponent {
+export class ProductFormComponent implements OnInit {
 	private router: Router = inject(Router);
 	private route: ActivatedRoute = inject(ActivatedRoute);
 	private formBuilder: FormBuilder = inject(FormBuilder);
@@ -200,7 +199,6 @@ export class ProductFormComponent {
 
 	obtainModifiedFields(): any {
 		const modified: any = {};
-
 		if (this.product) {
 			Object.keys(this.product).forEach((key) => {
 				const productInfoValue = this.product![key];
@@ -220,7 +218,7 @@ export class ProductFormComponent {
 		this.inputModels.forEach((item) => {
 			if (this.product) {
 				const fieldName = item.name;
-				const value = this.product[fieldName];
+				const value = this.product[fieldName];				
 				this.productFormGroup.get(fieldName).setValue(value || '');
 			}
 		});
@@ -257,23 +255,18 @@ export class ProductFormComponent {
 		}
 		//si se selecciono la opcion de crear una nueva marca hago el request para crear la marca
 		if (this.accionMarca === AccionesMarca.agregar) {
-			const existeMarca = await lastValueFrom(
-				this.marcasHttpService.existeMarca(nombreMarca)
-			);
+			const existeMarca = await lastValueFrom(this.marcasHttpService.existeMarca(nombreMarca));
 
 			if (existeMarca) {
 				this.alertFailedCreation('La marca ingresada ya existe.');
 				return;
 			} else {
-				const creacionMarca: ResponseAddMarca = (await lastValueFrom(
-					this.marcasHttpService.addMarca(nombreMarca)
-				)) as ResponseAddMarca;
+				const creacionMarca: any = await lastValueFrom(this.marcasHttpService.addMarca(nombreMarca));
+				
 				if (creacionMarca?.success === true) {
 					this.alertSuccessfulToast(nombreMarca);
 				} else {
-					this.alertFailedCreation(
-						creacionMarca.error || creacionMarca.mensaje
-					);
+					this.alertFailedCreation(creacionMarca.error || creacionMarca.mensaje);
 					return;
 				}
 			}
@@ -304,7 +297,6 @@ export class ProductFormComponent {
 	}
 
 	updateProduct(formData: any): void {
-		
 		this.productsHttpService.updateProduct(formData).subscribe({
 			next: (data) => {	
 				if (data) {					
@@ -401,7 +393,9 @@ export class ProductFormComponent {
 			icon: 'success',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
-		});
+		}).then( () => {
+			location.reload();
+		} );
 	}
 
 	alertSuccessfulUpdate(data: any): void {
@@ -412,7 +406,7 @@ export class ProductFormComponent {
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
 		}).then( () => {
-			location.href = "/";
+			this.router.navigate(['/']);
 		})
 	}
 
@@ -434,7 +428,7 @@ export class ProductFormComponent {
 			text: data,
 			icon: 'error',
 			showCloseButton: true,
-			confirmButtonText: 'Accept',
+			confirmButtonText: 'Aceptar',
 		});
 	}
 
@@ -443,7 +437,7 @@ export class ProductFormComponent {
 			title: 'Ocurrió un error al actualizar el producto',
 			icon: 'error',
 			showCloseButton: true,
-			confirmButtonText: 'Accept',
+			confirmButtonText: 'Aceptar',
 		});
 	}
 
@@ -453,7 +447,7 @@ export class ProductFormComponent {
 			text: err?.mensaje,
 			icon: 'error',
 			showCloseButton: true,
-			confirmButtonText: 'Accept',
+			confirmButtonText: 'Aceptar',
 		});
 	}
 

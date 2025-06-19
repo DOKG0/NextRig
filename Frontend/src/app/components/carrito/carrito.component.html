@@ -48,12 +48,12 @@
                 Total: <strong>${{ total | number:'1.2-2' }}</strong>
               </p>
               <p class="card-text">
-                Cupon: <strong>-$200</strong>
+                Cupon: <strong> 15% OFF</strong>
               </p>
               <p class="card-text">
-                Precio Final: <strong>${{ total -200 | number:'1.2-2'}}</strong>
+                Precio Final: <strong>${{ total - (total * 0.15) | number:'1.2-2'}}</strong>
               </p>
-              <button class="btn btn-success w-100" (click)="comprar()">Comprar(${{total -200 |
+              <button class="btn btn-success w-100" (click)="comprar()">Comprar(${{total - (total * 0.15) |
                 number:'1.2-2'}})</button>
             </div>
           </div>
@@ -68,12 +68,9 @@
 
 <ng-template #sinProductos>
   <h1 class="text-center content-mode">No hay productos en el carrito</h1>
- 
-  
 
   <img class="icono-color" [ngStyle]="{'mask-image': 'url(../../../assets/img/empty-cart.png)'}" style="display: block; margin: 0 auto;" />
 
-  
 </ng-template>
 
 
@@ -133,10 +130,10 @@
                 Total: <strong>${{total}}</strong>
               </p>
               <p class="card-text">
-                Cupon: <strong>-$200</strong>
+                Cupon: <strong> 15% OFF</strong>
               </p>
               <p class="card-text">
-                Precio Final: <strong >${{ total -200 | number:'1.2-2'}}</strong>
+                Precio Final: <strong >${{ total - (total * 0.15) | number:'1.2-2'}}</strong>
               </p>
             </div>
           </div>
