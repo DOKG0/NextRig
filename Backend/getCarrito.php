@@ -152,6 +152,15 @@ public function getHistorialCompras($username){
             echo json_encode(["error" => mysqli_error($this->db_conn)]);
             exit;
         }
+
+        // obtengo el id de la compra creada
+        $idCompra = mysqli_insert_id($this->db_conn);
+        
+        http_response_code(200);
+        return [
+            "success" => "Compra creada correctamente",
+            "idCompra" => $idCompra
+        ];
     }
 
      public function getUsuario($username){
