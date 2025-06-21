@@ -15,6 +15,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "phpmailer/phpmailer": "^6.10"
+        "phpmailer/phpmailer": "^6.10",
+        "dompdf/dompdf": "^2.0"
     }
 }

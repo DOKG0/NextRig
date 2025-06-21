@@ -58,85 +58,140 @@ carrito: any[] = [];
   eliminarProducto(producto: any) {
     console.log(producto.id);
     console.log(this.user);
-   this.usuarioService.eliminarProductoCarrito(this.user, producto.id,).subscribe({
-     next: () => {
-      this.carrito = this.carrito.filter(p => p.id !== producto.id);
-
-      this.total = this.carrito.reduce((sum, p) => sum + Number(p.precio) * p.cantidad, 0);
-
-      if(this.carrito.length === 0) {
-      this.hayProductos = false;
-      }
-    },
-   });
-   
-  }
-
-verProducto(id : string) {
-  this.router.navigate(['/products', id]);
-}
-
-
-
-  comprar() {
-    this.quiereComprar = true;
-}
-
-get f() {
-    return this.userForm.controls;
-  }
-
-async onSubmit() {
- 
-  this.submitted = true;
-  
-   if (this.userForm.invalid) return;
-
-    let telefonoNumber = this.userForm.get('telefono')?.value;
-    this.total = this.total - (this.total * 0.15);
-    try{
-    await lastValueFrom( this.usuarioService.crearCompra(this.user,this.total,telefonoNumber,this.userForm.get('direccion')?.value,this.userForm.get('departamento')?.value));
-    for (let i = 0; i < this.carrito.length; i++) {
-      
-    await lastValueFrom (this.usuarioService.comprarCarrito(this.user, this.carrito[i].id,this.carrito[i].precio,this.carrito[i].cantidad));
-
-  }
-  
-  Swal.fire({
-          icon: 'success',
-          title: '¡Compra realizada con éxito!',
-          showConfirmButton: false,
-          timer: 2000
-        }).then(() => {
-          
-          this.eliminarTodos();
-          this.carrito.length = 0;
-          this.userForm.reset();
-          this.submitted = false;
-          this.hayProductos = false;
-        });
-      }catch(error){
-        console.error("Error en la compra",error);
-      }
-
-       
-  }
-
-eliminarTodos(){
-  for (let i = 0; i < this.carrito.length; i++) {
-    
-    this.usuarioService.eliminarProductoCarrito(this.user, this.carrito[i].id).subscribe({
+    this.usuarioService.eliminarProductoCarrito(this.user, producto.id,).subscribe({
       next: () => {
-        this.carrito.length = 0;
-        this.hayProductos = false;
-        this.total = 0;
+        this.carrito = this.carrito.filter(p => p.id !== producto.id);
+        this.total = this.carrito.reduce((sum, p) => sum + Number(p.precio) * p.cantidad, 0);
+        if (this.carrito.length === 0) {
+          this.hayProductos = false;
+        }
       },
     });
   }
-}
 
+  verProducto(id: string) {
+    this.router.navigate(['/products', id]);
+  }
 
+  comprar() {
+    this.quiereComprar = true;
+  }
 
+  get f() {
+    return this.userForm.controls;
+  }
 
+  async onSubmit() {
+    this.submitted = true;
+    if (this.userForm.invalid) return;
 
+    let telefonoNumber = this.userForm.get('telefono')?.value;
+    this.total = this.total - (this.total * 0.15);
+
+    try {
+    // -> aqui se crea la compra
+    const compraResult = await lastValueFrom(
+      this.usuarioService.crearCompra(
+        this.user, 
+        this.total, 
+        telefonoNumber, 
+        this.userForm.get('direccion')?.value, 
+        this.userForm.get('departamento')?.value
+      )
+    );
+
+    // -> se agregan los productos a la compra
+    for (let i = 0; i < this.carrito.length; i++) {
+      await lastValueFrom(
+        this.usuarioService.comprarCarrito(
+          this.user, 
+          this.carrito[i].id, 
+          this.carrito[i].precio, 
+          this.carrito[i].cantidad
+        )
+      );
+    }
+
+    // -> genera solamente la facutura si se obtuvo el id de cmpra
+    let facturaGenerada = false;
+    if (compraResult.idCompra) {
+      try {
+        await lastValueFrom(this.usuarioService.generarFactura(compraResult.idCompra));
+        facturaGenerada = true;
+        console.log('Factura generada exitosamente');
+      } catch (error) {
+        console.error('Error al generar factura:', error);
+      }
+    }
+
+    const mensajeHtml = facturaGenerada && compraResult.idCompra ? 
+      `Tu compra se ha procesado correctamente.<br><br>
+       <div style="margin-top: 15px;">
+         <button id="descargar-factura" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+           📄 Descargar Factura
+         </button>
+       </div>` :
+      'Tu compra se ha procesado correctamente.';
+      
+      Swal.fire({
+      icon: 'success',
+      title: '¡Compra realizada con exito!',
+      html: mensajeHtml,
+      showConfirmButton: true,
+      confirmButtonText: 'Aceptar',
+      allowOutsideClick: false,
+      didOpen: () => {
+        const botonDescargar = document.getElementById('descargar-factura');
+        if (botonDescargar && compraResult.idCompra) {
+          botonDescargar.addEventListener('click', () => {
+            this.usuarioService.descargarFactura(compraResult.idCompra);
+          setTimeout(() => {
+              this.usuarioService.eliminarFactura(compraResult.idCompra).subscribe({
+                next: (response) => {
+                  console.log('Factura eliminada del servidor:', response);
+                },
+                error: (error) => {
+                  console.error('Error al eliminar factura:', error);
+                }
+              });
+            }, 2000); // Esperar 2 segundos para que termine la descarga
+          });
+        }
+      }
+      }).then(() => {
+
+        if (facturaGenerada && compraResult.idCompra) {
+          this.usuarioService.eliminarFactura(compraResult.idCompra).subscribe({
+            next: (response) => {
+              console.log('Factura eliminada del servidor al cerrar modal:', response);
+            },
+            error: (error) => {
+              console.error('Error al eliminar factura al cerrar modal:', error);
+            }
+          });
+        }
+
+        this.eliminarTodos();
+        this.carrito.length = 0;
+        this.userForm.reset();
+        this.submitted = false;
+        this.hayProductos = false;
+      });
+    } catch (error) {
+      console.error("Error en la compra", error);
+    }
+  }
+
+  eliminarTodos() {
+    for (let i = 0; i < this.carrito.length; i++) {
+
+      this.usuarioService.eliminarProductoCarrito(this.user, this.carrito[i].id).subscribe({
+        next: () => {
+          this.carrito.length = 0;
+          this.hayProductos = false;
+          this.total = 0;
+        },
+      });
+    }
+  }
 }
