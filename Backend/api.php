@@ -9,6 +9,7 @@ include_once 'marcaService.php';
 include_once 'contactoService.php';
 include_once 'reviewService.php';
 include_once 'getCarrito.php';
+include_once 'pdfService.php';
 
 setHeaders();
 
@@ -122,6 +123,36 @@ function handlePostRequest($request)
             );
             echo json_encode($result);
             break;
+        case 'generar-factura':
+            if (!isset($_SESSION['usuario']['username'])) {
+                http_response_code(401);
+                echo json_encode(['error' => 'Usuario no autenticado']);
+                return;
+            }
+            
+            $pdfService = new PDFService();
+            $username = $_SESSION['usuario']['username'];
+            $idCompra = $data['idCompra'] ?? null;
+            
+            if (!$idCompra) {
+                http_response_code(400);
+                echo json_encode(['error' => 'ID de compra no proporcionado']);
+                return;
+            }
+            
+            $result = $pdfService->generarFacturaCompra($username, $idCompra);
+            
+            if ($result['success']) {
+                echo json_encode([
+                    'success' => true,
+                    'filename' => $result['filename'],
+                    'downloadUrl' => 'Backend/facturas/' . $result['filename']
+                ]);
+            } else {
+                http_response_code(400);
+                echo json_encode(['error' => $result['error']]);
+            }
+            break;
         default:
             http_response_code(404);
             echo json_encode(['error' => 'Recurso no encontrado']);
@@ -134,6 +165,29 @@ function handleGetRequest($request)
     if (empty($request[0])) {
         http_response_code(400);
         echo json_encode(['error' => 'Recurso no especificado']);
+        return;
+    }
+
+    if ($request[0] == 'descargar-factura' && sizeof($request) > 1) {
+        if (!isset($_SESSION['usuario']['username'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Usuario no autenticado']);
+            return;
+        }
+        
+        $idCompra = $request[1];
+        $filename = 'factura_' . $idCompra . '_' . date('Y-m-d') . '.pdf';
+        $filepath = 'facturas/' . $filename;
+        
+        if (file_exists($filepath)) {
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Length: ' . filesize($filepath));
+            readfile($filepath);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Factura no encontrada']);
+        }
         return;
     }
 
@@ -354,6 +408,26 @@ function handleDeleteRequest($request)
         );
         http_response_code($result['httpCode']);
         echo json_encode($result);
+        return;
+    }
+
+    if ($request[0] == 'eliminar-factura' && sizeof($request) > 1) {
+
+        $idCompra = $request[1];
+        $filename = 'factura_' . $idCompra . '_' . date('Y-m-d') . '.pdf';
+        $filepath = 'facturas/' . $filename;
+        
+        if (file_exists($filepath)) {
+            if (unlink($filepath)) {
+                echo json_encode(['success' => true, 'message' => 'Factura eliminada correctamente']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'No se pudo eliminar la factura']);
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Factura no encontrada']);
+        }
         return;
     }
 
