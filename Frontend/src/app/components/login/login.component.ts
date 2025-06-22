@@ -170,7 +170,13 @@ export class LoginComponent implements OnInit, OnDestroy {
               title: '¡Bienvenido!',
               text: `Hola ${user.name}, has iniciado sesion correctamente.`,
               timer: 1800,
-              showConfirmButton: false
+              showConfirmButton: false,
+              showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
             }).then(() => {
               this.router.navigate(['/']).then(() => {
                 window.location.reload();

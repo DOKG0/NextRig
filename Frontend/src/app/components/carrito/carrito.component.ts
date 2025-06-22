@@ -97,7 +97,13 @@ carrito: any[] = [];
             showConfirmButton: false,
             didOpen: () => {
                 Swal.showLoading();
-            }
+            },
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
         });
     // -> aqui se crea la compra
     const compraResult = await lastValueFrom(
@@ -173,7 +179,13 @@ carrito: any[] = [];
                   }, 2000);
               });
           }
-      }
+      },
+      showClass: {
+          popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        }
       }).then(() => {
 
         if (facturaGenerada && compraResult.idCompra) {

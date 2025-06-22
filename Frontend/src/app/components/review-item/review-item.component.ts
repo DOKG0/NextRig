@@ -41,6 +41,12 @@ export class ReviewItemComponent implements OnInit {
 			confirmButtonText: 'Aceptar',
 			showCancelButton: true,
 			cancelButtonText: 'Cancelar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		}).then((result) => {
 			if (result.isConfirmed) {
 				this.sendDeleteRequest();
@@ -68,6 +74,12 @@ export class ReviewItemComponent implements OnInit {
 			icon: 'success',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		}).then(() => {
 			location.reload();
 		});
@@ -80,6 +92,12 @@ export class ReviewItemComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Accept',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 }

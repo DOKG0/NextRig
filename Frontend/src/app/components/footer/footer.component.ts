@@ -22,6 +22,12 @@ export class FooterComponent {
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
+      },
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown animate__faster'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOut animate__faster'
       }
     });
 
@@ -33,7 +39,13 @@ export class FooterComponent {
         Swal.fire({
           icon: res.success ? 'success' : 'error',
           title: res.success ? '¡Mensaje enviado!' : 'Error',
-          text: res.mensaje || (res.success ? 'Tu mensaje fue enviado correctamente.' : 'Ocurrio un error al enviar el mensaje.')
+          text: res.mensaje || (res.success ? 'Tu mensaje fue enviado correctamente.' : 'Ocurrio un error al enviar el mensaje.'),
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown animate__faster'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOut animate__faster'
+          }
         });
         if (res.success) {
           this.nombre = '';
@@ -46,7 +58,13 @@ export class FooterComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Error al enviar el mensaje. Intenta nuevamente.'
+          text: 'Error al enviar el mensaje. Intenta nuevamente.',
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown animate__faster'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOut animate__faster'
+          }
         });
       }
     });
