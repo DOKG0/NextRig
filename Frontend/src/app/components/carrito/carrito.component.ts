@@ -89,6 +89,16 @@ carrito: any[] = [];
     this.total = this.total - (this.total * 0.15);
 
     try {
+      Swal.fire({
+            title: 'Procesando pago...',
+            text: 'Por favor espera mientras procesamos tu compra',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
     // -> aqui se crea la compra
     const compraResult = await lastValueFrom(
       this.usuarioService.crearCompra(
@@ -114,49 +124,55 @@ carrito: any[] = [];
 
     // -> genera solamente la facutura si se obtuvo el id de cmpra
     let facturaGenerada = false;
+    let emailEnviado = false;
     if (compraResult.idCompra) {
       try {
-        await lastValueFrom(this.usuarioService.generarFactura(compraResult.idCompra));
-        facturaGenerada = true;
-        console.log('Factura generada exitosamente');
+          const facturaResult = await lastValueFrom(this.usuarioService.generarFactura(compraResult.idCompra));
+          facturaGenerada = true;
+          emailEnviado = facturaResult.emailSent || false;
+          console.log('Factura generada exitosamente');
+          if (emailEnviado) {
+              console.log('Factura enviada por email:', facturaResult.emailMessage);
+          }
       } catch (error) {
-        console.error('Error al generar factura:', error);
+          console.error('Error al generar factura:', error);
       }
-    }
+  }
 
-    const mensajeHtml = facturaGenerada && compraResult.idCompra ? 
+  const mensajeHtml = facturaGenerada && compraResult.idCompra ? 
       `Tu compra se ha procesado correctamente.<br><br>
-       <div style="margin-top: 15px;">
-         <button id="descargar-factura" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-           📄 Descargar Factura
-         </button>
-       </div>` :
+        ${emailEnviado ? '<div style="color: #28a745; margin: 10px 0;"><strong>✅ Factura enviada a tu email</strong></div>' : ''}
+        <div style="margin-top: 15px;">
+          <button id="descargar-factura" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            📄 Descargar Factura
+          </button>
+        </div>` :
       'Tu compra se ha procesado correctamente.';
       
-      Swal.fire({
+  Swal.fire({
       icon: 'success',
-      title: '¡Compra realizada con exito!',
+      title: '¡Compra realizada con éxito!',
       html: mensajeHtml,
       showConfirmButton: true,
       confirmButtonText: 'Aceptar',
       allowOutsideClick: false,
       didOpen: () => {
-        const botonDescargar = document.getElementById('descargar-factura');
-        if (botonDescargar && compraResult.idCompra) {
-          botonDescargar.addEventListener('click', () => {
-            this.usuarioService.descargarFactura(compraResult.idCompra);
-          setTimeout(() => {
-              this.usuarioService.eliminarFactura(compraResult.idCompra).subscribe({
-                next: (response) => {
-                  console.log('Factura eliminada del servidor:', response);
-                },
-                error: (error) => {
-                  console.error('Error al eliminar factura:', error);
-                }
+          const botonDescargar = document.getElementById('descargar-factura');
+          if (botonDescargar && compraResult.idCompra) {
+              botonDescargar.addEventListener('click', () => {
+                  this.usuarioService.descargarFactura(compraResult.idCompra);
+                  setTimeout(() => {
+                      this.usuarioService.eliminarFactura(compraResult.idCompra).subscribe({
+                          next: (response) => {
+                              console.log('Factura eliminada del servidor:', response);
+                          },
+                          error: (error) => {
+                              console.error('Error al eliminar factura:', error);
+                          }
+                      });
+                  }, 2000);
               });
-            }, 2000); // Esperar 2 segundos para que termine la descarga
-          });
-        }
+          }
       }
       }).then(() => {
 

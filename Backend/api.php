@@ -1,5 +1,13 @@
 <?php
 
+ini_set('session.cookie_lifetime', 86400 * 7);
+ini_set('session.gc_maxlifetime', 86400 * 7);
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+
+date_default_timezone_set('America/Montevideo');
+
 session_start();
 
 include_once 'usuarioService.php';
@@ -131,6 +139,7 @@ function handlePostRequest($request)
             }
             
             $pdfService = new PDFService();
+            $contactoService = new ContactoService();
             $username = $_SESSION['usuario']['username'];
             $idCompra = $data['idCompra'] ?? null;
             
@@ -143,11 +152,37 @@ function handlePostRequest($request)
             $result = $pdfService->generarFacturaCompra($username, $idCompra);
             
             if ($result['success']) {
-                echo json_encode([
-                    'success' => true,
-                    'filename' => $result['filename'],
-                    'downloadUrl' => 'Backend/facturas/' . $result['filename']
-                ]);
+                $carritoService = new CarritoService();
+                $usuario = $carritoService->getUsuario($username);
+                
+                if ($usuario) {
+                    $nombreCompleto = $usuario->nombre . ' ' . $usuario->apellido;
+                    $email = $usuario->correo;
+                    $pathFactura = $result['filepath'];
+                    
+                    $emailResult = $contactoService->enviarFacturaPorEmail(
+                        $email, 
+                        $nombreCompleto, 
+                        $idCompra, 
+                        $pathFactura
+                    );
+                    
+                    echo json_encode([
+                        'success' => true,
+                        'filename' => $result['filename'],
+                        'downloadUrl' => 'Backend/facturas/' . $result['filename'],
+                        'emailSent' => $emailResult['success'],
+                        'emailMessage' => $emailResult['mensaje']
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => true,
+                        'filename' => $result['filename'],
+                        'downloadUrl' => 'Backend/facturas/' . $result['filename'],
+                        'emailSent' => false,
+                        'emailMessage' => 'No se pudo obtener datos del usuario para envio del email'
+                    ]);
+                }
             } else {
                 http_response_code(400);
                 echo json_encode(['error' => $result['error']]);
