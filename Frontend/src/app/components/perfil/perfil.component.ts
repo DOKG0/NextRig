@@ -95,7 +95,13 @@ editarCampo(campo: string) {
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Si",
-      cancelButtonText: "No"
+      cancelButtonText: "No",
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown animate__faster'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOut animate__faster'
+      }
     }).then((result) => {
 
       if (result.isConfirmed) {

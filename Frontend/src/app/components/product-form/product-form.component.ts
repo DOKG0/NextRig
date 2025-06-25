@@ -393,6 +393,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'success',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+				popup: 'animate__animated animate__fadeInDown animate__faster'
+				},
+				hideClass: {
+				popup: 'animate__animated animate__fadeOut animate__faster'
+				}
 		}).then( () => {
 			location.reload();
 		} );
@@ -405,6 +411,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'success',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		}).then( () => {
 			this.router.navigate(['/']);
 		})
@@ -419,6 +431,12 @@ export class ProductFormComponent implements OnInit {
 			showConfirmButton: false,
 			timerProgressBar: true,
 			timer: 2000,
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -429,6 +447,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -438,6 +462,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -448,6 +478,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -458,6 +494,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -468,6 +510,12 @@ export class ProductFormComponent implements OnInit {
 			confirmButtonText: 'Aceptar',
 			showCancelButton: true,
 			cancelButtonText: 'Cancelar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		}).then((result) => {
 			if (result.isConfirmed) {
 				this.postForm(formData, true);
@@ -484,7 +532,13 @@ export class ProductFormComponent implements OnInit {
 			Swal.fire({
 				title: 'No hay campos modificados',
 				icon: 'info',
-				confirmButtonText: 'Aceptar'
+				confirmButtonText: 'Aceptar',
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown animate__faster'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOut animate__faster'
+				}
 			});
 		} else {
 			Swal.fire({
@@ -499,7 +553,13 @@ export class ProductFormComponent implements OnInit {
 					}).join('')}`,
 				confirmButtonText: 'Aceptar',
 				showCancelButton: true,
-				cancelButtonText: 'Cancelar'
+				cancelButtonText: 'Cancelar',
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown animate__faster'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOut animate__faster'
+				}
 			}).then( (result) => {
 				if (result.isConfirmed) {
 					this.postForm(formData, false);				
