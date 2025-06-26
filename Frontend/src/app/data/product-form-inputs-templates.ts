@@ -61,6 +61,7 @@ export const formInputTemplates = {
 		labelText: 'Url Imagen',
 		formControlName: 'imagen',
 		validators: [
+            { validate: 'required' },
             { validate: 'maxLength', value: 255}, 
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],

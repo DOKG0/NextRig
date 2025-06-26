@@ -39,7 +39,7 @@ class AdminService
     public function addProducto(
         $id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre) {
         
-        foreach ([$id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci] as $param) {
+        foreach ([$id, $nombre, $precio, $stock, $descripcion, $categoria, $admin_ci] as $param) {
             if (is_null($param) || empty($param)) {
                 return CustomResponseBuilder::build(
                     false, "Existe al menos un parámetro faltante", null, 400, 
@@ -113,6 +113,29 @@ class AdminService
             return true;
         }
         return false;
+    }
+
+    public function updateImagenProducto($idProducto, $urlImagen) {
+        $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
+        $urlImagen = mysqli_real_escape_string($this->db_conn, $urlImagen);
+
+        $existeProductoQuery = "SELECT id FROM Productos WHERE id='$idProducto'";
+        $producto = mysqli_query($this->db_conn, $existeProductoQuery);
+
+        if (mysqli_num_rows($producto) == 0) {
+            return CustomResponseBuilder::build(
+                false, "Error al actualizar el producto", $idProducto, 404, "Error: El producto no existe"
+            );
+        }
+
+        $queryActualizacion = "UPDATE Productos SET imagen = '$urlImagen' WHERE id = '$idProducto'";
+        $resultado = mysqli_query($this->db_conn, $queryActualizacion);
+
+        if ($resultado) {
+            return CustomResponseBuilder::build(true, "Actualización de producto exitosa", $idProducto, 200);
+        } else {
+            return CustomResponseBuilder::build(false, "Error al actualizar el producto", $idProducto, 500, "No se pudo actualizar la imagen del producto");
+        }
     }
 
     public function updateProducto(

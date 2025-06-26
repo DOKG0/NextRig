@@ -26,9 +26,9 @@ import { Product } from '../../interfaces/product';
 
 //ENUM
 enum AccionesMarca {
-	ignorar = '0', //agregar despues
+	ignorar 	= '0', //agregar despues
 	seleccionar = '1', //seleccionar marca preexistente
-	agregar = '2', //crear una nueva marca
+	agregar     = '2', //crear una nueva marca
 }
 
 @Component({
@@ -73,17 +73,13 @@ export class ProductFormComponent implements OnInit {
 	 * Ademas lo hace mas sencillo para modificar o agregar cosas al form. Podria simplificarse aun mas de todos modos
 	 */
 	public inputModels: FormInputModel[] = formInputTemplates.constants
-		.map(
-			(e) =>
-				new FormInputModel(
+		.map( (e) => new FormInputModel(
 					e.formControlName,
 					e.type,
 					e.labelText,
 					e.validators,
-					e.config
-				)
-		)
-		// .sort((a, b) => a.config?.order? - b.config?.order?);
+					e.config)
+		);
 
 	//Input para la creacion de una nueva marca
 	//Lo creo aparte del resto por tener mas logica asociada y tener una visibilidad condicional
@@ -99,12 +95,17 @@ export class ProductFormComponent implements OnInit {
 	})(); //wrap en una funcion auto-invocada (IIFE) para que se ejecute inmediatamente despues de la declaracion
 
 	ngOnInit(): void {
+		//obtengo el id del producto de la ruta en caso de que se ingrese al url de modificar producto: 
+		// /product-form/update/:id
 		const productId = this.route.snapshot.paramMap.get('id');
+
+		//si se obtuvo un id en el url busco el producto con ese id para rellenar el form con los datos del mismo
 		if (productId) {
 			this.fetchProductData(productId);
 			this.title = 'Modificación de Producto';
 		}
 
+		//creo la instancia del formulario
 		this.createFormInstance();
 	}
 
@@ -150,6 +151,7 @@ export class ProductFormComponent implements OnInit {
 		});
 	}
 
+	//Creo el FormGroup con todos los FormControl (cada input/select/textarea...) basado en los templates
 	createFormGroup(): any {
 		const group: any = {};
 		let formControlElement: FormControl;
@@ -192,6 +194,10 @@ export class ProductFormComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * funcion que revisa cuales campos fueron modificados en la modificacion de productos 
+	 * para poder mostrar el valor previo y el nuevo al usuario antes de enviar la peticion
+	 */
 	obtainModifiedFields(): any {
 		const modified: any = {};
 		if (this.product) {
@@ -241,17 +247,10 @@ export class ProductFormComponent implements OnInit {
 	}
 
 	async postForm(formData: any, createNew: boolean): Promise<void> {
-		let nombreMarca = '';
-		
-		//si no se ha agregado el nombre de la marca al form, 
-		//entonces envio el campo marca_nombre pero con su valor en null
-		if (!formData['marca_nombre']) {
-			formData['marca_nombre'] = null;
-		} else {
-			nombreMarca = formData['marca_nombre'];
-		}
+
 		//si se selecciono la opcion de crear una nueva marca hago el request para crear la marca
 		if (this.accionMarca === AccionesMarca.agregar) {
+			const nombreMarca = formData['marca_nombre'];
 			const existeMarca = await lastValueFrom(this.marcasHttpService.existeMarca(nombreMarca));
 
 			if (existeMarca) {
@@ -269,11 +268,21 @@ export class ProductFormComponent implements OnInit {
 			}
 		}
 
+		this.checkFileInput();
+
 		if (createNew) {
 			this.postProduct(formData);
 		} else {
 			this.updateProduct(formData);
 		}
+	}
+
+	checkFileInput() {
+		//revisar si hay un archivo subido
+		//si lo hay remover validator.required de url y setear el campo imagen en null
+		//guardar el path del archivo y esperar a que se haga el post del producto
+		//enviar el request de imgur para subir la imagen seleccionada
+		//si se subio exitosamente extraer el link y mandar al backend el link de la imagen
 	}
 
 	postProduct(formData: any): void {
@@ -310,11 +319,9 @@ export class ProductFormComponent implements OnInit {
 	}
 
 	onFormSubmit(): void {
-		if (this.productFormGroup.valid) {
-			console.log(this.productFormGroup.value);
-			
-			// const formData = this.productFormGroup.getRawValue();
+		if (this.productFormGroup.valid) {			
 			const formData = this.productFormGroup.value;
+			
 
 			if (this.product) {
 				this.alertUpdateConfirmation(formData);
