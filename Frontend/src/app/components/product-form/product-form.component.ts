@@ -79,15 +79,11 @@ export class ProductFormComponent implements OnInit {
 					e.formControlName,
 					e.type,
 					e.labelText,
-					e.order,
 					e.validators,
-					e.optionSelectValues,
-					e.id,
-					e.value,
 					e.config
 				)
 		)
-		.sort((a, b) => a.order - b.order);
+		// .sort((a, b) => a.config?.order? - b.config?.order?);
 
 	//Input para la creacion de una nueva marca
 	//Lo creo aparte del resto por tener mas logica asociada y tener una visibilidad condicional
@@ -97,8 +93,8 @@ export class ProductFormComponent implements OnInit {
 			template.formControlName,
 			template.type,
 			template.labelText,
-			template.order,
-			template.validators
+			template.validators,
+			template.config
 		);
 	})(); //wrap en una funcion auto-invocada (IIFE) para que se ejecute inmediatamente despues de la declaracion
 
@@ -116,9 +112,8 @@ export class ProductFormComponent implements OnInit {
 	setCurrentAdminCI(): void {
 		const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
 		if (user && user.ci) {
-			const formControlAdmin = this.productFormGroup.get('admin_ci');			
+			const formControlAdmin: FormControl = this.productFormGroup.get('admin_ci');			
 			formControlAdmin.setValue(user.ci);
-			formControlAdmin.disable();
 		} else {
 			this.router.navigate(['/login']);
 		}
@@ -239,13 +234,15 @@ export class ProductFormComponent implements OnInit {
 				}
 			}
 		}
-		this.productFormGroup.get('id').disable();
+		const productIdElement: HTMLInputElement = document.getElementById("productIdControl") as HTMLInputElement;		
+		productIdElement.setAttribute("readonly", "true");
+
 		this.setCurrentAdminCI();
 	}
 
 	async postForm(formData: any, createNew: boolean): Promise<void> {
 		let nombreMarca = '';
-
+		
 		//si no se ha agregado el nombre de la marca al form, 
 		//entonces envio el campo marca_nombre pero con su valor en null
 		if (!formData['marca_nombre']) {
@@ -314,7 +311,10 @@ export class ProductFormComponent implements OnInit {
 
 	onFormSubmit(): void {
 		if (this.productFormGroup.valid) {
-			const formData = this.productFormGroup.getRawValue();
+			console.log(this.productFormGroup.value);
+			
+			// const formData = this.productFormGroup.getRawValue();
+			const formData = this.productFormGroup.value;
 
 			if (this.product) {
 				this.alertUpdateConfirmation(formData);

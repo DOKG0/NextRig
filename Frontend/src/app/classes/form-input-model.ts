@@ -3,11 +3,17 @@ export class FormInputModel {
         public name: string,
         public type: string,
         public text: string,
-        public order: number,
         public validators?: {validate: string, value?: any}[],
-        public optionSelectValues?: string[],
-        public id?: string,
-        public value?: any,
-        public config?: any
+        public config?: {
+          order?: number,
+          optionSelectValues?: string[],
+          id?: string,
+          value?: any,
+          disabled?: boolean,
+          readonly?: boolean,
+          step?: string,
+          placeholder?: string,
+          accept?: string
+        }
       ) {}
 }

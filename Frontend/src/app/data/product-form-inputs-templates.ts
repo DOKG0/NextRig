@@ -4,139 +4,138 @@ export const formInputTemplates = {
 		type: 'text',
 		labelText: 'Identificador',
 		formControlName: 'id',
-		order: 1,
 		validators: [
             { validate: 'required' }, 
             { validate: 'maxLength', value: 50 }, 
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: { }
+        config: {
+            order: 1,
+            id: 'productIdControl'
+        }
 	},
 	{
 		type: 'text',
 		labelText: 'Nombre',
 		formControlName: 'nombre',
-		order: 2,
 		validators: [
             { validate: 'required' }, 
             { validate: 'maxLength', value: 100 },
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: { placeholder: "NVIDIA RTX 4090 TI"}
+        config: { 
+            placeholder: "NVIDIA RTX 4090 TI",
+            order: 2
+        }
 	},
 	{
 		type: 'number',
 		labelText: 'Precio',
 		formControlName: 'precio',
-		order: 4,
 		validators: [
             { validate: 'required' }, 
             { validate: 'max', value: 99999999.99},
             { validate: 'pattern', value: new RegExp(/^\d{1,16}\.?\d{0,2}$/)}
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: { step: '0.01' }
+        config: { 
+            step: '0.01',
+            order: 4,
+        }
 	},
     {
 		type: 'number',
 		labelText: 'Stock',
 		formControlName: 'stock',
-		order: 5,
 		validators: [
             { validate: 'required' }, 
             { validate: 'max', value: 9999},
             { validate: 'pattern', value: new RegExp(/^\d+$/)}
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: { step: '1' }
+        config: { 
+            step: '1', 
+            order: 5,
+        }
 	},
     {
         type: 'text',
 		labelText: 'Url Imagen',
 		formControlName: 'imagen',
-		order: 6,
 		validators: [
-            { validate: 'required' }, 
             { validate: 'maxLength', value: 255}, 
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: {}
+        config: {
+            order: 7
+        }
+    },
+    {
+        type: 'file',
+		labelText: 'Subir Imagen',
+		formControlName: 'imagenArchivo',
+		validators: [],
+        config: {
+            order: 8,
+            accept: "image/png, image/jpeg, image/webp, image/jpg"
+        }
     },
     {
         type: 'text',
 		labelText: 'CI Administrador',
 		formControlName: 'admin_ci',
-		order: 7,
 		validators: [
             { validate: 'required' }, 
             { validate: 'minLength', value: 6},
             { validate: 'maxLength', value: 50}, 
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: { placeholder: "12341234"}
+        config: { 
+            placeholder: "12341234",
+    		order: 6,
+            readonly: true
+        }
     },
     {
         type: 'textarea',
 		labelText: 'Descripción',
 		formControlName: 'descripcion',
-		order: 8,
 		validators: [
             { validate: 'required' }, 
             { validate: "maxLength", value: 255}, 
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: {}
+        config: {
+            order: 20
+        }
     },
     {
         type: 'select',
 		labelText: 'Categoría',
 		formControlName: 'categoria',
-		order: 3,
 		validators: [ { validate: 'required' } ],
-        optionSelectValues: [
+        config: {
+    		order: 3,
+            optionSelectValues: [
             'CPU', 'MOTHERBOARD', 'TARJETA_GRAFICA', 
             'ALMACENAMIENTO', 'MEMORIAS', 'COOLING', 
             'GABINETES', 'MONITORES', 'TECLADOS', 'MOUSE'
         ],
-        id: '',
-        value: '',
-        config: {}
+        }
     }
 ],
 conditionals: [
     {
         type: 'text',
-		labelText: 'Marca',
+		labelText: 'Ingrese la marca',
 		formControlName: 'marca_nombre',
-		order: 10,
 		validators: [
             { validate: 'required' }, 
             { validate: 'maxLength', value: 100}, 
             { validate: 'pattern', value: new RegExp(/[\S]/g) }
         ],
-        optionSelectValues: [],
-        id: '',
-        value: '',
-        config: { disabled: true }
+        config: { 
+            disabled: true, 
+    		order: 10
+        }
     }
 ]
 };

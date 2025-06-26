@@ -14,6 +14,11 @@ input, textarea, select {
     background-color: var(--color-bg);
 }
 
+input:read-only {
+    color: var(--color-text-primary);
+    background-color: var(--color-input-disabled);
+}
+
 input:disabled {
     color: var(--color-text-primary);
     background-color: var(--color-input-disabled);
