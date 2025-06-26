@@ -10,6 +10,10 @@
   background-color: var(--color-surface);
 }
 
+.marcas-carrousel {
+  padding: 1rem 0;
+}
+
 .content-wrapper {
   box-sizing: border-box;
 }

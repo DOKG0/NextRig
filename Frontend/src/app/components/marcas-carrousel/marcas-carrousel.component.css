@@ -1,7 +1,6 @@
 
 .slider{
     width: 100%;
-    
     height: var(--height);
     overflow: hidden;
     mask-image: linear-gradient(
@@ -18,7 +17,6 @@
     width: 100%;
     min-width: calc(var(--width) * var(--quantity));
     position: relative;
-    
 }
 
 
@@ -52,10 +50,7 @@
     justify-content: center;
     align-items: center;
     width: 5rem;
-    height: 5rem;
-    box-shadow: 
-    2px 2px 5px var(--shadow-border),
-    -2px -2px 5px var(--shadow-border);
+    height: 5rem; 
     cursor: pointer;
     border-radius: 8px;
     margin: 0.5rem 1rem;

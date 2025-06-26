@@ -10,7 +10,7 @@
                     <option value="nameDesc">Nombre: Z-A</option>
                   </select>
             </div>
-            <app-marcas-carrousel [marcasSorted]="marcasSorted" (marcaSelected)="handleMarcaSelected($event)"></app-marcas-carrousel>
+            <app-marcas-carrousel class="marcas-carrousel" [marcasSorted]="marcasSorted" (marcaSelected)="handleMarcaSelected($event)"></app-marcas-carrousel>
              <div class="grid-header-buttons mostrar">
                 <span>Mostrar:</span>
                 <select [(ngModel)]="quantityItemsPerPage" (ngModelChange)="handleSortItems($event)">
