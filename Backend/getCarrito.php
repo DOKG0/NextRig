@@ -165,7 +165,7 @@ public function getHistorialCompras($username){
 
      public function getUsuario($username){
 
-        $query = "SELECT  u.username, u.nombre, u.apellido, u.correo
+        $query = "SELECT  u.username, u.nombre, u.apellido, u.correo, u.imagen
                     FROM Usuario u
                     WHERE u.username = '$username'";
         $resultado = mysqli_query($this->db_conn, $query);

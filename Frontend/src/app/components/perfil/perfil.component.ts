@@ -22,7 +22,8 @@ usuario: { [key: string]: string } = {
   nombre: '',
   apellido: '',
   username: '',
-  correo: ''
+  correo: '',
+  imagen: ''
 };
 
 usuarioCopia: { [key: string]: string } = {
@@ -44,6 +45,7 @@ constructor(private usuarioService: UsuarioService,) {
     this.usuario['apellido'] = data.apellido;
     this.usuario['username'] = data.username;
     this.usuario['correo'] = data.correo;
+    this.usuario['imagen'] = data.imagen;
     this.usuarioCopia = { ...this.usuario };
   });
 }
@@ -148,6 +150,8 @@ editarCampo(campo: string) {
       this.usuario[campo] = this.usuarioCopia[campo];
   }
 
+  cambiarImagen(event: any){
 
+  }
 
 }

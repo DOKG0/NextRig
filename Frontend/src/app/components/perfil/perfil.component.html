@@ -1,13 +1,20 @@
 <div class="container mt-5">
-  <h2 class="mb-4">Perfil de Usuario</h2>
+
+   <div style="display: flex; justify-content: space-between;">
+    <div>
+      <h2 class="mb-4">Perfil de Usuario</h2>
+    </div>
+    <div style="position: relative; display: inline-block;">
+      <img src="{{usuario['imagen']}}" alt="Imagen no disponible" class="rounded-circle">
+      <input type="file" id="fileInput" accept="image/*" style="display: none;" (change)="cambiarImagen($event)">
+      <button onclick="document.getElementById('fileInput').click()" class="btn btn-sm btn-primary" style="position: absolute; bottom: 0; right: 0; border-radius: 50%; padding: 4px 6px; background-color: azure;">
+    ✏️
+  </button>
+    </div>
+  </div>
 
   <div class="card p-4 shadow-sm">
  
-
-
-
-
-
     <!-- Nombre -->
     <div class="mb-3">
       <label class="form-label fw-bold">Nombre</label>
