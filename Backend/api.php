@@ -570,8 +570,15 @@ function handleAdminRequest($adminService, $action, $data)
             echo json_encode($result_addMarca);
             break;
         case 'eliminarProducto':
-            $adminService = new AdminService();
-            echo json_encode($adminService->eliminarProducto($data->producto_id));
+            $result_eliminarProducto = $adminService->eliminarProducto($data->producto_id);
+            echo json_encode($result_eliminarProducto);
+            break;
+        case 'updateProductImage':
+            $result_updateProductImage = $adminService->updateImagenProducto(
+                $data['idProducto'] ?? null, 
+                $data['urlImagen'] ?? null);
+            http_response_code($result_updateProductImage['httpCode']);
+            echo json_encode($result_updateProductImage);
             break;
     }
 }
