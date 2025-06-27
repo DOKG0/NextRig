@@ -54,7 +54,7 @@ export class ProductFormComponent implements OnInit {
 	public title: string = 'Alta de Producto';
 	public productFormGroup: any; //Referencia al FormGroup
 	private product: Product | null = null; //datos del producto si es una modificacion de producto
-	private imageFilePath: string = "";
+	private imageFile: File | null = null;
 	private postedProductId!: string;
 	public accionMarca: AccionesMarca = AccionesMarca.ignorar; //Valor de la accion a realizar sobre la marca
 	/**
@@ -263,15 +263,13 @@ export class ProductFormComponent implements OnInit {
 				const creacionMarca: any = await lastValueFrom(this.marcasHttpService.addMarca(nombreMarca));
 				
 				if (creacionMarca?.success === true) {
-					this.alertSuccessfulToast(nombreMarca);
+					this.alertSuccessfulToast(`Marca '${nombreMarca}' creada correctamente`);
 				} else {
 					this.alertFailedCreation(creacionMarca.error || creacionMarca.mensaje);
 					return;
 				}
 			}
 		}
-
-		this.imageFilePath = formData.imagenArchivo || "";
 
 		if (createNew) {
 			this.postProduct(formData);
@@ -282,7 +280,14 @@ export class ProductFormComponent implements OnInit {
 
 	captureInputValueChangeEvent(event: ValueChangeEvent): void {
 		if (event.elementId === "imagenArchivo" && event.inputType === "file") {
-			this.imageFilePath = event.newValue;
+			if (event.newValue === "") {
+				this.imageFile = null;
+			} else {
+				const fileInput: HTMLInputElement = document.querySelector("#imagenArchivo") as HTMLInputElement;
+				const files: FileList = fileInput.files as FileList;				
+				const image = files[0];				
+				this.imageFile = image;				
+			}
 
 			const imagenInputControl: FormControl = this.productFormGroup.get("imagen");
 			if (event.newValue !== "") {
@@ -405,12 +410,17 @@ export class ProductFormComponent implements OnInit {
 	}
 
 	imageFileUpload(): void {
-		console.log("imageFileUpload...");
-		
-		if (this.imageFilePath !== "" && this.postedProductId) {
+
+		if (this.imageFile && this.postedProductId) {
 			//enviar solicitud para postear imagen
-			console.log("enviando imagen...");
-			
+			this.productsHttpService.uploadImage(this.postedProductId, this.imageFile).subscribe({
+				next: (response) => {
+					this.alertSuccessfulToast(response.mensaje);					
+				},
+				error: (err) => {
+					this.alertFailedToast(err.error.mensaje);
+				}
+			})
 		}
 	}
 
@@ -458,12 +468,30 @@ export class ProductFormComponent implements OnInit {
 		})
 	}
 
-	alertSuccessfulToast(data: string): void {
+	alertSuccessfulToast(message: string): void {
 		Swal.fire({
 			toast: true,
 			position: 'top-end',
 			icon: 'success',
-			title: `Marca '${data}' creada correctamente`,
+			title: message,
+			showConfirmButton: false,
+			timerProgressBar: true,
+			timer: 2000,
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
+		});
+	}
+
+	alertFailedToast(message: string): void {
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			icon: 'error',
+			title: message,
 			showConfirmButton: false,
 			timerProgressBar: true,
 			timer: 2000,
@@ -586,7 +614,9 @@ export class ProductFormComponent implements OnInit {
 						return "<p style='font-size:1.2em;'><b>" + key.toUpperCase() + "</b></p>" 
 							+ "<p><b>Valor anterior:</b> " + modifiedData[key].old + "</p>"
 							+ "<p><b>Valor nuevo:</b> " + modifiedData[key].new + "</p>"
-					}).join('')}`,
+					}).join('')}
+					<small>Si se está subiendo una nueva imagen desde el dispositivo el campo puede aparecer como null hasta que la imagen sea subida al servidor.</small>
+					`,
 				confirmButtonText: 'Aceptar',
 				showCancelButton: true,
 				cancelButtonText: 'Cancelar',

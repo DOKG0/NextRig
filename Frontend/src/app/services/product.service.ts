@@ -35,7 +35,7 @@ export class ProductService {
     formData.append('imagen', file);
     
     return this.http.post(
-      `${this.apiAdminUrl}/admin/uploadImgurImage`,
+      `${this.apiAdminUrl}/uploadImgurImage`,
       formData,
       {
         withCredentials: true

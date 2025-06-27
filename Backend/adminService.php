@@ -127,18 +127,16 @@ class AdminService
         $producto = mysqli_query($this->db_conn, $existeProductoQuery);
 
         if (mysqli_num_rows($producto) == 0) {
-            return CustomResponseBuilder::build(
-                false, "Error al actualizar el producto", $idProducto, 404, "Error: El producto no existe"
-            );
+            return false;
         }
 
         $queryActualizacion = "UPDATE Productos SET imagen = '$urlImagen' WHERE id = '$idProducto'";
         $resultado = mysqli_query($this->db_conn, $queryActualizacion);
 
         if ($resultado) {
-            return CustomResponseBuilder::build(true, "Actualización de producto exitosa", $idProducto, 200);
+            return true;
         } else {
-            return CustomResponseBuilder::build(false, "Error al actualizar el producto", $idProducto, 500, "No se pudo actualizar la imagen del producto");
+            return false;
         }
     }
 
@@ -167,29 +165,31 @@ class AdminService
             'description' => $producto['nombre']
         ];
 
-            // Iniciar CURL
-            $ch = curl_init();
+        // Iniciar CURL
+        $ch = curl_init();
 
-            curl_setopt_array($ch, [
-                CURLOPT_URL => 'https://api.imgur.com/3/image',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => $postFields,
-                CURLOPT_HTTPHEADER => [
-                    "Authorization: Bearer $accessToken"
-                ]
-            ]);
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://api.imgur.com/3/image',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postFields,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $accessToken"
+            ]
+        ]);
 
-            // Ejecuta el curl
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-            if ($response === false) {
-                return CustomResponseBuilder::build(false, "Error al subir imagen del producto", 500);
-            } else {
-                return CustomResponseBuilder::build(true, "Imagen subida exitosamente", 200, $response);
-            }
-
+        // Ejecuta el curl
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($response === false) {
+            return CustomResponseBuilder::build(false, "Error al subir imagen del producto", $httpCode, 500);
+        } else {
+             //extraer el link aca
+            //retornar ok si se actualiza
+            //$resultado = $this->updateImagenProducto($idProducto, $link);
+            return CustomResponseBuilder::build(true, "Imagen subida exitosamente", 200, $response);
+        }
             
     }
 

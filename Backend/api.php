@@ -580,13 +580,6 @@ function handleAdminRequest($adminService, $action, $data)
             $result_eliminarProducto = $adminService->eliminarProducto($data->producto_id);
             echo json_encode($result_eliminarProducto);
             break;
-        case 'updateProductImage':
-            $result_updateProductImage = $adminService->updateImagenProducto(
-                $data['idProducto'] ?? null, 
-                $data['urlImagen'] ?? null);
-            http_response_code($result_updateProductImage['httpCode']);
-            echo json_encode($result_updateProductImage);
-            break;
         case 'uploadImgurImage':
             $result_uploadProductImage = $adminService->uploadImgurImage(
                 $_POST['idProducto'] ?? null,
