@@ -215,4 +215,32 @@ public function getHistorialCompras($username){
         }
         
     }
+
+    public function eliminarUsuario($username){
+        $query = "UPDATE Usuario SET estado = false WHERE username = '$username'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error al eliminar el usuario."]);
+            exit;
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => "Usuario eliminado correctamente."]);
+            exit;
+        }
+    }
+
+    public function habilitarUsuario($correo){
+        $query = "UPDATE Usuario SET estado = true WHERE correo = '$correo'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error al habilitar el usuario."]);
+            exit;
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => "Usuario habilitado correctamente."]);
+            exit;
+        }
+    }
 }

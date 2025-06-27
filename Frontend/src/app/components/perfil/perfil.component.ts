@@ -154,4 +154,25 @@ editarCampo(campo: string) {
 
   }
 
+  eliminarPerfil() {
+    
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar tu perfil?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.usuarioService.eliminarUsuario(this.user).subscribe(() => {
+          Swal.fire('Perfil eliminado', 'Tu perfil ha sido eliminado correctamente.', 'success');
+          localStorage.removeItem('currentUser');
+          window.location.href = '/login'; // Redirigir al login
+        }, error => {
+          Swal.fire('Error', 'No se pudo eliminar el perfil. Inténtalo más tarde.', 'error');
+        });
+      }
+    });
+  }
+
 }

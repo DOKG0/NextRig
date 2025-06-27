@@ -92,4 +92,13 @@ getCantidadproducto(username: string,idProducto: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/controlStock/${username}/${idProducto}`);
 }
 
+eliminarUsuario(username: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/usuario/eliminar/`, { username });
+    }
+
+habilitarUsuario(correo: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/usuario/habilitar/`, { correo });
+}
+
+
 }

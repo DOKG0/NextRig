@@ -406,6 +406,18 @@ function handlePutRequest($request)
                 $data['valor'] ?? null
             ));
             break;
+        case 'usuario':
+            if($request[1] == 'eliminar') {
+                $carritoService = new CarritoService();
+                echo json_encode($carritoService->eliminarUsuario($data['username'] ?? null));
+                return;
+            }else{
+                if($request[1] == 'habilitar') {
+                    $carritoService = new CarritoService();
+                    echo json_encode($carritoService->habilitarUsuario($data['correo'] ?? null));
+                    return;
+                }
+            }
         default:
             http_response_code(404);
             echo json_encode(['error' => 'Recurso no encontrado']);

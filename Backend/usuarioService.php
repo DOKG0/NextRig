@@ -21,7 +21,15 @@ class UsuarioService
             $row = mysqli_fetch_assoc($result);
 
             if (password_verify($password, $row['password'])) {
-                // inicia la sesion si no hay
+                // Verificar el estado del usuario
+                
+                $queryEstado = "SELECT estado FROM Usuario WHERE correo = '$correo'";
+                $estadoResult = mysqli_query($this->db_conn, $queryEstado);
+                $row2 = mysqli_fetch_assoc($estadoResult);
+                $estado = $row2['estado'];
+                // Si el usuario esta habilitado, se inicia la sesion
+                if($estado){
+                    // inicia la sesion si no hay
                 if (session_status() == PHP_SESSION_NONE) {
                     session_start();
                 }
@@ -42,9 +50,20 @@ class UsuarioService
                 ];
                 return [
                     "success" => true,
+                    "estado" => $estado,
                     "mensaje" => "Login exitoso",
                     "usuario" => $_SESSION['usuario']
                 ];
+                }else{
+                    return [
+                        "success" => true,
+                        "estado" => $estado,
+                        "mensaje" => "Usuario inhabilitado"
+                    ];
+                }
+
+                
+                
             }
         }
         http_response_code(401);
