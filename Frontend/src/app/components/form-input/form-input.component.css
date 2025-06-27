@@ -28,3 +28,15 @@ input:disabled {
 input::placeholder {
     color: var(--color-text-secondary);
 }
+
+.span-delete {
+    color: var(--color-text-secondary);
+    font-size: 1em;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.trash-icon {
+    font-size: 2em;
+}

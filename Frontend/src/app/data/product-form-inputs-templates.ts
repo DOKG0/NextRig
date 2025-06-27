@@ -1,5 +1,5 @@
 export const formInputTemplates = {
-    constants: [
+    basic: [
 	{
 		type: 'text',
 		labelText: 'Identificador',
@@ -75,8 +75,9 @@ export const formInputTemplates = {
 		formControlName: 'imagenArchivo',
 		validators: [],
         config: {
+            id: 'imagenArchivo',
             order: 8,
-            accept: "image/png, image/jpeg, image/webp, image/jpg"
+            accept: 'image/png, image/jpeg, image/webp, image/jpg'
         }
     },
     {

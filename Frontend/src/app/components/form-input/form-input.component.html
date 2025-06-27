@@ -54,7 +54,19 @@
             placeholder="{{model?.config?.placeholder}}"
             [readOnly]="model?.config?.readonly"
             accept="{{model?.config?.accept}}"
+            (change)="onInputValueChange($event)"
             >
+            <span 
+                *ngIf="model?.type === 'file'" 
+                (click)="clearFileInput($event)"
+                class="span-delete" 
+                id="delete-{{model?.name}}"
+                attr.data-for-input="{{model?.name}}"
+                >
+                Eliminar archivo subido
+                <i class="trash-icon bx bx-trash" attr.data-for-input="{{model?.name}}"></i>  
+            </span>
+                     
         }
     }
     
