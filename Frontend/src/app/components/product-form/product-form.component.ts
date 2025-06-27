@@ -23,6 +23,7 @@ import { MarcasService } from '../../services/marcas.service';
 import { ProductService } from '../../services/product.service';
 //INTERFACES
 import { Product } from '../../interfaces/product';
+import { ValueChangeEvent } from '../../interfaces/value-change-event';
 
 //ENUM
 enum AccionesMarca {
@@ -53,6 +54,8 @@ export class ProductFormComponent implements OnInit {
 	public title: string = 'Alta de Producto';
 	public productFormGroup: any; //Referencia al FormGroup
 	private product: Product | null = null; //datos del producto si es una modificacion de producto
+	private imageFilePath: string = "";
+	private postedProductId!: string;
 	public accionMarca: AccionesMarca = AccionesMarca.ignorar; //Valor de la accion a realizar sobre la marca
 	/**
 	 * Hacky stuff:
@@ -72,7 +75,7 @@ export class ProductFormComponent implements OnInit {
 	 * Creo los inputs dinamicamente a partir de unos templates, me evita tener un html gigante para el form.
 	 * Ademas lo hace mas sencillo para modificar o agregar cosas al form. Podria simplificarse aun mas de todos modos
 	 */
-	public inputModels: FormInputModel[] = formInputTemplates.constants
+	public inputModels: FormInputModel[] = formInputTemplates.basic
 		.map( (e) => new FormInputModel(
 					e.formControlName,
 					e.type,
@@ -268,7 +271,7 @@ export class ProductFormComponent implements OnInit {
 			}
 		}
 
-		this.checkFileInput();
+		this.imageFilePath = formData.imagenArchivo || "";
 
 		if (createNew) {
 			this.postProduct(formData);
@@ -277,18 +280,30 @@ export class ProductFormComponent implements OnInit {
 		}
 	}
 
-	checkFileInput() {
-		//revisar si hay un archivo subido
-		//si lo hay remover validator.required de url y setear el campo imagen en null
-		//guardar el path del archivo y esperar a que se haga el post del producto
-		//enviar el request de imgur para subir la imagen seleccionada
-		//si se subio exitosamente extraer el link y mandar al backend el link de la imagen
+	captureInputValueChangeEvent(event: ValueChangeEvent): void {
+		if (event.elementId === "imagenArchivo" && event.inputType === "file") {
+			this.imageFilePath = event.newValue;
+
+			const imagenInputControl: FormControl = this.productFormGroup.get("imagen");
+			if (event.newValue !== "") {
+				imagenInputControl.removeValidators(Validators.required);
+				imagenInputControl.setValue(null);
+				imagenInputControl.disable();
+				imagenInputControl.markAsPristine();
+				imagenInputControl.markAsUntouched();
+			} else {
+				imagenInputControl.enable();
+				imagenInputControl.addValidators(Validators.required)
+			}
+			imagenInputControl.updateValueAndValidity();
+		}
 	}
 
-	postProduct(formData: any): void {
+	postProduct(formData: any): void {		
 		this.productsHttpService.addProduct(formData).subscribe({
 			next: (data) => {
 				if (data) {
+					this.postedProductId = formData.id;
 					this.alertSuccessfulCreation();
 				} else {
 					this.alertFailedCreation(data);
@@ -305,7 +320,8 @@ export class ProductFormComponent implements OnInit {
 	updateProduct(formData: any): void {
 		this.productsHttpService.updateProduct(formData).subscribe({
 			next: (data) => {	
-				if (data) {					
+				if (data) {
+					this.postedProductId = formData.id;
 					this.alertSuccessfulUpdate(data);
 				} else {
 					this.alertFailedUpdate();
@@ -319,10 +335,9 @@ export class ProductFormComponent implements OnInit {
 	}
 
 	onFormSubmit(): void {
+		
 		if (this.productFormGroup.valid) {			
 			const formData = this.productFormGroup.value;
-			
-
 			if (this.product) {
 				this.alertUpdateConfirmation(formData);
 			} else {
@@ -389,11 +404,23 @@ export class ProductFormComponent implements OnInit {
 		formControl.updateValueAndValidity();
 	}
 
+	imageFileUpload(): void {
+		console.log("imageFileUpload...");
+		
+		if (this.imageFilePath !== "" && this.postedProductId) {
+			//enviar solicitud para postear imagen
+			console.log("enviando imagen...");
+			
+		}
+	}
+
 	/**
 	 * ALERTS con sweetalert
 	 */
 
 	alertSuccessfulCreation(): void {
+		this.imageFileUpload()
+
 		Swal.fire({
 			title: 'Producto creado exitosamente',
 			text: 'Se creó un nuevo producto.',
@@ -406,6 +433,8 @@ export class ProductFormComponent implements OnInit {
 	}
 
 	alertSuccessfulUpdate(data: any): void {
+		this.imageFileUpload()
+
 		Swal.fire({
 			title: 'El producto fue actualizado exitosamente',
 			text: `Producto: ${data?.id}`,
