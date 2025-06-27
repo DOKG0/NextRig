@@ -59,6 +59,10 @@ class AdminService
         $admin_ci = mysqli_real_escape_string($this->db_conn, $admin_ci);
         $marca_nombre = mysqli_real_escape_string($this->db_conn, $marca_nombre);
 
+        if (empty($imagen) || is_null($imagen)) {
+            $imagen = "../assets/img/no-image.webp";
+        }
+
         if (empty($marca_nombre) || is_null($marca_nombre)) {
             $query_insert_producto = "INSERT INTO Productos 
                 (id, nombre, precio, stock, descripcion, imagen, admin_ci) 

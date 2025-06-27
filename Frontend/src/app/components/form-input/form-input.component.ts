@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormInputModel } from '../../classes/form-input-model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
+import { ValueChangeEvent } from '../../interfaces/value-change-event';
 
 @Component({
   selector: 'app-form-input',
@@ -12,6 +13,7 @@ import { NgFor, NgIf } from '@angular/common';
 export class FormInputComponent implements OnInit {
   @Input() model: FormInputModel | null = null;
   @Input() productFormGroup: any;
+  @Output() inputValueChangeEvent = new EventEmitter<ValueChangeEvent>();
   name: string | undefined = "";
   inputErrorMessage: string = "";
 
@@ -54,5 +56,34 @@ export class FormInputComponent implements OnInit {
     }
   
     return "";
+  }
+
+  onInputValueChange(event: any): void {
+      const target: HTMLInputElement = event.target;
+      const elementId = target.getAttribute("id");
+      const elementType = target.getAttribute("type");
+      const value = target.value;
+      const eventObject: ValueChangeEvent = {
+        elementId: elementId || "", 
+        newValue: value,
+        inputType: elementType || ""
+      };
+      this.inputValueChangeEvent.emit(eventObject);
+  }
+
+  clearFileInput(event: any): void {
+      const target: HTMLElement = event.target;
+      const fileInputId = target.getAttribute("data-for-input");
+
+      if (fileInputId) {
+          const fileInput: HTMLInputElement = document.getElementById(fileInputId) as HTMLInputElement;
+          fileInput.value = "";
+
+          this.inputValueChangeEvent.emit({
+            elementId: fileInputId || "", 
+            newValue: fileInput.value,
+            inputType: "file"
+          });
+      }
   }
 }
