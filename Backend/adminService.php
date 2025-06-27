@@ -138,6 +138,57 @@ class AdminService
         }
     }
 
+    public function uploadImgurImage($idProducto, $imagen) {
+        include './imgurApiCredentials.php';
+
+        if (!file_exists($imagen)) {
+            return CustomResponseBuilder::build(false, "Archivo de imagen no encontrado", null, 400);
+        }
+
+        // Buscar producto
+        $query = "SELECT nombre, descripcion FROM Productos WHERE id = '$idProducto'";
+        $result = mysqli_query($this->db_conn, $query);
+
+        if (!$result || mysqli_num_rows($result) === 0) {
+            return CustomResponseBuilder::build(false, "Producto no encontrado", null, 404);
+        }
+
+        $producto = mysqli_fetch_assoc($result); 
+
+        $postFields = [
+            'image' => new CURLFile($imagen),
+            'album' => $albumHash,
+            'type' => 'file',
+            'title' => $producto['nombre'],
+            'description' => $producto['nombre']
+        ];
+
+            // Iniciar CURL
+            $ch = curl_init();
+
+            curl_setopt_array($ch, [
+                CURLOPT_URL => 'https://api.imgur.com/3/image',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $postFields,
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: Bearer $accessToken"
+                ]
+            ]);
+
+            // Ejecuta el curl
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($response === false) {
+                return CustomResponseBuilder::build(false, "Error al subir imagen del producto", 500);
+            } else {
+                return CustomResponseBuilder::build(true, "Imagen subida exitosamente", 200, $response);
+            }
+
+            
+    }
+
     public function updateProducto(
         $id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre) {
         //formateando los datos para evitar sql injection

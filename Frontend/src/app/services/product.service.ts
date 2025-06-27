@@ -29,6 +29,20 @@ export class ProductService {
     return this.http.post(`${this.apiAdminUrl}/addProduct`, product, httpOptions);
   }
 
+  uploadImage(idProducto: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('idProducto', idProducto);
+    formData.append('imagen', file);
+    
+    return this.http.post(
+      `${this.apiAdminUrl}/admin/uploadImgurImage`,
+      formData,
+      {
+        withCredentials: true
+      }
+    );
+  }
+
   updateProduct(product: Product): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
