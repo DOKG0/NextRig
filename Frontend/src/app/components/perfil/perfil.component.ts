@@ -150,9 +150,6 @@ editarCampo(campo: string) {
       this.usuario[campo] = this.usuarioCopia[campo];
   }
 
-  cambiarImagen(event: any){
-
-  }
 
   eliminarPerfil() {
     
