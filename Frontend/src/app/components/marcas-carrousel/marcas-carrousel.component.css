@@ -41,7 +41,11 @@
 }
 
 .slider:hover .item{
-    animation-play-state: paused!important;
+    animation-play-state: paused !important;
+}
+
+.slider:has(.marca-card.active) .item.animar {
+  animation-play-state: paused !important;
 }
 
 .marca-card{

@@ -27,6 +27,8 @@ export class MarcasCarrouselComponent {
   }
 
   get esCarrouselActivo(): boolean {
-  return this.marcasSorted.length > 5;
-}
+    return this.marcasSorted.length > 5;
+  }
+
+  
 }
