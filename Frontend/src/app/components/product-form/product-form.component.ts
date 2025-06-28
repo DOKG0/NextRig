@@ -209,7 +209,7 @@ export class ProductFormComponent implements OnInit {
 				const inputValue = this.productFormGroup.get(key).value;
 
 				if (productInfoValue !== inputValue) {
-					modified[key] = { old: productInfoValue, new: inputValue };
+					modified[key] = { old: productInfoValue, new: inputValue || "" };
 				}
 			});
 		}
@@ -313,7 +313,7 @@ export class ProductFormComponent implements OnInit {
 				} else {
 					this.alertFailedCreation(data);
 				}
-				this.productFormGroup.reset();
+				this.productFormGroup.disable();
 			},
 			error: (err) => {
 				console.error(err.error.error);
@@ -614,9 +614,7 @@ export class ProductFormComponent implements OnInit {
 						return "<p style='font-size:1.2em;'><b>" + key.toUpperCase() + "</b></p>" 
 							+ "<p><b>Valor anterior:</b> " + modifiedData[key].old + "</p>"
 							+ "<p><b>Valor nuevo:</b> " + modifiedData[key].new + "</p>"
-					}).join('')}
-					<small>Si se está subiendo una nueva imagen desde el dispositivo el campo puede aparecer como null hasta que la imagen sea subida al servidor.</small>
-					`,
+					}).join('')}`,
 				confirmButtonText: 'Aceptar',
 				showCancelButton: true,
 				cancelButtonText: 'Cancelar',
