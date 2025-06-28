@@ -182,12 +182,21 @@ class AdminService
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+        
         if ($response === false) {
             return CustomResponseBuilder::build(false, "Error al subir imagen del producto", $httpCode, 500);
         } else {
-             //extraer el link aca
-            //retornar ok si se actualiza
-            //$resultado = $this->updateImagenProducto($idProducto, $link);
+            $responseData = json_decode($response, true);
+            $link = $responseData['data']['link'] ?? null;
+            if (is_null($link)) {
+                return CustomResponseBuilder::build(false, "Error al obtener el enlace de la imagen", null, 500);
+            }
+
+            $resultado = $this->updateImagenProducto($idProducto, $link);
+            if (!$resultado) {
+                return CustomResponseBuilder::build(false, "Error al actualizar la imagen del producto", $idProducto, 500);
+            }
+
             return CustomResponseBuilder::build(true, "Imagen subida exitosamente", 200, $response);
         }
             
