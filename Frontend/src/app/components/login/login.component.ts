@@ -154,6 +154,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         next: (response) => {
           console.log('login exitoso:', response);
           if (response && response.success) {
+            if(response.estado == '1'){
             const user = {
               name: response.nombre || response.usuario?.nombre || 'Usuario',
               username: response.usuario?.username || '',
@@ -182,13 +183,36 @@ export class LoginComponent implements OnInit, OnDestroy {
                 window.location.reload();
               });
             });
-
+          } else {
+            // Alerta de usuario inhabilitado
+            Swal.fire({
+              icon: 'warning',
+              title: 'Usuario inhabilitado',
+              text: 'Tu cuenta ha sido inhabilitada. ¿Desea recuperarla?',
+              confirmButtonText: 'Recuperar',
+              cancelButtonText: 'Cancelar',
+              showConfirmButton: true,
+              showCancelButton: true,
+              
+              
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.usuarioService.habilitarUsuario(this.loginData.email).subscribe({
+                  next: (response) => {
+                    this.login();
+              }});
+            }else{
+              this.router.navigate(['/']);
+            }
+          })
+        }
           } else {
             this.errorMessage = 'Error al iniciar sesion. Formato de respuesta invalido.';
           }
         },
         error: (error) => {
           this.errorMessage = 'Error al iniciar sesion. Verifica tus credenciales.';
+          console.log(error);
           this.isLoading = false;
         },
         complete: () => {

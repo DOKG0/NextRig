@@ -1,13 +1,16 @@
 <div class="container mt-5">
-  <h2 class="mb-4">Perfil de Usuario</h2>
+
+   <div style="display: flex; justify-content: space-between;">
+    <div style="display: flex;">
+      <h2 class="mb-4">Perfil de Usuario</h2>
+      <div style="margin-left: 2rem; margin-top: 0.5rem;">
+      <button  class="btn btn-outline-danger mt-auto" (click)="eliminarPerfil()" >Eliminar</button>
+        </div>
+    </div>
+  </div>
 
   <div class="card p-4 shadow-sm">
  
-
-
-
-
-
     <!-- Nombre -->
     <div class="mb-3">
       <label class="form-label fw-bold">Nombre</label>
