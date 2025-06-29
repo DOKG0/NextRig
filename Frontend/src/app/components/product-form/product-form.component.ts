@@ -177,12 +177,14 @@ export class ProductFormComponent implements OnInit {
 		this.setCurrentAdminCI();
 	}
 
+	//pido al backend la informacion del producto cuando es una actualizacion de producto
 	fetchProductData(id: string): void {
 		this.productsHttpService.getProductoById(id).subscribe({
 			next: (response) => {
 				if (response) {
 					this.product = response;
 					if (this.product.marca_nombre == null) { this.product.marca_nombre = "";}
+					//cargo el form con la informacion obtenida
 					this.loadData();
 				} else {
 					this.product = null;
@@ -243,9 +245,10 @@ export class ProductFormComponent implements OnInit {
 				}
 			}
 		}
+		//seteo el id como read-only para evitar que se modifique
 		const productIdElement: HTMLInputElement = document.getElementById("productIdControl") as HTMLInputElement;		
 		productIdElement.setAttribute("readonly", "true");
-
+		//seteo el campo admin ci con la cedula del admin que ha iniciado sesion
 		this.setCurrentAdminCI();
 	}
 
@@ -261,8 +264,8 @@ export class ProductFormComponent implements OnInit {
 				return;
 			} else {
 				const creacionMarca: any = await lastValueFrom(this.marcasHttpService.addMarca(nombreMarca));
-				
-				if (creacionMarca?.success === true) {
+				//envio la solicitud para crear la marca y continuo con la ejecucion solo si se creo correctamente
+				if (creacionMarca?.success === true) {					
 					this.alertSuccessfulToast(`Marca '${nombreMarca}' creada correctamente`);
 				} else {
 					this.alertFailedCreation(creacionMarca.error || creacionMarca.mensaje);
@@ -270,7 +273,7 @@ export class ProductFormComponent implements OnInit {
 				}
 			}
 		}
-
+		//alta o modificacion de producto segun el parametro recibido
 		if (createNew) {
 			this.postProduct(formData);
 		} else {
@@ -278,25 +281,32 @@ export class ProductFormComponent implements OnInit {
 		}
 	}
 
+	//capturo el evento de modificacion del input emitido por el form-input-component
 	captureInputValueChangeEvent(event: ValueChangeEvent): void {
+		//si el input que emitio el evento es el input de tipo file
 		if (event.elementId === "imagenArchivo" && event.inputType === "file") {
 			if (event.newValue === "") {
+				//si se borro el archivo seleccionado en el input entonces borro el archivo
 				this.imageFile = null;
 			} else {
+				//guardo el archivo seleccionado si se selecciono uno
 				const fileInput: HTMLInputElement = document.querySelector("#imagenArchivo") as HTMLInputElement;
 				const files: FileList = fileInput.files as FileList;				
 				const image = files[0];				
 				this.imageFile = image;				
 			}
 
+			//modificacion del campo url imagen segun si se selecciono un archivo para subir o no
 			const imagenInputControl: FormControl = this.productFormGroup.get("imagen");
 			if (event.newValue !== "") {
+				//si se selecciono un archivo remuevo el requisito required del url y limpio el contenido
 				imagenInputControl.removeValidators(Validators.required);
 				imagenInputControl.setValue(null);
 				imagenInputControl.disable();
 				imagenInputControl.markAsPristine();
 				imagenInputControl.markAsUntouched();
 			} else {
+				//si se remueve el archivo seleccionado vuelvo a activar el input del url
 				imagenInputControl.enable();
 				imagenInputControl.addValidators(Validators.required)
 			}
@@ -424,6 +434,13 @@ export class ProductFormComponent implements OnInit {
 		}
 	}
 
+	//recarga el componente sin hacer un reload completo del sitio
+	reloadPage(): void {
+		this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+			this.router.navigate(['/product-form']);
+		});
+	}
+
 	/**
 	 * ALERTS con sweetalert
 	 */
@@ -444,7 +461,7 @@ export class ProductFormComponent implements OnInit {
 				popup: 'animate__animated animate__fadeOut animate__faster'
 				}
 		}).then( () => {
-			location.reload();
+			this.reloadPage();
 		} );
 	}
 
@@ -468,7 +485,7 @@ export class ProductFormComponent implements OnInit {
 		})
 	}
 
-	alertSuccessfulToast(message: string): void {
+	alertSuccessfulToast(message: string): void {		
 		Swal.fire({
 			toast: true,
 			position: 'top-end',
