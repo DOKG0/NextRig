@@ -1,5 +1,5 @@
 <div class="marcas-container">
-  <div class="arrow left" (click)="moverCarrousel(-1)" [class.disabled]="!puedeMoverIzquierda">
+  <div class="arrow left" (click)="moverCarrousel(-1)" [class.disabled]="!puedeMoverIzquierda" *ngIf="marcasSorted.length > 4">
     <i class="bx bx-chevron-left"></i>
   </div>
 
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="arrow right" (click)="moverCarrousel(1)" [class.disabled]="!puedeMoverDerecha">
+  <div class="arrow right" (click)="moverCarrousel(1)" [class.disabled]="!puedeMoverDerecha" *ngIf="marcasSorted.length > 4">
     <i class="bx bx-chevron-right"></i>
   </div>
 </div>

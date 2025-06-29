@@ -16,8 +16,8 @@ export class MarcasCarrouselComponent {
   selectedMarca: string = '';
 
   posicionScroll: number = 0;
-  anchoItem: number = 139; 
-  itemsVisibles: number = 5; 
+  anchoItem: number = 123; 
+  itemsVisibles: number = 4; 
 
   get puedeMoverIzquierda(): boolean {
     console.log(this.marcasSorted);

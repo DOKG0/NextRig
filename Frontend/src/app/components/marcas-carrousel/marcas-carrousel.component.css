@@ -24,7 +24,7 @@
 }
 
 
-.slider .list .item.animar{
+/* .slider .list .item.animar{
     width: var(--width);
     height: var(--height);
     position: absolute;
@@ -52,7 +52,7 @@
   animation: autoRun 20s linear infinite;
   animation-delay: calc((20s / var(--quantity)) * (var(--position) - 1) - 20s) !important;
 
-}
+} */
 
 .marca-card{
     position: relative;
@@ -166,7 +166,7 @@ p {
   transition: transform 0.5s ease;
 }
 
-.slider .item.animar {
+/* .slider .item.animar {
   position: absolute;
   animation: autoRun 20s linear infinite;
   animation-delay: calc( (20s / var(--quantity)) * (var(--position) - 1) - 20s)!important;
@@ -174,7 +174,7 @@ p {
 
 .slider.pausado .item.animar {
   animation-play-state: paused !important;
-}
+} */
 
 .arrow {
   cursor: pointer;
