@@ -1,3 +1,8 @@
+.marcas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .slider{
     width: 100%;
@@ -10,7 +15,6 @@
         transparent
     );
 }
-
 
 .slider .list{
     display: flex;
@@ -45,7 +49,9 @@
 }
 
 .slider:has(.marca-card.active) .item.animar {
-  animation-play-state: paused !important;
+  animation: autoRun 20s linear infinite;
+  animation-delay: calc((20s / var(--quantity)) * (var(--position) - 1) - 20s) !important;
+
 }
 
 .marca-card{
@@ -129,3 +135,57 @@ p {
     margin: 0 2rem;
 }
 
+.arrow{
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-text-primary);
+    box-shadow: 2px 2px 5px var(--shadow-border);
+    cursor: pointer;
+    transition: right 0.3s ease;
+    z-index: 100;
+}
+
+.arrow i{
+  font-size: 1rem;
+}
+
+.arrow:hover .slider .item{
+  animation-play-state: paused !important;
+}
+
+.slider .list {
+  display: flex;
+  position: relative;
+  transition: transform 0.5s ease;
+}
+
+.slider .item.animar {
+  position: absolute;
+  animation: autoRun 20s linear infinite;
+  animation-delay: calc( (20s / var(--quantity)) * (var(--position) - 1) - 20s)!important;
+}
+
+.slider.pausado .item.animar {
+  animation-play-state: paused !important;
+}
+
+.arrow {
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: var(--color-surface);
+  border-radius: 50%;
+  border: 0.2px solid var(--shadow-border);
+  margin: 0 0.5rem;
+}
+
+.arrow.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}

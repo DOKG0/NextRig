@@ -1,22 +1,21 @@
 <div class="marcas-container">
-  <div class="slider" 
-      [class.carrousel-activo]="esCarrouselActivo"
-      [style.--width]="'7rem'" 
-      [style.--height]="'7rem'" 
-      [style.--quantity]="marcasSorted.length">
+  <div class="arrow left" (click)="moverCarrousel(-1)" [class.disabled]="!puedeMoverIzquierda">
+    <i class="bx bx-chevron-left"></i>
+  </div>
 
-    <div class="list">
-      <div 
-        class="item" 
-        *ngFor="let marca of marcasSorted; let i = index" 
-        [style.--position]="i"
-        [class.animar]="esCarrouselActivo"
-        (click)="handleMarcaClick(marca)">
-        
-        <div class="marca-card" [class.active]="marca === selectedMarca ">
+  <div class="slider">
+    <div class="list" [style.transform]="'translateX(' + posicionScroll + 'px)'">
+      <div class="item"
+           *ngFor="let marca of marcasSorted"
+           (click)="handleMarcaClick(marca)">
+        <div class="marca-card" [class.active]="marca === selectedMarca">
           <p>{{ marca }}</p>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="arrow right" (click)="moverCarrousel(1)" [class.disabled]="!puedeMoverDerecha">
+    <i class="bx bx-chevron-right"></i>
   </div>
 </div>

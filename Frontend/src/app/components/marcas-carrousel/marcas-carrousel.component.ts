@@ -11,24 +11,37 @@ import { FormsModule } from '@angular/forms';
 })
 export class MarcasCarrouselComponent {
 
-@Input() marcasSorted: string[] = [];
-@Output() marcaSelected = new EventEmitter<string>();
-  selectedMarca : string = '';
+  @Input() marcasSorted: string[] = [];
+  @Output() marcaSelected = new EventEmitter<string>();
+  selectedMarca: string = '';
+
+  posicionScroll: number = 0;
+  anchoItem: number = 139; 
+  itemsVisibles: number = 5; 
+
+  get puedeMoverIzquierda(): boolean {
+    console.log(this.marcasSorted);
+    return this.posicionScroll < 0;
+  }
+
+  get puedeMoverDerecha(): boolean {
+    const totalVisible = this.itemsVisibles * this.anchoItem;
+    const totalAncho = this.marcasSorted.length * this.anchoItem;
+    return Math.abs(this.posicionScroll) + totalVisible < totalAncho;
+  }
 
   handleMarcaClick(marca: string) {
-    if (marca !== this.selectedMarca ) {
+    this.selectedMarca = this.selectedMarca === marca ? '' : marca;
+    this.marcaSelected.emit(this.selectedMarca);
+  }
 
-      this.selectedMarca  = marca;
-      this.marcaSelected.emit(marca);
-    }else{
-      this.selectedMarca  = '';
-      this.marcaSelected.emit(this.selectedMarca );
+  moverCarrousel(direccion: number) {
+    const desplazamiento = this.anchoItem;
+
+    if (direccion === -1 && this.puedeMoverIzquierda) {
+      this.posicionScroll += desplazamiento;
+    } else if (direccion === 1 && this.puedeMoverDerecha) {
+      this.posicionScroll -= desplazamiento;
     }
   }
-
-  get esCarrouselActivo(): boolean {
-    return this.marcasSorted.length > 5;
-  }
-
-  
 }
