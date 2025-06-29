@@ -531,6 +531,10 @@ function handleUsuarioRequest($usuarioService, $action, $data)
             $carritoService = new CarritoService();
             echo json_encode($carritoService->crearCompra($data['username'],$data['costoCarrito'],$data['telefono'],$data['direccion'],$data['departamento']));
             break;
+        case 'cambiarImagen':
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->cambiarImagen($data['username'], $data['imagen']));
+            break;
 
         default:
             http_response_code(404);

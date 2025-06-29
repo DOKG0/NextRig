@@ -172,4 +172,20 @@ editarCampo(campo: string) {
     });
   }
 
+
+  cambiarImagen(event: any) {
+    const file = event.target.files[0];
+    
+        console.log(this.user);
+        this.usuarioService.cambiarImagen(this.user,file).subscribe(response => {
+          Swal.fire('Imagen actualizada', '', 'success');
+          console.log('Imagen actualizada:', response);
+        }, error => {
+          console.error('Error al actualizar la imagen:', error);
+          Swal.fire('Error al actualizar la imagen', '', 'error');
+        });
+      
+      
+    
+  }
 }
