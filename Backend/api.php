@@ -86,7 +86,29 @@ function requiredFieldsExist($data, $fields)
 
 function handlePostRequest($request)
 {
-   
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
+
+    if (empty($request[0])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Recurso no especificado']);
+        return;
+    }
+
+    if (strpos($contentType, 'application/json') !== false) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(['error' => 'JSON inválido: ' . json_last_error_msg()]);
+            return;
+        }
+    } else if (strpos($contentType, 'multipart/form-data') !== false) {
+        $data = $_POST;
+    } else {
+        $data = [];
+    }
+
+    error_log("Datos recibidos: " . print_r($data, true));
     switch ($request[0]) {
         case 'usuario':
             $usuarioService = new UsuarioService();
