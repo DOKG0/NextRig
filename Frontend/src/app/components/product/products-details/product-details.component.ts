@@ -154,7 +154,13 @@ export class ProductDetailsComponent implements OnInit {
 			if ((cantidadEnCarrito + quantity) > this.producto.stock) {
 			  Swal.fire({
 				title: "Has alcanzado la cantidad maxima para este producto",
-				icon: "warning"
+				icon: "warning",
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown animate__faster'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOut animate__faster'
+				}
 			  }
 			  );
 			  return;
@@ -188,6 +194,12 @@ export class ProductDetailsComponent implements OnInit {
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 5000,
+		  showClass: {
+				popup: 'animate__animated animate__fadeInDown animate__faster'
+			},
+			hideClass: {
+				popup: 'animate__animated animate__fadeOut animate__faster'
+			}
         });
       }
 }

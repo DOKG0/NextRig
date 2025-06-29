@@ -8,6 +8,9 @@ class CarritoService{
         }
 
         public function getProductosCarrito($username){
+
+            $username = mysqli_real_escape_string($this->db_conn, $username);
+
             $query = "select id,precio,stock,descripcion,imagen,nombre,marca_nombre,cantidad from (select idProducto,cantidad from (select idCarrito from (select ci from Usuario where username = '$username') as consulta1,Carrito where Carrito.ci = consulta1.ci) as consulta2,Carrito_Productos where Carrito_Productos.idCarrito = consulta2.idCarrito) as consulta3,Productos where Productos.id = consulta3.idProducto AND Productos.habilitado = 1";
             
             $resultado = mysqli_query($this->db_conn, $query);
@@ -25,6 +28,11 @@ class CarritoService{
         }
 
         public function postCantidadProductoCarrito($username, $idProducto, $cantidad){
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+        $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
+        $cantidad = mysqli_real_escape_string($this->db_conn, $cantidad);
+
           $queryCarrito = "
         SELECT c.idCarrito
         FROM Carrito c
@@ -87,6 +95,11 @@ class CarritoService{
     }
 
     public function comprarCarrito($username,$idProducto,$costoCarrito, $cantidad){
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+        $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
+        $costoCarrito = mysqli_real_escape_string($this->db_conn, $costoCarrito);
+        $cantidad = mysqli_real_escape_string($this->db_conn, $cantidad);
        
 
         $query2 = "INSERT INTO Compra_Producto (idCompra,idProducto,precioUnitario,cantidad)
@@ -124,6 +137,9 @@ exit;
 
 
 public function getHistorialCompras($username){
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+
         $query = "SELECT Compra_Producto.precioUnitario,Productos.id,Productos.stock,Productos.precio,Productos.imagen,Productos.nombre,Productos.descripcion,Productos.marca_nombre,Compra.fechaCompra,Compra.costoCarrito,Compra.depto,Compra.direccion,Compra.ci,Compra_Producto.cantidad,Compra_Producto.idProducto from Compra,Usuario,Productos,Compra_Producto where Compra.ci = Usuario.ci and Usuario.username = '$username'and Productos.id = Compra_Producto.idProducto and Compra_Producto.idCompra = Compra.IDcompra ORDER BY Compra.fechaCompra DESC";
 
         $resultado = mysqli_query($this->db_conn, $query);
@@ -141,6 +157,13 @@ public function getHistorialCompras($username){
     }
 
     public function crearCompra($username,$costoCarrito,$telefono,$direccion,$departamento){
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+        $costoCarrito = mysqli_real_escape_string($this->db_conn, $costoCarrito);
+        $telefono = mysqli_real_escape_string($this->db_conn, $telefono);
+        $direccion = mysqli_real_escape_string($this->db_conn, $direccion);
+        $departamento = mysqli_real_escape_string($this->db_conn, $departamento);
+
         
         $query = "INSERT INTO Compra (fechaCompra, costoCarrito, depto,direccion,ci,telefono)
                     SELECT CURDATE(),'$costoCarrito','$departamento','$direccion', u.ci, '$telefono'
@@ -152,11 +175,22 @@ public function getHistorialCompras($username){
             echo json_encode(["error" => mysqli_error($this->db_conn)]);
             exit;
         }
+
+        // obtengo el id de la compra creada
+        $idCompra = mysqli_insert_id($this->db_conn);
+        
+        http_response_code(200);
+        return [
+            "success" => "Compra creada correctamente",
+            "idCompra" => $idCompra
+        ];
     }
 
      public function getUsuario($username){
 
-        $query = "SELECT  u.username, u.nombre, u.apellido, u.correo
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+
+        $query = "SELECT  u.username, u.nombre, u.apellido, u.correo, u.imagen
                     FROM Usuario u
                     WHERE u.username = '$username'";
         $resultado = mysqli_query($this->db_conn, $query);
@@ -170,6 +204,12 @@ public function getHistorialCompras($username){
     }
 
     public function actualizarUsuario($username,$campo, $valor){
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+        $campo = mysqli_real_escape_string($this->db_conn, $campo);
+        $valor = mysqli_real_escape_string($this->db_conn, $valor);
+
+
         if($campo == 'username' || $campo == 'correo'){
         $query = "SELECT * FROM Usuario WHERE $campo = '$valor'";
         $resultado = mysqli_query($this->db_conn, $query);
@@ -193,6 +233,10 @@ public function getHistorialCompras($username){
     }
 
     public function getCantidadProducto($username,$idProducto){
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+        $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
+
         $query = "SELECT cantidad FROM Carrito_Productos,Carrito,Usuario WHERE Usuario.username = '$username' AND Carrito.ci = Usuario.ci AND Carrito_Productos.idProducto = '$idProducto'";
         $resultado = mysqli_query($this->db_conn,$query);
         http_response_code(200);
@@ -205,5 +249,39 @@ public function getHistorialCompras($username){
             return $cantidad->cantidad;
         }
         
+    }
+
+    public function eliminarUsuario($username){
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+
+        $query = "UPDATE Usuario SET estado = false WHERE username = '$username'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error al eliminar el usuario."]);
+            exit;
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => "Usuario eliminado correctamente."]);
+            exit;
+        }
+    }
+
+    public function habilitarUsuario($correo){
+
+        $correo = mysqli_real_escape_string($this->db_conn, $correo);
+
+        $query = "UPDATE Usuario SET estado = true WHERE correo = '$correo'";
+        $resultado = mysqli_query($this->db_conn, $query);
+        if (!$resultado) {
+            http_response_code(500);
+            echo json_encode(["error" => "Error al habilitar el usuario."]);
+            exit;
+        } else {
+            http_response_code(200);
+            echo json_encode(["success" => "Usuario habilitado correctamente."]);
+            exit;
+        }
     }
 }

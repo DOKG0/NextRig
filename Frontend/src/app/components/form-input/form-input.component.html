@@ -7,13 +7,13 @@
         @case ("select") {
             <select 
                 class="form-select mb-2 {{getInputValidationClass()}}"
-                id="{{model?.id}}" 
+                id="{{model?.config?.id}}" 
                 name="{{model?.name}}" 
                 [formControlName]="model?.name || ''"
                 [attr.disabled]="model?.config?.disabled"
             >
                 <option 
-                    *ngFor="let option of model?.optionSelectValues"  
+                    *ngFor="let option of model?.config?.optionSelectValues"  
                     [value]="option">
                     {{option}}
                 </option> 
@@ -22,22 +22,22 @@
         @case ("number") {
             <input 
                 class="form-control mb-2 {{getInputValidationClass()}}" 
-                id="{{model?.id}}"
+                id="{{model?.config?.id}}"
                 type="{{model?.type}}" 
                 name="{{model?.name}}" 
                 [formControlName]="model?.name || ''"
                 step="{{model?.config?.step || 1}}" 
-                value="{{model?.value}}"
+                value="{{model?.config?.value}}"
                 [attr.disabled]="model?.config?.disabled"
             >
         }
         @case ("textarea") {
             <textarea
                 class="form-control mb-2 {{getInputValidationClass()}}" 
-                id="{{model?.id}}"
+                id="{{model?.config?.id}}"
                 name="{{model?.name}}" 
                 [formControlName]="model?.name || ''"
-                value="{{model?.value}}"
+                value="{{model?.config?.value}}"
                 [attr.disabled]="model?.config?.disabled"
                 >
             </textarea>
@@ -45,14 +45,28 @@
         @default {
             <input 
             class="form-control mb-2 {{getInputValidationClass()}}" 
-            id="{{model?.id}}"
+            id="{{model?.config?.id}}"
             type="{{model?.type}}" 
             name="{{model?.name}}" 
             [formControlName]="model?.name || ''" 
-            value="{{model?.value}}"
+            value="{{model?.config?.value}}"
             [attr.disabled]="model?.config?.disabled"
             placeholder="{{model?.config?.placeholder}}"
+            [readOnly]="model?.config?.readonly"
+            accept="{{model?.config?.accept}}"
+            (change)="onInputValueChange($event)"
             >
+            <span 
+                *ngIf="model?.type === 'file'" 
+                (click)="clearFileInput($event)"
+                class="span-delete" 
+                id="delete-{{model?.name}}"
+                attr.data-for-input="{{model?.name}}"
+                >
+                Eliminar archivo subido
+                <i class="trash-icon bx bx-trash" attr.data-for-input="{{model?.name}}"></i>  
+            </span>
+                     
         }
     }
     

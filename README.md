@@ -79,49 +79,29 @@ sudo chmod -R 775 /opt/lampp/htdocs
 	
 ***
 
-## Como nos manejamos en GITHUB
-
-
- ### Commits
-
-* feat: Agregar nueva funcionalidad
-* fix: Solucionar error o bug
-* Delete: Eliminacion de archivo/codigo innecesario
-* style: cambios de stylo (que no afecta la logica)
-* test: agregar o corregir test (aqui no pero funciona para java)
-
-### Flujo de trabajo
-
-1 - Clonar repositorio
-
-	1.1 - Crear nueva rama desde main:
-**comandos:** git checkout main<br>
-**comandos:** git pull origin main // Trae los cambios mas recientes de main a tu repo local<br>
-**comandos:** git checkout -b feature/nombre-tarea //Creas una rama para trabajar sobre ella y que no afecte a main
-
-	1.2 - Push a la rama creada
-
-**comando:** git push -u origin feature/nombre-tarea
-
----
 
 ### Documentacion de proyecto
+
+Plataforma e-commerce enfocado en la venta de componentes de PC.
 
 #### Tecnologias utilizadas
 
 FrontEnd
 * Angular
 * Typscript
-* CSS5
-* HTML
+* CSS3
+* HTML5
 * Bootrap
 * SweetAlert2
+* AnimateCSS
+* Boxicons
 
 Backend
 * PHP
 * MYSQL
 * PHPMailer
 * Composer
+* DomPDF
 * RESTful API
 
 #### Caracteristicas destacadas
@@ -141,6 +121,8 @@ Funcionalidad del Sistema
 * Sistema de reseñas y calificaciones
 * Historial de compras detallado
 * Contacto por email con PHPMailer
+* Impresion de PDF y envio luego de finalizar la compra con los detalles.
+* Gestion de productos por Administrador
 
 Arquitectura
 * Separacion entre frontend y backend
@@ -148,3 +130,53 @@ Arquitectura
 * API RESTful con manejo de errores
 * Patron MVC en el backend PHP
 * Componentes reutilizables en Angular
+
+---
+
+### Algunas imagenes del proyecto
+
+#### Home
+![home](https://github.com/user-attachments/assets/c1f799b0-1a87-4466-9490-4b3c648a7848)
+
+#### Login
+![login-page](https://github.com/user-attachments/assets/b7ec6196-11aa-4a0b-a513-f8560e684eb0)
+
+#### Detalles de producto
+![product-details-top](https://github.com/user-attachments/assets/eb98c139-ec89-4ff0-91cd-65e1b3bb2094)
+
+#### Alta de producto
+![form-alta-producto-filled-sin-marca](https://github.com/user-attachments/assets/c2afd879-b2f6-4ed4-a8ca-b78ef0036e48)
+
+#### Reseñas
+![reviews-de-usuario](https://github.com/user-attachments/assets/e46274e0-3bf2-4741-ab0b-042cceddec95)
+
+---
+
+## GITHUB
+
+
+ ### Commits
+
+* feat: Agregar nueva funcionalidad
+* fix: Solucionar error o bug
+* Delete: Eliminacion de archivo/codigo innecesario
+* style: cambios de estilo
+
+### Flujo de trabajo
+
+1 - Clonar repositorio
+
+	1.1 - Crear nueva rama desde main:
+**comandos:** git checkout main<br>
+**comandos:** git pull origin main // Trae los cambios mas recientes de main a tu repo local<br>
+**comandos:** git checkout -b feature/nombre-tarea //Creas una rama para trabajar sobre ella y que no afecte a main
+
+	1.2 - Push a la rama creada
+
+**comando:** git push -u origin feature/nombre-tarea
+
+---
+
+
+
+

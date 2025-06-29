@@ -23,12 +23,13 @@ import { MarcasService } from '../../services/marcas.service';
 import { ProductService } from '../../services/product.service';
 //INTERFACES
 import { Product } from '../../interfaces/product';
+import { ValueChangeEvent } from '../../interfaces/value-change-event';
 
 //ENUM
 enum AccionesMarca {
-	ignorar = '0', //agregar despues
+	ignorar 	= '0', //agregar despues
 	seleccionar = '1', //seleccionar marca preexistente
-	agregar = '2', //crear una nueva marca
+	agregar     = '2', //crear una nueva marca
 }
 
 @Component({
@@ -53,6 +54,8 @@ export class ProductFormComponent implements OnInit {
 	public title: string = 'Alta de Producto';
 	public productFormGroup: any; //Referencia al FormGroup
 	private product: Product | null = null; //datos del producto si es una modificacion de producto
+	private imageFile: File | null = null;
+	private postedProductId!: string;
 	public accionMarca: AccionesMarca = AccionesMarca.ignorar; //Valor de la accion a realizar sobre la marca
 	/**
 	 * Hacky stuff:
@@ -72,22 +75,14 @@ export class ProductFormComponent implements OnInit {
 	 * Creo los inputs dinamicamente a partir de unos templates, me evita tener un html gigante para el form.
 	 * Ademas lo hace mas sencillo para modificar o agregar cosas al form. Podria simplificarse aun mas de todos modos
 	 */
-	public inputModels: FormInputModel[] = formInputTemplates.constants
-		.map(
-			(e) =>
-				new FormInputModel(
+	public inputModels: FormInputModel[] = formInputTemplates.basic
+		.map( (e) => new FormInputModel(
 					e.formControlName,
 					e.type,
 					e.labelText,
-					e.order,
 					e.validators,
-					e.optionSelectValues,
-					e.id,
-					e.value,
-					e.config
-				)
-		)
-		.sort((a, b) => a.order - b.order);
+					e.config)
+		);
 
 	//Input para la creacion de una nueva marca
 	//Lo creo aparte del resto por tener mas logica asociada y tener una visibilidad condicional
@@ -97,18 +92,23 @@ export class ProductFormComponent implements OnInit {
 			template.formControlName,
 			template.type,
 			template.labelText,
-			template.order,
-			template.validators
+			template.validators,
+			template.config
 		);
 	})(); //wrap en una funcion auto-invocada (IIFE) para que se ejecute inmediatamente despues de la declaracion
 
 	ngOnInit(): void {
+		//obtengo el id del producto de la ruta en caso de que se ingrese al url de modificar producto: 
+		// /product-form/update/:id
 		const productId = this.route.snapshot.paramMap.get('id');
+
+		//si se obtuvo un id en el url busco el producto con ese id para rellenar el form con los datos del mismo
 		if (productId) {
 			this.fetchProductData(productId);
 			this.title = 'Modificación de Producto';
 		}
 
+		//creo la instancia del formulario
 		this.createFormInstance();
 	}
 
@@ -116,9 +116,8 @@ export class ProductFormComponent implements OnInit {
 	setCurrentAdminCI(): void {
 		const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
 		if (user && user.ci) {
-			const formControlAdmin = this.productFormGroup.get('admin_ci');			
+			const formControlAdmin: FormControl = this.productFormGroup.get('admin_ci');			
 			formControlAdmin.setValue(user.ci);
-			formControlAdmin.disable();
 		} else {
 			this.router.navigate(['/login']);
 		}
@@ -155,6 +154,7 @@ export class ProductFormComponent implements OnInit {
 		});
 	}
 
+	//Creo el FormGroup con todos los FormControl (cada input/select/textarea...) basado en los templates
 	createFormGroup(): any {
 		const group: any = {};
 		let formControlElement: FormControl;
@@ -177,12 +177,14 @@ export class ProductFormComponent implements OnInit {
 		this.setCurrentAdminCI();
 	}
 
+	//pido al backend la informacion del producto cuando es una actualizacion de producto
 	fetchProductData(id: string): void {
 		this.productsHttpService.getProductoById(id).subscribe({
 			next: (response) => {
 				if (response) {
 					this.product = response;
 					if (this.product.marca_nombre == null) { this.product.marca_nombre = "";}
+					//cargo el form con la informacion obtenida
 					this.loadData();
 				} else {
 					this.product = null;
@@ -197,6 +199,10 @@ export class ProductFormComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * funcion que revisa cuales campos fueron modificados en la modificacion de productos 
+	 * para poder mostrar el valor previo y el nuevo al usuario antes de enviar la peticion
+	 */
 	obtainModifiedFields(): any {
 		const modified: any = {};
 		if (this.product) {
@@ -205,7 +211,7 @@ export class ProductFormComponent implements OnInit {
 				const inputValue = this.productFormGroup.get(key).value;
 
 				if (productInfoValue !== inputValue) {
-					modified[key] = { old: productInfoValue, new: inputValue };
+					modified[key] = { old: productInfoValue, new: inputValue || "" };
 				}
 			});
 		}
@@ -239,22 +245,18 @@ export class ProductFormComponent implements OnInit {
 				}
 			}
 		}
-		this.productFormGroup.get('id').disable();
+		//seteo el id como read-only para evitar que se modifique
+		const productIdElement: HTMLInputElement = document.getElementById("productIdControl") as HTMLInputElement;		
+		productIdElement.setAttribute("readonly", "true");
+		//seteo el campo admin ci con la cedula del admin que ha iniciado sesion
 		this.setCurrentAdminCI();
 	}
 
 	async postForm(formData: any, createNew: boolean): Promise<void> {
-		let nombreMarca = '';
 
-		//si no se ha agregado el nombre de la marca al form, 
-		//entonces envio el campo marca_nombre pero con su valor en null
-		if (!formData['marca_nombre']) {
-			formData['marca_nombre'] = null;
-		} else {
-			nombreMarca = formData['marca_nombre'];
-		}
 		//si se selecciono la opcion de crear una nueva marca hago el request para crear la marca
 		if (this.accionMarca === AccionesMarca.agregar) {
+			const nombreMarca = formData['marca_nombre'];
 			const existeMarca = await lastValueFrom(this.marcasHttpService.existeMarca(nombreMarca));
 
 			if (existeMarca) {
@@ -262,16 +264,16 @@ export class ProductFormComponent implements OnInit {
 				return;
 			} else {
 				const creacionMarca: any = await lastValueFrom(this.marcasHttpService.addMarca(nombreMarca));
-				
-				if (creacionMarca?.success === true) {
-					this.alertSuccessfulToast(nombreMarca);
+				//envio la solicitud para crear la marca y continuo con la ejecucion solo si se creo correctamente
+				if (creacionMarca?.success === true) {					
+					this.alertSuccessfulToast(`Marca '${nombreMarca}' creada correctamente`);
 				} else {
 					this.alertFailedCreation(creacionMarca.error || creacionMarca.mensaje);
 					return;
 				}
 			}
 		}
-
+		//alta o modificacion de producto segun el parametro recibido
 		if (createNew) {
 			this.postProduct(formData);
 		} else {
@@ -279,15 +281,49 @@ export class ProductFormComponent implements OnInit {
 		}
 	}
 
-	postProduct(formData: any): void {
+	//capturo el evento de modificacion del input emitido por el form-input-component
+	captureInputValueChangeEvent(event: ValueChangeEvent): void {
+		//si el input que emitio el evento es el input de tipo file
+		if (event.elementId === "imagenArchivo" && event.inputType === "file") {
+			if (event.newValue === "") {
+				//si se borro el archivo seleccionado en el input entonces borro el archivo
+				this.imageFile = null;
+			} else {
+				//guardo el archivo seleccionado si se selecciono uno
+				const fileInput: HTMLInputElement = document.querySelector("#imagenArchivo") as HTMLInputElement;
+				const files: FileList = fileInput.files as FileList;				
+				const image = files[0];				
+				this.imageFile = image;				
+			}
+
+			//modificacion del campo url imagen segun si se selecciono un archivo para subir o no
+			const imagenInputControl: FormControl = this.productFormGroup.get("imagen");
+			if (event.newValue !== "") {
+				//si se selecciono un archivo remuevo el requisito required del url y limpio el contenido
+				imagenInputControl.removeValidators(Validators.required);
+				imagenInputControl.setValue(null);
+				imagenInputControl.disable();
+				imagenInputControl.markAsPristine();
+				imagenInputControl.markAsUntouched();
+			} else {
+				//si se remueve el archivo seleccionado vuelvo a activar el input del url
+				imagenInputControl.enable();
+				imagenInputControl.addValidators(Validators.required)
+			}
+			imagenInputControl.updateValueAndValidity();
+		}
+	}
+
+	postProduct(formData: any): void {		
 		this.productsHttpService.addProduct(formData).subscribe({
 			next: (data) => {
 				if (data) {
+					this.postedProductId = formData.id;
 					this.alertSuccessfulCreation();
 				} else {
 					this.alertFailedCreation(data);
 				}
-				this.productFormGroup.reset();
+				this.productFormGroup.disable();
 			},
 			error: (err) => {
 				console.error(err.error.error);
@@ -299,7 +335,8 @@ export class ProductFormComponent implements OnInit {
 	updateProduct(formData: any): void {
 		this.productsHttpService.updateProduct(formData).subscribe({
 			next: (data) => {	
-				if (data) {					
+				if (data) {
+					this.postedProductId = formData.id;
 					this.alertSuccessfulUpdate(data);
 				} else {
 					this.alertFailedUpdate();
@@ -313,9 +350,9 @@ export class ProductFormComponent implements OnInit {
 	}
 
 	onFormSubmit(): void {
-		if (this.productFormGroup.valid) {
-			const formData = this.productFormGroup.getRawValue();
-
+		
+		if (this.productFormGroup.valid) {			
+			const formData = this.productFormGroup.value;
 			if (this.product) {
 				this.alertUpdateConfirmation(formData);
 			} else {
@@ -382,43 +419,105 @@ export class ProductFormComponent implements OnInit {
 		formControl.updateValueAndValidity();
 	}
 
+	imageFileUpload(): void {
+
+		if (this.imageFile && this.postedProductId) {
+			//enviar solicitud para postear imagen
+			this.productsHttpService.uploadImage(this.postedProductId, this.imageFile).subscribe({
+				next: (response) => {
+					this.alertSuccessfulToast(response.mensaje);					
+				},
+				error: (err) => {
+					this.alertFailedToast(err.error.mensaje);
+				}
+			})
+		}
+	}
+
+	//recarga el componente sin hacer un reload completo del sitio
+	reloadPage(): void {
+		this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+			this.router.navigate(['/product-form']);
+		});
+	}
+
 	/**
 	 * ALERTS con sweetalert
 	 */
 
 	alertSuccessfulCreation(): void {
+		this.imageFileUpload()
+
 		Swal.fire({
 			title: 'Producto creado exitosamente',
 			text: 'Se creó un nuevo producto.',
 			icon: 'success',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+				popup: 'animate__animated animate__fadeInDown animate__faster'
+				},
+				hideClass: {
+				popup: 'animate__animated animate__fadeOut animate__faster'
+				}
 		}).then( () => {
-			location.reload();
+			this.reloadPage();
 		} );
 	}
 
 	alertSuccessfulUpdate(data: any): void {
+		this.imageFileUpload()
+
 		Swal.fire({
 			title: 'El producto fue actualizado exitosamente',
 			text: `Producto: ${data?.id}`,
 			icon: 'success',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		}).then( () => {
 			this.router.navigate(['/']);
 		})
 	}
 
-	alertSuccessfulToast(data: string): void {
+	alertSuccessfulToast(message: string): void {		
 		Swal.fire({
 			toast: true,
 			position: 'top-end',
 			icon: 'success',
-			title: `Marca '${data}' creada correctamente`,
+			title: message,
 			showConfirmButton: false,
 			timerProgressBar: true,
 			timer: 2000,
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
+		});
+	}
+
+	alertFailedToast(message: string): void {
+		Swal.fire({
+			toast: true,
+			position: 'top-end',
+			icon: 'error',
+			title: message,
+			showConfirmButton: false,
+			timerProgressBar: true,
+			timer: 2000,
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -429,6 +528,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -438,6 +543,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -448,6 +559,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -458,6 +575,12 @@ export class ProductFormComponent implements OnInit {
 			icon: 'error',
 			showCloseButton: true,
 			confirmButtonText: 'Aceptar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		});
 	}
 
@@ -468,6 +591,12 @@ export class ProductFormComponent implements OnInit {
 			confirmButtonText: 'Aceptar',
 			showCancelButton: true,
 			cancelButtonText: 'Cancelar',
+			showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOut animate__faster'
+              }
 		}).then((result) => {
 			if (result.isConfirmed) {
 				this.postForm(formData, true);
@@ -484,7 +613,13 @@ export class ProductFormComponent implements OnInit {
 			Swal.fire({
 				title: 'No hay campos modificados',
 				icon: 'info',
-				confirmButtonText: 'Aceptar'
+				confirmButtonText: 'Aceptar',
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown animate__faster'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOut animate__faster'
+				}
 			});
 		} else {
 			Swal.fire({
@@ -499,7 +634,13 @@ export class ProductFormComponent implements OnInit {
 					}).join('')}`,
 				confirmButtonText: 'Aceptar',
 				showCancelButton: true,
-				cancelButtonText: 'Cancelar'
+				cancelButtonText: 'Cancelar',
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown animate__faster'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOut animate__faster'
+				}
 			}).then( (result) => {
 				if (result.isConfirmed) {
 					this.postForm(formData, false);				

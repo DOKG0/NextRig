@@ -11,6 +11,7 @@ class UsuarioService
 
     public function login($correo, $password)
     {
+        include './imgurApiCredentials.php';
         // Sanear los datos
         $correo = mysqli_real_escape_string($this->db_conn, $correo);
 
@@ -21,7 +22,15 @@ class UsuarioService
             $row = mysqli_fetch_assoc($result);
 
             if (password_verify($password, $row['password'])) {
-                // inicia la sesion si no hay
+                // Verificar el estado del usuario
+                
+                $queryEstado = "SELECT estado FROM Usuario WHERE correo = '$correo'";
+                $estadoResult = mysqli_query($this->db_conn, $queryEstado);
+                $row2 = mysqli_fetch_assoc($estadoResult);
+                $estado = $row2['estado'];
+                // Si el usuario esta habilitado, se inicia la sesion
+                if($estado){
+                    // inicia la sesion si no hay
                 if (session_status() == PHP_SESSION_NONE) {
                     session_start();
                 }
@@ -40,11 +49,33 @@ class UsuarioService
                     "correo" => $row['correo'],
                     "isAdmin" => $isAdmin
                 ];
+
+                if ($isAdmin) {
+                    if (!$this->isImgurTokenValid($accessToken)) {
+                        $this->renewImgurToken();
+                        error_log("Token de Imgur valido.");
+                    }else{
+                        error_log("Token de Imgur invalido.");
+                    }                      
+                }
+                
+
                 return [
                     "success" => true,
+                    "estado" => $estado,
                     "mensaje" => "Login exitoso",
                     "usuario" => $_SESSION['usuario']
                 ];
+                }else{
+                    return [
+                        "success" => true,
+                        "estado" => $estado,
+                        "mensaje" => "Usuario inhabilitado"
+                    ];
+                }
+
+                
+                
             }
         }
         http_response_code(401);
@@ -124,5 +155,59 @@ class UsuarioService
                 "mensaje" => $e->getMessage()
             ];
         }
+    }
+
+    function isImgurTokenValid($accessToken) {
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://api.imgur.com/3/account/Spaghettini2003',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $accessToken"
+            ]
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        return $httpCode === 200;
+    }
+
+    function renewImgurToken() {
+        include './imgurApiCredentials.php';
+
+        $ch = curl_init('https://api.imgur.com/oauth2/token');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query([
+                'refresh_token' => $imgur_refresh_token,
+                'client_id' => $imgur_client_id,
+                'client_secret' => $imgur_client_secret,
+                'grant_type' => 'refresh_token'
+            ])
+        ]);
+
+        $newTokenResponse = curl_exec($ch);
+        curl_close($ch);
+
+        $newTokenData = json_decode($newTokenResponse, true);
+
+        if (isset($newTokenData['access_token'])) {
+            // Sobrescribe todo el archivo con los nuevos tokens
+            $contenido = "<?php\n"
+            . '$imgur_client_id = ' . var_export($imgur_client_id, true) . ";\n"
+            . '$imgur_client_secret = ' . var_export($imgur_client_secret, true) . ";\n"
+            . '$imgur_refresh_token = ' . var_export($newTokenData['refresh_token'] ?? $imgur_refresh_token, true) . ";\n \n"
+            . '$accessToken = ' . var_export($newTokenData['access_token'], true) . ";\n"
+            . '$albumHash = ' . var_export($albumHash ?? 'cF71yFW', true) . ";\n"
+            . "?>";
+
+            file_put_contents('./imgurApiCredentials.php', $contenido);
+            return true;
+        }
+        return false;
     }
 }

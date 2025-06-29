@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -30,6 +30,26 @@ export class UsuarioService {
         }, { withCredentials: true });
     }
 
+    generarFactura(idCompra: number): Observable<any> {
+        const options = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json'
+        }),
+        withCredentials: true
+        };
+        
+        return this.http.post(`${this.apiUrl}/generar-factura`, { idCompra }, options);
+    }
+
+    descargarFactura(idCompra: number): void {
+        const url = `${this.apiUrl}/descargar-factura/${idCompra}`;
+        window.open(url, '_blank');
+    }
+
+    eliminarFactura(idCompra: number) {
+        return this.http.delete(`${this.apiUrl}/eliminar-factura/${idCompra}`);
+    }
+
     getCarrito(username : string): Observable<any> {
        
         return this.http.get(`${this.apiUrl}/carrito/${username}`);
@@ -57,7 +77,7 @@ getHistorial(username: string): Observable<any> {
 }
 
 crearCompra(username: string, costoCarrito: number,telefono: number,direccion: string,departamento: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuario/crearCompra`, { username, costoCarrito, telefono, direccion, departamento });
+    return this.http.post(`${this.apiUrl}/usuario/crearCompra`, { username, costoCarrito, telefono, direccion, departamento }, { withCredentials: true });
 }
 
 getUsuario(username: string): Observable<any> {
@@ -71,5 +91,15 @@ actualizarUsuario(username: string,campo: string, valor: string): Observable<Htt
 getCantidadproducto(username: string,idProducto: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/controlStock/${username}/${idProducto}`);
 }
+
+eliminarUsuario(username: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/usuario/eliminar/`, { username });
+    }
+
+habilitarUsuario(correo: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/usuario/habilitar/`, { correo });
+}
+
+
 
 }

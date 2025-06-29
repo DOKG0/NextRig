@@ -5,6 +5,8 @@ require_once('utils/ResponseBuilder.php');
 class AdminService
 {
     private $db_conn;
+    private $FALLBACK_PRODUCT_IMAGE_PATH = "../assets/img/no-image.webp";
+
     public function __construct()
     {
         $database = new Database();
@@ -39,7 +41,7 @@ class AdminService
     public function addProducto(
         $id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci, $marca_nombre) {
         
-        foreach ([$id, $nombre, $precio, $stock, $descripcion, $imagen, $categoria, $admin_ci] as $param) {
+        foreach ([$id, $nombre, $precio, $stock, $descripcion, $categoria, $admin_ci] as $param) {
             if (is_null($param) || empty($param)) {
                 return CustomResponseBuilder::build(
                     false, "Existe al menos un parámetro faltante", null, 400, 
@@ -58,6 +60,11 @@ class AdminService
         $categoria = mysqli_real_escape_string($this->db_conn, $categoria);
         $admin_ci = mysqli_real_escape_string($this->db_conn, $admin_ci);
         $marca_nombre = mysqli_real_escape_string($this->db_conn, $marca_nombre);
+
+        //seteo la imagen de respaldo 'no-image.webp' alojada en el frontend si la url recibida es null
+        if (empty($imagen) || is_null($imagen)) {
+            $imagen = $this->FALLBACK_PRODUCT_IMAGE_PATH;
+        }
 
         if (empty($marca_nombre) || is_null($marca_nombre)) {
             $query_insert_producto = "INSERT INTO Productos 
@@ -113,6 +120,109 @@ class AdminService
             return true;
         }
         return false;
+    }
+
+    public function updateImagenProducto($idProducto, $urlImagen) {
+        //sanitizar inputs
+        $idProducto = mysqli_real_escape_string($this->db_conn, $idProducto);
+        $urlImagen = mysqli_real_escape_string($this->db_conn, $urlImagen);
+
+        //seteo la imagen de respaldo 'no-image.webp' alojada en el frontend si la url recibida es null
+        if (is_null($urlImagen) || empty($urlImagen)) {
+            $urlImagen = $this->FALLBACK_PRODUCT_IMAGE_PATH;
+        }
+
+        //no se checkea que el producto exista ya que ya se hace en la funcion uploadImgurImage
+        $queryActualizacion = "UPDATE Productos SET imagen = '$urlImagen' WHERE id = '$idProducto'";
+        $resultado = mysqli_query($this->db_conn, $queryActualizacion);
+
+        if ($resultado) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function uploadImgurImage($idProducto, $imagen) {
+        include './imgurApiCredentials.php';
+
+        if (!file_exists($imagen)) {
+            return CustomResponseBuilder::build(false, "Archivo de imagen no encontrado", $idProducto, 400);
+        }
+
+        // Buscar producto
+        $query = "SELECT nombre, descripcion FROM Productos WHERE id = '$idProducto'";
+        $result = mysqli_query($this->db_conn, $query);
+
+        if (!$result || mysqli_num_rows($result) === 0) {
+            return CustomResponseBuilder::build(false, "Producto no encontrado", $idProducto, 404);
+        }
+        
+        //intento setear la imagen 'no-image.webp' de respaldo por si falla alguno de los pasos siguientes
+        //esto se va a sobreescribir con el enlace generado mas adelante si se ejecuta correctamente
+        $this->updateImagenProducto($idProducto, null);
+
+        $producto = mysqli_fetch_assoc($result); 
+
+        $postFields = [
+            'image' => new CURLFile($imagen),
+            'album' => $albumHash,
+            'type' => 'file',
+            'title' => $producto['nombre'],
+            'description' => $producto['nombre']
+        ];
+
+        // Iniciar CURL
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://api.imgur.com/3/image',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postFields,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $accessToken"
+            ]
+        ]);
+
+        // Ejecuta el curl
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($response === false) {
+            return CustomResponseBuilder::build(
+                false, 
+                "Error al subir imagen del producto", 
+                $idProducto, 
+                $httpCode);
+        }
+        $responseData = json_decode($response, true);
+        $link = $responseData['data']['link'] ?? null;
+
+        if (is_null($link)) {
+            return CustomResponseBuilder::build(
+                false, 
+                "Error al obtener el enlace de la imagen", 
+                $idProducto, 
+                500);
+        }
+
+        $resultado = $this->updateImagenProducto($idProducto, $link);
+
+        if (!$resultado) {
+            return CustomResponseBuilder::build(
+                false, 
+                "Error al actualizar la imagen del producto", 
+                $idProducto, 
+                500);
+        }
+
+        return CustomResponseBuilder::build(
+            true, 
+            "Imagen subida exitosamente y producto actualizado correctamente", 
+            $idProducto, 
+            200);
     }
 
     public function updateProducto(

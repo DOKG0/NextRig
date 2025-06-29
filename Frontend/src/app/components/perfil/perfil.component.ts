@@ -22,7 +22,8 @@ usuario: { [key: string]: string } = {
   nombre: '',
   apellido: '',
   username: '',
-  correo: ''
+  correo: '',
+  imagen: ''
 };
 
 usuarioCopia: { [key: string]: string } = {
@@ -44,6 +45,7 @@ constructor(private usuarioService: UsuarioService,) {
     this.usuario['apellido'] = data.apellido;
     this.usuario['username'] = data.username;
     this.usuario['correo'] = data.correo;
+    this.usuario['imagen'] = data.imagen;
     this.usuarioCopia = { ...this.usuario };
   });
 }
@@ -95,7 +97,13 @@ editarCampo(campo: string) {
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Si",
-      cancelButtonText: "No"
+      cancelButtonText: "No",
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown animate__faster'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOut animate__faster'
+      }
     }).then((result) => {
 
       if (result.isConfirmed) {
@@ -143,5 +151,25 @@ editarCampo(campo: string) {
   }
 
 
+  eliminarPerfil() {
+    
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar tu perfil?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.usuarioService.eliminarUsuario(this.user).subscribe(() => {
+          Swal.fire('Perfil eliminado', 'Tu perfil ha sido eliminado correctamente.', 'success');
+          localStorage.removeItem('currentUser');
+          window.location.href = '/login'; // Redirigir al login
+        }, error => {
+          Swal.fire('Error', 'No se pudo eliminar el perfil. Inténtalo más tarde.', 'error');
+        });
+      }
+    });
+  }
 
 }

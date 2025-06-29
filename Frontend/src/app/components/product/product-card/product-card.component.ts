@@ -67,7 +67,13 @@ export class ProductCardComponent implements AfterViewInit {
         if(this.producto.stock == 0){
                 Swal.fire({
                   title: "Sin stock",
-                  icon: "error"
+                  icon: "error",
+                  showClass: {
+                    popup: 'animate__animated animate__fadeInDown animate__faster'
+                  },
+                  hideClass: {
+                    popup: 'animate__animated animate__fadeOut animate__faster'
+                  }
                 });
                 return;
               }
@@ -75,7 +81,13 @@ export class ProductCardComponent implements AfterViewInit {
         if ((cantidadEnCarrito + quantity) > this.producto.stock) {
           Swal.fire({
             title: "Has alcanzado la cantidad maxima para este producto",
-            icon: "warning"
+            icon: "warning",
+            showClass: {
+              popup: 'animate__animated animate__fadeInDown animate__faster'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOut animate__faster'
+            }
           }
           );
           return;
@@ -108,11 +120,17 @@ export class ProductCardComponent implements AfterViewInit {
         showCancelButton: true,
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             this._productService.deleteProduct(this.producto.id).subscribe({
                 next: (response) => {
-                    Swal.fire('¡Eliminado!', 'El producto fue eliminado.', 'success');
+                    Swal.fire('¡Eliminado!', 'El producto fue eliminado.', 'success', );
                     console.log('Producto eliminado con éxito', response);
                 },
                 error: (error) => {
@@ -136,6 +154,12 @@ export class ProductCardComponent implements AfterViewInit {
         showConfirmButton: false,
         timerProgressBar: true,
         timer: 5000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        }
       });
     }
 
@@ -150,6 +174,12 @@ export class ProductCardComponent implements AfterViewInit {
         showConfirmButton: false,
         timerProgressBar: true,
         timer: 2000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        }
       });
     }
 }
