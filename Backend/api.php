@@ -86,7 +86,7 @@ function requiredFieldsExist($data, $fields)
 
 function handlePostRequest($request)
 {
-    $data = json_decode(file_get_contents("php://input"), true);
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
 
     if (empty($request[0])) {
         http_response_code(400);
@@ -94,11 +94,18 @@ function handlePostRequest($request)
         return;
     }
 
-    // Verifica si se pudo decodificar el JSON correctamente
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        http_response_code(400);
-        echo json_encode(['error' => 'JSON inválido: ' . json_last_error_msg()]);
-        return;
+    if (strpos($contentType, 'application/json') !== false) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(['error' => 'JSON inválido: ' . json_last_error_msg()]);
+            return;
+        }
+    } else if (strpos($contentType, 'multipart/form-data') !== false) {
+        $data = $_POST;
+    } else {
+        $data = [];
     }
 
     error_log("Datos recibidos: " . print_r($data, true));
@@ -585,12 +592,13 @@ function handleAdminRequest($adminService, $action, $data)
             $result_eliminarProducto = $adminService->eliminarProducto($data->producto_id);
             echo json_encode($result_eliminarProducto);
             break;
-        case 'updateProductImage':
-            $result_updateProductImage = $adminService->updateImagenProducto(
-                $data['idProducto'] ?? null, 
-                $data['urlImagen'] ?? null);
-            http_response_code($result_updateProductImage['httpCode']);
-            echo json_encode($result_updateProductImage);
+        case 'uploadImgurImage':
+            $result_uploadProductImage = $adminService->uploadImgurImage(
+                $_POST['idProducto'] ?? null,
+                $_FILES['imagen']['tmp_name'] ?? null
+            );
+            http_response_code((int)$result_uploadProductImage['httpCode']);
+            echo json_encode($result_uploadProductImage);
             break;
     }
 }
