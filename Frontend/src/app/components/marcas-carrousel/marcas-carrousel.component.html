@@ -1,9 +1,21 @@
-<div class="content-wrapper">
-  <div class="marcas-container">
-    <label class="marca-card" *ngFor="let marca of marcasSorted">
-      <div class="marca-card">
-        <p>{{ marca }}</p>
+<div class="marcas-container">
+  <div class="arrow left" (click)="moverCarrousel(-1)" [class.disabled]="!puedeMoverIzquierda" *ngIf="marcasSorted.length > 4">
+    <i class="bx bx-chevron-left"></i>
+  </div>
+
+  <div class="slider">
+    <div class="list" [style.transform]="'translateX(' + posicionScroll + 'px)'">
+      <div class="item"
+           *ngFor="let marca of marcasSorted"
+           (click)="handleMarcaClick(marca)">
+        <div class="marca-card" [class.active]="marca === selectedMarca">
+          <p>{{ marca }}</p>
+        </div>
       </div>
-    </label>
+    </div>
+  </div>
+
+  <div class="arrow right" (click)="moverCarrousel(1)" [class.disabled]="!puedeMoverDerecha" *ngIf="marcasSorted.length > 4">
+    <i class="bx bx-chevron-right"></i>
   </div>
 </div>

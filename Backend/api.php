@@ -242,6 +242,12 @@ function handleGetRequest($request)
             return;
         }
 
+        if (isset($request[2]) && $request[2] == 'marca' && isset($request[3])) {
+            $productos = $productosService->getComponentsByCategoryAndMarca($request[1], $request[3]);
+            echo json_encode($productos);
+            return;
+        }
+
         switch ($request[1]) {
             case 'cpu':
                 echo json_encode($productosService->getComponentsByCategory('CPU'));

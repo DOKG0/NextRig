@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../interfaces/product'
@@ -9,6 +9,7 @@ import { UsuarioService } from '../../../services/usuarios.service';
 import { ReviewListComponent } from "../../review-list/review-list.component";
 import { ReviewService } from '../../../services/review.service';
 import { ReviewFormComponent } from "../../review-form/review-form.component";
+
 import Swal from 'sweetalert2';
 import { lastValueFrom } from 'rxjs';
 @Component({
@@ -35,7 +36,8 @@ export class ProductDetailsComponent implements OnInit {
 		private router: Router,
 		private _productService: ProductService,
 		private usuarioService: UsuarioService,
-		private reviewService: ReviewService
+		private reviewService: ReviewService,
+		private location: Location
 	) { }
 
 	ngOnInit(): void {
@@ -132,6 +134,11 @@ export class ProductDetailsComponent implements OnInit {
 			this.topOfDetails.nativeElement.scrollIntoView({ behavior: 'smooth' });
 		}, 0);
 	}
+
+	previousPage() {
+		this.location.back();
+	}
+
 
 	async agregarAlCarrito(quantity : number) {
 

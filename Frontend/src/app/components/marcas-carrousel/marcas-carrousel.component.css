@@ -1,15 +1,58 @@
+.marcas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-.content-wrapper {
+.slider{
     width: 100%;
-    height: 100%;
-}
-.marcas-container{
-    display: flex;
-    flex-direction: row;
-    max-width: 32rem;
-    max-height: 7rem;
+    height: var(--height);
     overflow: hidden;
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 10% 90%,
+        transparent
+    );
 }
+
+.slider .list{
+    display: flex;
+    width: 100%;
+    min-width: calc(var(--width) * var(--quantity));
+    position: relative;
+}
+
+
+/* .slider .list .item.animar{
+    width: var(--width);
+    height: var(--height);
+    position: absolute;
+    left: 100%;
+    animation: autoRun 20s linear infinite;
+    transition: filter 0.5s;
+    animation-delay: calc( (20s / var(--quantity)) * (var(--position) - 1) - 20s)!important;
+}
+
+
+
+@keyframes autoRun{
+    from{
+        left: 100%;
+    }to{
+        left: calc(var(--width) * -1);
+    }
+}
+
+.slider:hover .item{
+    animation-play-state: paused !important;
+}
+
+.slider:has(.marca-card.active) .item.animar {
+  animation: autoRun 20s linear infinite;
+  animation-delay: calc((20s / var(--quantity)) * (var(--position) - 1) - 20s) !important;
+
+} */
 
 .marca-card{
     position: relative;
@@ -17,65 +60,132 @@
     justify-content: center;
     align-items: center;
     width: 5rem;
-    height: 5rem;
-    box-shadow: 
-    2px 2px 5px var(--shadow-border),
-    -2px -2px 5px var(--shadow-border);
+    height: 5rem; 
     cursor: pointer;
     border-radius: 8px;
     margin: 0.5rem 1rem;
     padding: 3rem; 
-    overflow: hidden;
+    background-color: var(--color-surface); 
 }
 
 p {
     color: var(--color-text-primary);
-    z-index: 3;
 }
 
-.marca-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    
-    transform: rotate(0deg);
-    transition: transform 0.3s ease;
+@property --angle{
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
-/* Aplica la animación solo en hover */
-.marca-card:hover::before {
-    background: conic-gradient(
-        from 0deg,
-        #00ffff,
-        #0066ff,
-        #00ffff
-    );
-    animation: rotateBorder 1s linear infinite;
-    opacity: 0.2;
-    z-index: 1;
+.marca-card:hover::after, .marca-card:hover::before{
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-image: conic-gradient(from var(--angle), #ff4545, #00ff99, #006aff, #ff0095, #ff4545);
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+  padding: 3px;
+  border-radius: 10px;
+  animation: 3s spin linear infinite;
+}
+.marca-card:hover::before{
+  filter: blur(1rem);
+  opacity: 0.5;
+}
+@keyframes spin{
+  from{
+    --angle: 0deg;
+  }
+  to{
+    --angle: 360deg;
+  }
 }
 
-.marca-card::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    right: 3px;
-    bottom: 3px;
-    background-color: var(--color-surface); 
-    border-radius: 6px;
-    z-index: 2;
+.marca-card.active::after,
+.marca-card.active::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-image: conic-gradient(from var(--angle), transparent 30%, blue);
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+  padding: 49px;
+  border-radius: 10px;
+  animation: spin 1.5s linear infinite;
 }
 
+.marca-card.active::before {
+  filter: blur(1rem);
+  opacity: 0.5;
+}
 
-@keyframes rotateBorder {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+.marcas-container{
+    display: flex;
+    flex-direction: row;
+    max-width: 40rem;
+    max-height: 10rem;
+    overflow: hidden;
+    margin: 0 2rem;
+}
+
+.arrow{
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-text-primary);
+    box-shadow: 2px 2px 5px var(--shadow-border);
+    cursor: pointer;
+    transition: right 0.3s ease;
+    z-index: 100;
+}
+
+.arrow i{
+  font-size: 1rem;
+}
+
+.arrow:hover .slider .item{
+  animation-play-state: paused !important;
+}
+
+.slider .list {
+  display: flex;
+  position: relative;
+  transition: transform 0.5s ease;
+}
+
+/* .slider .item.animar {
+  position: absolute;
+  animation: autoRun 20s linear infinite;
+  animation-delay: calc( (20s / var(--quantity)) * (var(--position) - 1) - 20s)!important;
+}
+
+.slider.pausado .item.animar {
+  animation-play-state: paused !important;
+} */
+
+.arrow {
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: var(--color-surface);
+  border-radius: 50%;
+  border: 0.2px solid var(--shadow-border);
+  margin: 0 0.5rem;
+}
+
+.arrow.disabled {
+  opacity: 0.3;
+  pointer-events: none;
 }
