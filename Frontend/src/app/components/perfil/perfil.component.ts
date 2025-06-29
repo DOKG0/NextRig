@@ -175,13 +175,32 @@ editarCampo(campo: string) {
 
   cambiarImagen(event: any) {
     const file = event.target.files[0];
-    
+    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+const extension = file.name.split('.').pop()?.toLowerCase();
+
+if (!validExtensions.includes(extension)) {
+  Swal.fire('Solicitud denegada', 'El archivo no es una imagen válida', 'error');
+  return;
+}
+
+
+    Swal.fire({
+  title: 'Procesando...',
+  text: 'Por favor espera',
+  allowOutsideClick: false,
+  didOpen: () => {
+    Swal.showLoading();
+  }
+});
         console.log(this.user);
         this.usuarioService.cambiarImagen(this.user,file).subscribe(response => {
+          Swal.close();
           Swal.fire('Imagen actualizada', '', 'success');
-          console.log('Imagen actualizada:', response);
+          
+          this.usuario['imagen'] = response.mensaje;
         }, error => {
-          console.error('Error al actualizar la imagen:', error);
+          Swal.close();
+          
           Swal.fire('Error al actualizar la imagen', '', 'error');
         });
       

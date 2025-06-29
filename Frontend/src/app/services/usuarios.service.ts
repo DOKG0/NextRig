@@ -101,11 +101,12 @@ habilitarUsuario(correo: string): Observable<any> {
 }
 
 cambiarImagen(username: string, imagen: File): Observable<any> {
+    
      const formData = new FormData();
      formData.append('username', username);
     formData.append('imagen', imagen);
     
-    return this.http.post(`${this.apiUrl}/usuario/cambiarImagen/`,{username, imagen});
+    return this.http.post(`${this.apiUrl}/usuario/cambiarImagen/`,formData );
 }
 
 }

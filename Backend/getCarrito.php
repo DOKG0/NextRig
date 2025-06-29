@@ -336,8 +336,9 @@ public function getHistorialCompras($username){
                 return CustomResponseBuilder::build(false, "Error al obtener el enlace de la imagen", null, 500);
             }
             $query = "UPDATE Usuario SET imagen = '$link' WHERE username = '$username'";
+            $resultado = mysqli_query($this->db_conn, $query);
 
-            return CustomResponseBuilder::build(true, "Imagen subida exitosamente", 200, $response);
+            return CustomResponseBuilder::build(true, $link, 200, $response);
         }
     }
 }
