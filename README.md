@@ -106,7 +106,7 @@ Backend
 
 #### Caracteristicas destacadas
 
-Autenticacion y autirizacion
+Autenticacion y autorizacion
 * Sistema de sesiones PHP con cookies seguras
 * Autenticacion basada en roles (Usuario/Administrador)
 
