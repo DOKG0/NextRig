@@ -284,4 +284,61 @@ public function getHistorialCompras($username){
             exit;
         }
     }
+
+    public function cambiarImagen($username, $imagen){
+        //error_log("Username recibido: " . $username);
+
+        $username = mysqli_real_escape_string($this->db_conn, $username);
+
+       include './imgurApiCredentials.php';
+
+        $query = "SELECT username,nombre FROM Usuario WHERE username = '$username'";
+        $result = mysqli_query($this->db_conn, $query);
+
+        if (!$result || mysqli_num_rows($result) === 0) {
+            return CustomResponseBuilder::build(false, "Usuario no encontrado", null, 404);
+        }
+
+        $producto = mysqli_fetch_assoc($result); 
+
+        $postFields = [
+            'image' => new CURLFile($imagen),
+            'album' => $albumHash,
+            'type' => 'file',
+            'title' => $producto['username'],
+            'description' => $producto['nombre']
+        ];
+
+        // Iniciar CURL
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://api.imgur.com/3/image',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postFields,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $accessToken"
+            ]
+        ]);
+
+        // Ejecuta el curl
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($response === false) {
+            return CustomResponseBuilder::build(false, "Error al subir imagen del producto", $httpCode, 500);
+        } else {
+            $responseData = json_decode($response, true);
+            $link = $responseData['data']['link'] ?? null;
+            if (is_null($link)) {
+                return CustomResponseBuilder::build(false, "Error al obtener el enlace de la imagen", null, 500);
+            }
+            $query = "UPDATE Usuario SET imagen = '$link' WHERE username = '$username'";
+            $resultado = mysqli_query($this->db_conn, $query);
+
+            return CustomResponseBuilder::build(true, $link, 200, $response);
+        }
+    }
 }

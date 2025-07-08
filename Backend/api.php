@@ -86,7 +86,7 @@ function requiredFieldsExist($data, $fields)
 
 function handlePostRequest($request)
 {
-    $data = json_decode(file_get_contents("php://input"), true);
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
 
     if (empty($request[0])) {
         http_response_code(400);
@@ -94,15 +94,21 @@ function handlePostRequest($request)
         return;
     }
 
-    // Verifica si se pudo decodificar el JSON correctamente
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        http_response_code(400);
-        echo json_encode(['error' => 'JSON inválido: ' . json_last_error_msg()]);
-        return;
+    if (strpos($contentType, 'application/json') !== false) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(['error' => 'JSON inválido: ' . json_last_error_msg()]);
+            return;
+        }
+    } else if (strpos($contentType, 'multipart/form-data') !== false) {
+        $data = $_POST;
+    } else {
+        $data = [];
     }
 
     error_log("Datos recibidos: " . print_r($data, true));
-
     switch ($request[0]) {
         case 'usuario':
             $usuarioService = new UsuarioService();
@@ -530,6 +536,10 @@ function handleUsuarioRequest($usuarioService, $action, $data)
             case 'crearCompra':
             $carritoService = new CarritoService();
             echo json_encode($carritoService->crearCompra($data['username'],$data['costoCarrito'],$data['telefono'],$data['direccion'],$data['departamento']));
+            break;
+        case 'cambiarImagen':
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->cambiarImagen($_POST['username'], $_FILES['imagen']['tmp_name']));
             break;
 
         default:
