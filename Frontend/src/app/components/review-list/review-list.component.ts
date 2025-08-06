@@ -22,8 +22,6 @@ export class ReviewListComponent implements OnInit {
 		this.message = "Buscando las reseñas...";
 		if (this.product) {
 			this.fetchReviews();
-		} else {
-			console.error("No se obtuvo la información del producto.");
 		}
 	}
 

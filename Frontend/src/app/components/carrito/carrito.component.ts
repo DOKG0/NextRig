@@ -56,8 +56,6 @@ carrito: any[] = [];
   }
 
   eliminarProducto(producto: any) {
-    console.log(producto.id);
-    console.log(this.user);
     this.usuarioService.eliminarProductoCarrito(this.user, producto.id,).subscribe({
       next: () => {
         this.carrito = this.carrito.filter(p => p.id !== producto.id);
@@ -136,12 +134,8 @@ carrito: any[] = [];
           const facturaResult = await lastValueFrom(this.usuarioService.generarFactura(compraResult.idCompra));
           facturaGenerada = true;
           emailEnviado = facturaResult.emailSent || false;
-          console.log('Factura generada exitosamente');
-          if (emailEnviado) {
-              console.log('Factura enviada por email:', facturaResult.emailMessage);
-          }
       } catch (error) {
-          console.error('Error al generar factura:', error);
+          this.facturaError();
       }
   }
 
@@ -170,10 +164,18 @@ carrito: any[] = [];
                   setTimeout(() => {
                       this.usuarioService.eliminarFactura(compraResult.idCompra).subscribe({
                           next: (response) => {
-                              console.log('Factura eliminada del servidor:', response);
+                              Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Factura eliminada correctamente',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
+                              });
                           },
                           error: (error) => {
-                              console.error('Error al eliminar factura:', error);
+                              this.facturaError();
                           }
                       });
                   }, 2000);
@@ -191,10 +193,8 @@ carrito: any[] = [];
         if (facturaGenerada && compraResult.idCompra) {
           this.usuarioService.eliminarFactura(compraResult.idCompra).subscribe({
             next: (response) => {
-              console.log('Factura eliminada del servidor al cerrar modal:', response);
             },
             error: (error) => {
-              console.error('Error al eliminar factura al cerrar modal:', error);
             }
           });
         }
@@ -206,7 +206,6 @@ carrito: any[] = [];
         this.hayProductos = false;
       });
     } catch (error) {
-      console.error("Error en la compra", error);
     }
   }
 
@@ -222,4 +221,17 @@ carrito: any[] = [];
       });
     }
   }
+
+  facturaError() {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'error',
+      title: 'Error al eliminar factura',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true
+    });
+  }
+
 }

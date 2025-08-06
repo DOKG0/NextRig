@@ -20,7 +20,6 @@ export class MarcasCarrouselComponent {
   itemsVisibles: number = 4; 
 
   get puedeMoverIzquierda(): boolean {
-    console.log(this.marcasSorted);
     return this.posicionScroll < 0;
   }
 

@@ -84,7 +84,6 @@ editarCampo(campo: string) {
               }, 0);
       break;
     default:
-      console.error('Campo no reconocido:', campo);
 
 }
 }

@@ -192,7 +192,6 @@ export class ProductFormComponent implements OnInit {
 				}
 			},
 			error: (err) => {
-				console.error(err);
 				this.product = null;
 				this.router.navigate(['/404']);
 			},
@@ -326,7 +325,6 @@ export class ProductFormComponent implements OnInit {
 				this.productFormGroup.disable();
 			},
 			error: (err) => {
-				console.error(err.error.error);
 				this.alertServerError(err.error);
 			},
 		});
@@ -343,7 +341,6 @@ export class ProductFormComponent implements OnInit {
 				}
 			},
 			error: (err) => {				
-				console.error(err.error.error);
 				this.alertServerError(err.error);
 			},
 		});

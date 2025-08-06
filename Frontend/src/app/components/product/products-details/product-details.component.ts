@@ -59,7 +59,6 @@ export class ProductDetailsComponent implements OnInit {
 						}
 					},
 					error: (err) => {
-						console.error('Error al obtener el producto:', err);
 					}
 				});
 			}
@@ -85,7 +84,11 @@ export class ProductDetailsComponent implements OnInit {
 					this.reviewHabilitado = response.data?.habilitado || false;
 				},
 				error: (err) => {
-					console.error(err.error);
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: err.error || 'No se pudo obtener la información del producto.',
+					});
 				}
 			});
 		}
@@ -148,8 +151,8 @@ export class ProductDetailsComponent implements OnInit {
 		
 		try {
 		    if(this.producto === undefined) return;
+
 			let cantidadEnCarrito = Number(await lastValueFrom(this.usuarioService.getCantidadproducto(this.currentUsername, this.producto.id as string)));
-			
 			
 			if ((cantidadEnCarrito + quantity) > this.producto.stock) {
 			  Swal.fire({
@@ -167,7 +170,6 @@ export class ProductDetailsComponent implements OnInit {
 			} else {
 	
 			  if (!this.producto || this.producto.id === undefined) {
-				console.error('Producto no definido o sin ID');
 				return;
 			  } else {
 				let idProducto = this.producto.id as string;
@@ -180,7 +182,6 @@ export class ProductDetailsComponent implements OnInit {
 	
 			}
 		} catch (error) {
-		  console.error("error en el agregado", error);
 		}
 
 		}

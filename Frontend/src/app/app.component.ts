@@ -103,7 +103,6 @@ export class AppComponent implements AfterViewInit {
     const event = new CustomEvent('sidebarStateChanged', { detail: { state } });
     document.dispatchEvent(event);
     
-    console.log('Sidebar state dispatched:', state);
   }
 
   loadDarkModePreference() {
@@ -114,14 +113,12 @@ export class AppComponent implements AfterViewInit {
       
       setTimeout(() => {
         document.body.classList.add('dark-mode');
-        console.log('Dark mode loaded from storage:', this.isDarkMode);
       }, 0);
     }
   }
   
   saveDarkModePreference() {
     localStorage.setItem('darkMode', this.isDarkMode.toString());
-    console.log('Dark mode preference saved:', this.isDarkMode);
   }
   
   initializeSidebar() {
@@ -133,7 +130,6 @@ export class AppComponent implements AfterViewInit {
     newDarkModeBtn.addEventListener('click', () => {
       this.isDarkMode = !this.isDarkMode;
       document.body.classList.toggle('dark-mode');
-      console.log('Dark mode toggled:', this.isDarkMode);
       this.saveDarkModePreference();
     });
   }

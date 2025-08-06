@@ -94,7 +94,6 @@ export class ProductCardComponent implements AfterViewInit {
         } else {
 
           if (!this.producto || this.producto.id === undefined) {
-            console.error('Producto no definido o sin ID');
             return;
           } else {
             let idProducto = this.producto.id as string;
@@ -107,7 +106,6 @@ export class ProductCardComponent implements AfterViewInit {
 
         }
     } catch (error) {
-      console.error("error en el agregado", error);
     }
 
     }
@@ -131,16 +129,13 @@ export class ProductCardComponent implements AfterViewInit {
             this._productService.deleteProduct(this.producto.id).subscribe({
                 next: (response) => {
                     Swal.fire('¡Eliminado!', 'El producto fue eliminado.', 'success', );
-                    console.log('Producto eliminado con éxito', response);
                 },
                 error: (error) => {
                     Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
-                    console.error('Error al eliminar el producto:', error);
                 }
             });
         } else {
             this.alertCancelToast();
-            console.log('Eliminación cancelada');
         }
     });
     }
@@ -182,5 +177,6 @@ export class ProductCardComponent implements AfterViewInit {
         }
       });
     }
+
 }
  

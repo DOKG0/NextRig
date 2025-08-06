@@ -62,7 +62,6 @@ export class ReviewItemComponent implements OnInit {
 					this.alertSuccessfulCreation();
 				},
 				error: (err) => {
-					console.error(err.error);
 					this.alertFailedCreation(err.error.error);
 				}
 			})

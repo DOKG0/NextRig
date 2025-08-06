@@ -152,7 +152,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.usuarioService.login(this.loginData.email, this.loginData.password)
       .subscribe({
         next: (response) => {
-          console.log('login exitoso:', response);
           if (response && response.success) {
             if(response.estado == '1'){
             const user = {
@@ -212,7 +211,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           this.errorMessage = 'Error al iniciar sesion. Verifica tus credenciales.';
-          console.log(error);
           this.isLoading = false;
         },
         complete: () => {
@@ -241,7 +239,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.registerData.fechaNac
     ).subscribe({
       next: (response) => {
-        console.log('Registro exitoso:', response);
         
         // Guardar información del usuario en localStorage
         localStorage.setItem('currentUser', JSON.stringify({
@@ -254,7 +251,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Error en registro:', error);
         this.errorMessage = 'Error al registrar usuario. Intentalo nuevamente.';
         this.isLoading = false;
       },

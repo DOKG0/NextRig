@@ -69,12 +69,6 @@ export class ProductsGridComponent implements OnInit {
             this.quantityItems = this.productsSorted.length;
             this.quantityPages = Math.ceil(this.quantityItems / this.quantityItemsPerPage);
             this.updatePaginatedProductos();
-          },
-          error: (err) => {
-            console.error("Error obteniendo todos los productos:", err);
-          },
-          complete: () => {
-            console.log('Petición finalizada');
           }
         });
       }
@@ -85,9 +79,6 @@ export class ProductsGridComponent implements OnInit {
       next: response => {
         this.marcas = response; 
         this.sortMarcas();        
-      },
-      error: err => {
-        console.log("Error");        
       }
     });   
   }
@@ -166,11 +157,10 @@ export class ProductsGridComponent implements OnInit {
 
   handleMarcaSelected(marca: string) {
     this.marcaSelected = marca;
-    console.log("Marca seleccionada:", this.marcaSelected);
     if(this.marcaSelected !== '') {
+      
       this._productService.getProductosByCategoryAndMarca(this.category, marca).subscribe({
       next: (productos) => {
-        console.log("Productos obtenidos por marca:", productos);
         this.productsSorted = productos;
         this._productService.setProductsSortedByCat(this.productsSorted);
 
@@ -178,17 +168,10 @@ export class ProductsGridComponent implements OnInit {
         this.quantityItems = this.productsSorted.length;
         this.quantityPages = Math.ceil(this.quantityItems / this.quantityItemsPerPage);
         this.updatePaginatedProductos();
-      },
-      error: (err) => {
-        console.error("Error obteniendo productos por marca:", err);
-      },
-      complete: () => {
-        console.log('Petición finalizada');
       }
     });
     }else {
       // Si no hay marca seleccionada, se obtienen todos los productos de la categoria
-      console.log("No hay marca seleccionada, obteniendo todos los productos de la categoria:", this.category);
       this.getProductsByCategory(this.category);
     }
   }
