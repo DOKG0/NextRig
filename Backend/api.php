@@ -109,7 +109,6 @@ function handlePostRequest($request)
     }
 
     error_log("Datos recibidos: " . print_r($data, true));
-
     switch ($request[0]) {
         case 'usuario':
             $usuarioService = new UsuarioService();
@@ -543,6 +542,10 @@ function handleUsuarioRequest($usuarioService, $action, $data)
             case 'crearCompra':
             $carritoService = new CarritoService();
             echo json_encode($carritoService->crearCompra($data['username'],$data['costoCarrito'],$data['telefono'],$data['direccion'],$data['departamento']));
+            break;
+        case 'cambiarImagen':
+            $carritoService = new CarritoService();
+            echo json_encode($carritoService->cambiarImagen($_POST['username'], $_FILES['imagen']['tmp_name']));
             break;
 
         default:
